@@ -2,7 +2,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand">Vue JS Template for .NET 5</a>
+                <a class="navbar-brand">IPDMS</a>
                 <button class="navbar-toggler"
                         type="button"
                         data-toggle="collapse"
@@ -15,18 +15,21 @@
                      v-bind:class="{show: isExpanded}">
                     <ul class="navbar-nav flex-grow">
                         <li class="nav-item">
-                            <router-link :to="{ name: 'Home' }" class="nav-link text-dark">Home</router-link>
+                            <router-link :to="{ name: 'Login' }" class="nav-link text-dark">Login</router-link>
 
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name: 'Counter' }" class="nav-link text-dark">Counter</router-link>
+                            <router-link :to="{ name: 'Register' }" class="nav-link text-dark">Register</router-link>
                         </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'FetchMovie' }" class="nav-link text-dark">Fetch Movie</router-link>
-                        </li>
+                        <!--<li class="nav-item">
+        <router-link :to="{ name: 'Counter' }" class="nav-link text-dark">Counter</router-link>
+    </li>-->
+                        <!--<li class="nav-item">
+        <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
+    </li>
+    <li class="nav-item">
+        <router-link :to="{ name: 'FetchMovie' }" class="nav-link text-dark">Fetch Movie</router-link>
+    </li>-->
                     </ul>
                 </div>
             </div>
