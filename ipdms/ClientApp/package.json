@@ -1,31 +1,45 @@
 {
-  "name": "clientapp",
+  "name": "architectui-vue-free",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.20.0-0",
-    "bootstrap": "^4.5.3",
-    "core-js": "^3.7.0",
-    "vue": "^3.0.2",
-    "vue-loader-v16": "npm:vue-loader@^16.0.0-alpha.3",
-    "vue-router": "^4.0.0-rc.5"
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
+    "animate-sass": "^0.8.2",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.18",
+    "chart.js": "^2.8.0",
+    "es6-promise": "^4.2.6",
+    "increase-memory-limit": "^1.0.6",
+    "node-sass": "^4.14.1",
+    "pe7-icon": "^1.0.4",
+    "perfect-scrollbar": "^1.4.0",
+    "popper.js": "^1.15.0",
+    "sass-loader": "^7.1.0",
+    "vue": "^2.6.10",
+    "vue-chartjs": "^3.4.2",
+    "vue-perfect-scrollbar": "^0.1.0",
+    "vue-router": "^3.0.5",
+    "vue-sidebar-menu": "^3.7.0",
+    "vue2-google-maps": "^0.10.6",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.9",
-    "@vue/cli-plugin-eslint": "^4.5.9",
-    "@vue/cli-service": "^4.5.9",
-    "@vue/compiler-sfc": "^3.0.2",
-    "autoprefixer": "^9.8.6",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^7.1.0",
-    "postcss": "^7.0.36",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7"
+    "@vue/cli-plugin-babel": "^3.6.0",
+    "@vue/cli-plugin-eslint": "^3.6.0",
+    "@vue/cli-service": "^4.5.11",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.2.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
     "root": true,
@@ -33,17 +47,22 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
+      "plugin:vue/essential",
       "eslint:recommended"
     ],
+    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    },
-    "rules": {}
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead"
+    "not ie <= 8"
   ]
 }
