@@ -4,7 +4,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[User](
+CREATE TABLE [dbo].[IpdmsUser](
 	[user_id] [int] IDENTITY(1,1) NOT NULL,
 	[first_name] [nvarchar](20) NOT NULL,
 	[middle_name] [nvarchar](20) NULL,
