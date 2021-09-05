@@ -8,7 +8,8 @@
 
 
 <script>
-    import axios from 'axios'
+    /*import axios from 'axios'*/
+    import UserDataService from "../../Services/UserDataService";
     export default {
         name: "FetchUser",
         data() {
@@ -18,10 +19,12 @@
         },
         methods: {
             getUserList() {
-                axios.get('/api/IpdmsUsers')
+        /*axios.get('/api/IpdmsUsers')*/
+                UserDataService.getAllUsers()
                     .then((response) => {
                        
                         this.sampleresult = response.data;
+                     /*   console.log(this.sampleresult);*/
                     })
                     .catch(function (error) {
                         alert(error);
