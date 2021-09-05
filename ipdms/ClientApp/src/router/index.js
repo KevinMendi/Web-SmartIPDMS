@@ -13,15 +13,16 @@ export default new Router({
         // Dashboards
 
         {
-            path: '/',
-            name: 'analytics',
+            path: '/dashboard',
+            name: 'dashboard',
             component: () => import('../Pages/Dashboards/Analytics.vue'),
         },
 
         // Pages
 
         {
-            path: '/pages/login-boxed',
+        /*path: '/pages/login-boxed',*/
+            path: '/',
             name: 'login-boxed',
             meta: {layout: 'userpages'},
             component: () => import('../Pages/UserPages/LoginBoxed.vue'),
