@@ -197,6 +197,15 @@
                         title: 'ChartJS',
                         href: '/charts/chartjs',
                     },
+                    {
+                        header: true,
+                        title: 'Database',
+                    },
+                    {
+                        icon: 'pe-7s-server',
+                        title: 'Database',
+                        href: '/database/weatherforecast',
+                    },
                 ],
                 collapsed: true,
 

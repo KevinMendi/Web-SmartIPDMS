@@ -159,5 +159,13 @@ export default new Router({
             name: 'chartjs',
             component: () => import('../Pages/Charts/Chartjs.vue'),
         },
+
+        // Database
+
+        {
+            path: '/database/weatherforecast',
+            name: 'database',
+            component: () => import('../Pages/Testdb/WeatherDisplay.vue'),
+        },
     ]
 })
