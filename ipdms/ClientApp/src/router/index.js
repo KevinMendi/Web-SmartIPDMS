@@ -170,9 +170,9 @@ export default new Router({
             component: () => import('../Pages/Testdb/WeatherDisplay.vue'),
         },
         {
-            path: '/database/movies',
-            name: 'movies',
-            component: () => import('../Pages/Testdb/MovieDisplay.vue'),
+            path: '/database/users',
+            name: 'users',
+            component: () => import('../Pages/Testdb/UserDisplay.vue'),
         },
     ]
 })

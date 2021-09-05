@@ -10,16 +10,17 @@
 <script>
     import axios from 'axios'
     export default {
-        name: "FetchMovie",
+        name: "FetchUser",
         data() {
             return {
                 sampleresult: []
             }
         },
         methods: {
-            getMovieList() {
-                axios.get('/api/movies')
+            getUserList() {
+                axios.get('/api/IpdmsUsers')
                     .then((response) => {
+                       
                         this.sampleresult = response.data;
                     })
                     .catch(function (error) {
@@ -28,7 +29,7 @@
             }
         },
         mounted() {
-            this.getMovieList();
+            this.getUserList();
         }
     }
 </script>

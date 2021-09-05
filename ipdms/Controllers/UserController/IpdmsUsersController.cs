@@ -6,53 +6,54 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ipdms.Models;
+using ipdms.Models.AppDbContext;
 
-namespace ipdms.Controllers
+namespace ipdms.Controllers.UserController
 {
     [Route("[controller]")]
     [ApiController]
-    public class MoviesController : ControllerBase
+    public class IpdmsUsersController : ControllerBase
     {
-        private readonly MoviesDbContext _context;
+        private readonly IpdmsDbContext _context;
 
-        public MoviesController(MoviesDbContext context)
+        public IpdmsUsersController(IpdmsDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Movies
+        // GET: api/IpdmsUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<IpdmsUser>>> GetIpdmsUser()
         {
-            return await _context.Movies.ToListAsync();
+            return await _context.IpdmsUser.ToListAsync();
         }
 
-        // GET: api/Movies/5
+        // GET: api/IpdmsUsers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<IpdmsUser>> GetIpdmsUser(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
+            var ipdmsUser = await _context.IpdmsUser.FindAsync(id);
 
-            if (movie == null)
+            if (ipdmsUser == null)
             {
                 return NotFound();
             }
 
-            return movie;
+            return ipdmsUser;
         }
 
-        // PUT: api/Movies/5
+        // PUT: api/IpdmsUsers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, Movie movie)
+        public async Task<IActionResult> PutIpdmsUser(int id, IpdmsUser ipdmsUser)
         {
-            if (id != movie.Id)
+            if (id != ipdmsUser.user_id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(movie).State = EntityState.Modified;
+            _context.Entry(ipdmsUser).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +61,7 @@ namespace ipdms.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MovieExists(id))
+                if (!IpdmsUserExists(id))
                 {
                     return NotFound();
                 }
@@ -73,37 +74,37 @@ namespace ipdms.Controllers
             return NoContent();
         }
 
-        // POST: api/Movies
+        // POST: api/IpdmsUsers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<IpdmsUser>> PostIpdmsUser(IpdmsUser ipdmsUser)
         {
-            _context.Movies.Add(movie);
+            _context.IpdmsUser.Add(ipdmsUser);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
+            return CreatedAtAction("GetIpdmsUser", new { id = ipdmsUser.user_id }, ipdmsUser);
         }
 
-        // DELETE: api/Movies/5
+        // DELETE: api/IpdmsUsers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Movie>> DeleteMovie(int id)
+        public async Task<ActionResult<IpdmsUser>> DeleteIpdmsUser(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var ipdmsUser = await _context.IpdmsUser.FindAsync(id);
+            if (ipdmsUser == null)
             {
                 return NotFound();
             }
 
-            _context.Movies.Remove(movie);
+            _context.IpdmsUser.Remove(ipdmsUser);
             await _context.SaveChangesAsync();
 
-            return movie;
+            return ipdmsUser;
         }
 
-        private bool MovieExists(int id)
+        private bool IpdmsUserExists(int id)
         {
-            return _context.Movies.Any(e => e.Id == id);
+            return _context.IpdmsUser.Any(e => e.user_id == id);
         }
     }
 }

@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[IpdmsUser](
 	[CREATE_USER_ID] [int] NULL,
 	[CREATE_USER_DATE] [datetime] NULL,
 	[LAST_UPDATE_USER_ID] [int] NULL,
-	[LAST_UPDATE_DATE] [datetime] NULL,
+	[LAST_UPDATE_USER_DATE] [datetime] NULL,
  CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
 (
 	[user_id] ASC

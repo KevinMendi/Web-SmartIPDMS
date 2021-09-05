@@ -12,8 +12,9 @@ using System.Threading.Tasks;
 using VueCliMiddleware;
 using Newtonsoft.Json.Serialization;
 
-using ipdms.Models;
+
 using Microsoft.EntityFrameworkCore;
+using ipdms.Models.AppDbContext;
 
 namespace ipdms
 {
@@ -48,18 +49,18 @@ namespace ipdms
             //services.AddDbContext<MoviesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MoviesDbConnectionString")));
             //Console.WriteLine(a);
             //var connection = @"Server=DESKTOP-UJOQJ6I;Database=MoviesDb;Trusted_Connection=True;ConnectRetryCount=0";
-            var options = new DbContextOptionsBuilder<MoviesDbContext>();
+            var options = new DbContextOptionsBuilder<IpdmsDbContext>();
             options.UseSqlServer(a);
 
             ////services.AddDbContext<MoviesDbContext>(options => options.UseSqlServer(connection));
             //services.AddDbContext<MoviesDbContext>(options => options.UseSqlServer(connection));
 
-            using (var context = new MoviesDbContext(options.Options))
+            using (var context = new IpdmsDbContext(options.Options))
             {
                 // do stuff
                 Console.WriteLine("Suuloooooooooodddd");
                 Console.WriteLine("Suuloooooooooodddd");
-                services.AddDbContext<MoviesDbContext>(
+                services.AddDbContext<IpdmsDbContext>(
                     options => options.UseSqlServer(a)
 
                     );

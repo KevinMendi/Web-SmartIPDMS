@@ -210,7 +210,7 @@
                     {
                         icon: 'pe-7s-server',
                         title: 'Database',
-                        href: '/database/movies',
+                        href: '/database/users',
                     },
                 ],
                 collapsed: true,
