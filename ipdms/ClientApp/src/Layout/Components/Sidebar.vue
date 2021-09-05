@@ -203,8 +203,13 @@
                     },
                     {
                         icon: 'pe-7s-server',
-                        title: 'Database',
+                        title: 'Collection',
                         href: '/database/weatherforecast',
+                    },
+                    {
+                        icon: 'pe-7s-server',
+                        title: 'Database',
+                        href: '/database/movies',
                     },
                 ],
                 collapsed: true,

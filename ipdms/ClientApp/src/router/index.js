@@ -7,6 +7,7 @@ export default new Router({
     scrollBehavior() {
         return window.scrollTo({ top: 0, behavior: 'smooth' });
     },
+    mode: 'history',
     routes: [
 
         // Dashboards
@@ -166,6 +167,11 @@ export default new Router({
             path: '/database/weatherforecast',
             name: 'database',
             component: () => import('../Pages/Testdb/WeatherDisplay.vue'),
+        },
+        {
+            path: '/database/movies',
+            name: 'movies',
+            component: () => import('../Pages/Testdb/MovieDisplay.vue'),
         },
     ]
 })
