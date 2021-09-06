@@ -48,7 +48,7 @@ namespace ipdms.Controllers.UserController
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIpdmsUser(int id, IpdmsUser ipdmsUser)
         {
-            if (id != ipdmsUser.user_id)
+            if (id != ipdmsUser.ipdms_user_id)
             {
                 return BadRequest();
             }
@@ -83,7 +83,7 @@ namespace ipdms.Controllers.UserController
             _context.IpdmsUser.Add(ipdmsUser);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetIpdmsUser", new { id = ipdmsUser.user_id }, ipdmsUser);
+            return CreatedAtAction("GetIpdmsUser", new { id = ipdmsUser.ipdms_user_id }, ipdmsUser);
         }
 
         // DELETE: api/IpdmsUsers/5
@@ -104,7 +104,7 @@ namespace ipdms.Controllers.UserController
 
         private bool IpdmsUserExists(int id)
         {
-            return _context.IpdmsUser.Any(e => e.user_id == id);
+            return _context.IpdmsUser.Any(e => e.ipdms_user_id == id);
         }
     }
 }

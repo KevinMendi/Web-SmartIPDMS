@@ -15,6 +15,8 @@ using Newtonsoft.Json.Serialization;
 
 using Microsoft.EntityFrameworkCore;
 using ipdms.Models.AppDbContext;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json.Converters;
 
 namespace ipdms
 {
@@ -37,14 +39,22 @@ namespace ipdms
             //});
 
             ////JSON Serializer
-            //services.AddControllers().AddJsonOptions(options => {
+            //services.AddControllers().AddJsonOptions(options =>
+            //{
             //    options.JsonSerializerOptions.PropertyNamingPolicy = null;
             //    options.JsonSerializerOptions.DictionaryKeyPolicy = null;
 
             //});
-           
 
+            //services.AddMvc().AddNewtonsoftJson();
             services.AddControllers();
+            //services.AddControllers()
+            //.AddNewtonsoftJson(jsonOptions =>
+            //{
+            //    jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
+            //});
+
+            //services.AddControllers().AddNewtonsoftJson();
             var a = Configuration.GetConnectionString("MoviesDbConnectionString");
             //services.AddDbContext<MoviesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MoviesDbConnectionString")));
             //Console.WriteLine(a);

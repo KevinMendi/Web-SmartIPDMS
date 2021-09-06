@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ipdms.Models
@@ -9,41 +11,40 @@ namespace ipdms.Models
     public class IpdmsUser
     {
         [Key]
-        public int user_id { get; set; }
+        [JsonPropertyName("ipdmsUserId")]
+        public int ipdms_user_id { get; set; }
 
+        [JsonPropertyName("firstname")]
         public string first_name { get; set; }
 
+        [JsonPropertyName("lastname")]
         public string last_name { get; set; }
 
+        [JsonPropertyName("middlename")]
         public string middle_name { get; set; }
 
+        [JsonPropertyName("userRoleId")]
         public int user_role_id { get; set; }
-
+        
+        [JsonPropertyName("email")]
         public string email { get; set; }
 
+        [JsonPropertyName("password")]
         public string password { get; set; }
 
+        [JsonPropertyName("createUserId")]
         public string CREATE_USER_ID { get; set; }
 
+        [JsonPropertyName("createUserDate")]
         public DateTime? CREATE_USER_DATE { get; set; }
 
+        [JsonPropertyName("lastUpdateUserId")]
         public string LAST_UPDATE_USER_ID { get; set; }
 
+        [JsonPropertyName("lastUpdateUserDate")]
         public DateTime? LAST_UPDATE_USER_DATE { get; set; }
 
-        //[Key]
-        //public int UserId { get; set; }
 
-        //public string FirstName { get; set; }
 
-        //public string LastName { get; set; }
-
-        //public string MidleInitial { get; set; }
-
-        //public int UserRoleId { get; set; }
-
-        //public string Email { get; set; }
-
-        //public string Password { get; set; }
     }
 }
