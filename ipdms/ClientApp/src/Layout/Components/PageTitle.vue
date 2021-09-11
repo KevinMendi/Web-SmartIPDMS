@@ -14,13 +14,13 @@
                 </div>
             </div>
             <div class="page-title-actions">
-                <button type="button" class="btn-shadow mr-3 btn btn-dark">
+                <!--<button type="button" class="btn-shadow mr-3 btn btn-dark">
                     <font-awesome-icon icon="star"/>
                 </button>
                 <button type="button" class="btn-shadow d-inline-flex align-items-center btn btn-success">
                     <font-awesome-icon class="mr-2" icon="plus"/>
                     Create New
-                </button>
+                </button>-->
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
         faStar,
         faPlus
     } from '@fortawesome/free-solid-svg-icons'
-    import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+    /*import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'*/
 
     library.add(
         faStar,
@@ -41,7 +41,7 @@
 
     export default {
         components: {
-            'font-awesome-icon': FontAwesomeIcon,
+            /*'font-awesome-icon': FontAwesomeIcon,*/
         },
         props: {
             icon: String,

@@ -10,8 +10,8 @@
                             <div class="modal-body">
                                 <div class="h5 modal-title text-center">
                                     <h4 class="mt-2">
-                                        <div>Welcome back to IPDMS,</div>
-                                        <span>Please sign in to your account below.</span>
+                                        <div>Smart Intellectual Property Document Management System</div>
+                                        <small>Please sign in to your account below.</small>
                                     </h4>
                                 </div>
 

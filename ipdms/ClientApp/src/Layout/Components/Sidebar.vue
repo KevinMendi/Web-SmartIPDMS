@@ -2,7 +2,8 @@
     <div class="app-sidebar sidebar-shadow" @mouseover="toggleSidebarHover('add','closed-sidebar-open')" @mouseleave="toggleSidebarHover('remove','closed-sidebar-open')">
         <div class="app-header__logo">
             <!--<div class="logo-src"/>-->
-            <h4>IPDMS</h4>
+            <img src="../../assets/images/logo-with-name.png" width="223.5" />
+            <!--<h4>Smart IPDMS</h4>-->
             <div class="header__pane ml-auto">
                 <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" v-bind:class="{ 'is-active' : isOpen }" @click="toggleBodyClass('closed-sidebar')">
                     <span class="hamburger-box">
@@ -37,17 +38,33 @@
                 menu: [
                     {
                         header: true,
-                        title: 'Main Navigation',
+                        title: 'Home',
                     },
                     {
                         title: 'Dashboards',
                         icon: 'pe-7s-rocket',
-                        child: [
-                            {
-                                href: '/',
-                                title: 'Analytics',
-                            },
-                        ]
+                        href: '/dashboard',
+                        //child: [
+                        //    {
+                        //        href: '/',
+                        //        title: 'Analytics',
+                        //    },
+                        //]
+                    },
+                    {
+                        icon: 'pe-7s-cloud-upload',
+                        title: 'File Upload',
+                        href: '/uploads/upload-file',
+                    },
+
+                    {
+                        header: true,
+                        title: 'MONITORING'
+                    },
+                    {
+                        icon: 'pe-7s-folder',
+                        title: 'File Manager',
+                        href: '/monitoring/file-manager'
                     },
                     {
                         title: 'Pages',

@@ -10,18 +10,31 @@ export default new Router({
     mode: 'history',
     routes: [
 
-        // Dashboards
+        // Homepage
 
         {
+        /*path: '/dashboard',*/
             path: '/dashboard',
             name: 'dashboard',
             component: () => import('../Pages/Dashboards/Analytics.vue'),
+        },
+        {
+            path: '/uploads/upload-file',
+            name: 'upload-file',
+            component: () => import('../Pages/Uploads/UploadFile.vue'),
+        },
+        // Monitoring
+        {
+            path: '/monitoring/file-manager',
+            name: 'file-manager',
+            component: () => import('../Pages/Monitoring/FileManager.vue'),
         },
 
         // Pages
 
         {
         /*path: '/pages/login-boxed',*/
+         
             path: '/',
             name: 'login-boxed',
             meta: {layout: 'userpages'},

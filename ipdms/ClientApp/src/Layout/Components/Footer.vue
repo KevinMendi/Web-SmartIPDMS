@@ -1,7 +1,7 @@
 <template>
     <div class="app-footer">
         <div class="app-footer__inner text-center">
-            Copyright 2019 DashboardPack.com
+            IPDMS Copyright 2021
         </div>
     </div>
 </template>
