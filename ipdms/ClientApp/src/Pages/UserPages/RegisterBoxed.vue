@@ -178,7 +178,8 @@
                             this.submitted = true;
                         })
                         .catch(e => {
-                            alert(e);
+                            this.alertMessage = e;
+                            this.delayedAlert();
                         });
                 }
             },

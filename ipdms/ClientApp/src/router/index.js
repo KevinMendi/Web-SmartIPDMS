@@ -109,6 +109,11 @@ export default new Router({
             component: () => import('../Pages/Components/Accordions.vue'),
         },
         {
+            path: '/components/JqueryTable',
+            name: 'datatable',
+            component: () => import('../Pages/Components/JqueryTable.vue'),
+        },
+        {
             path: '/components/modals',
             name: 'modals',
             component: () => import('../Pages/Components/Modals.vue'),

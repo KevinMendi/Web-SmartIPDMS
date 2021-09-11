@@ -144,6 +144,10 @@
                                 href: '/components/accordions',
                             },
                             {
+                                title: 'Data Table',
+                                href: '/components/JqueryTable',
+                            },
+                            {
                                 title: 'Modals',
                                 href: '/components/modals',
                             },
