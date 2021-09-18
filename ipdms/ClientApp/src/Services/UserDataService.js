@@ -13,6 +13,10 @@ class UserDataService {
         return http.post("/IpdmsUsers", data);
     }
 
+    CheckCredential(data) {
+        return http.post("/IpdmsUsers/signin", data);
+    }
+
     UpdateUser(id, data) {
         return http.put(`/IpdmsUsers/${id}`, data);
     }

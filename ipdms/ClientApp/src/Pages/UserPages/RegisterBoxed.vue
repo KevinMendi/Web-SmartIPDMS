@@ -108,10 +108,6 @@
                                             </h6>
                                         </div>
                                         <div class="modal-footer d-block text-center">
-                                            <!--<b-button @click="saveUser" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
-                          size="lg">
-                    Create Account
-                </b-button>-->
                                             <b-button type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
                                                       size="lg">
                                                 Create Account
@@ -131,7 +127,6 @@
 </template>
 
 <script>
-    /*import axios from 'axios'*/
     import UserDataService from "../../Services/UserDataService";
     export default {
         name: "RegisterUser",
@@ -160,7 +155,6 @@
                     email: (this.user.email).trim(),
                     password: (this.user.password).trim(),
                     password2: (this.user.password2).trim()
-
                 };
 
                 if ((data.password).length < 8) {

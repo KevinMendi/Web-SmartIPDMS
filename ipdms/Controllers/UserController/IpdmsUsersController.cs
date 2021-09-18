@@ -86,6 +86,30 @@ namespace ipdms.Controllers.UserController
             return CreatedAtAction("GetIpdmsUser", new { id = ipdmsUser.ipdms_user_id }, ipdmsUser);
         }
 
+        [HttpPost("signin")]
+        public async Task<ActionResult<IpdmsUser>> ValidateCredential(IpdmsUser ipdmsUser)
+        {
+            IpdmsUser a = new IpdmsUser();
+            a = await (from u in _context.IpdmsUser
+                       where u.email == ipdmsUser.email && u.password == ipdmsUser.password
+                       select new IpdmsUser
+                       {
+                           ipdms_user_id = u.ipdms_user_id,
+                           first_name = u.first_name,
+                           middle_name = u.middle_name,
+                           last_name = u.last_name,
+                           user_role_id = u.user_role_id,
+                           email = u.email,
+                           password = u.password,
+                           CREATE_USER_ID = u.CREATE_USER_ID,
+                           CREATE_USER_DATE = u.CREATE_USER_DATE,
+                           LAST_UPDATE_USER_ID = u.LAST_UPDATE_USER_ID,
+                           LAST_UPDATE_USER_DATE = u.LAST_UPDATE_USER_DATE
+                       }).DefaultIfEmpty().FirstAsync();// FirstOrDefaultAsync();
+
+            return a;
+        }
+
         // DELETE: api/IpdmsUsers/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<IpdmsUser>> DeleteIpdmsUser(int id)
