@@ -3,7 +3,7 @@
         <div class="logo-src"/>
         <div class="app-header__content">
             <div class="app-header-left">
-                <SearchBox/>
+                <!--<SearchBox/>-->
             </div>
             <div class="app-header-right">
                 <UserArea/>
@@ -32,7 +32,7 @@
 
 <script>
 
-    import SearchBox from './Header/SearchBox';
+    //import SearchBox from './Header/SearchBox';
     import UserArea from './Header/HeaderUserArea';
 
     import {library} from '@fortawesome/fontawesome-svg-core'
@@ -47,7 +47,7 @@
     export default {
         name: "Header",
         components: {
-            SearchBox,
+            //SearchBox,
             UserArea,
             'font-awesome-icon': FontAwesomeIcon,
         },

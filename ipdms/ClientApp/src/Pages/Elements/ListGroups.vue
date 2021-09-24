@@ -593,9 +593,13 @@
       heading: 'List Groups',
       subheading: 'These can be used with other components and elements to create stunning and unique new elements for your UIs.',
       icon: 'pe-7s-paint icon-gradient bg-sunny-morning',
-
+      currentPage: 3,
     }),
-
+    methods: {
+      linkGen (pageNum) {
+        return '#page/' + pageNum + '/foobar'
+      }
+    }
 
   }
 </script>

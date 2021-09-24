@@ -29,6 +29,11 @@ export default new Router({
             name: 'file-manager',
             component: () => import('../Pages/Monitoring/FileManager.vue'),
         },
+        {
+            path: '/monitoring/chart',
+            name: 'chart',
+            component: () => import('../Pages/Monitoring/Chart.vue'),
+        },
 
         // Pages
 
