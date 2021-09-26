@@ -67,23 +67,28 @@
                         href: '/monitoring/file-manager'
                     },
                     {
-                        title: 'Pages',
-                        icon: 'pe-7s-browser',
-                        child: [
-                            {
-                                href: '/pages/login-boxed',
-                                title: 'Login Boxed',
-                            },
-                            {
-                                href: '/pages/register-boxed',
-                                title: 'Register Boxed',
-                            },
-                            {
-                                href: '/pages/forgot-password-boxed',
-                                title: 'Forgot Password Boxed',
-                            },
-                        ]
+                        icon: 'pe-7s-graph2',
+                        title: 'Chart',
+                        href: '/monitoring/chart'
                     },
+                    //{
+                    //    title: 'Pages',
+                    //    icon: 'pe-7s-browser',
+                    //    child: [
+                    //        {
+                    //            href: '/pages/login-boxed',
+                    //            title: 'Login Boxed',
+                    //        },
+                    //        {
+                    //            href: '/pages/register-boxed',
+                    //            title: 'Register Boxed',
+                    //        },
+                    //        {
+                    //            href: '/pages/forgot-password-boxed',
+                    //            title: 'Forgot Password Boxed',
+                    //        },
+                    //    ]
+                    //},
                     {
                         header: true,
                         title: 'UI Components',

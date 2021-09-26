@@ -225,7 +225,7 @@
         data: () => ({
             heading: 'Upload Office Action Document File',
             subheading: 'Upload latest office action document of the Project via scanning the document or upload the PDF file',
-            icon: 'pe-7s-upload icon-gradient bg-premium-dark',
+            icon: 'pe-7s-upload icon-gradient bg-happy-itmeo',
 
             counter: 99,
             max: 100,
