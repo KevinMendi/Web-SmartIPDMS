@@ -60,7 +60,8 @@
                                     </template>
 
                                     <template #cell(actions)="row">
-                                        <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1" variant="info">
+                                        <!-- ommitted script: @click="info(row.item, row.index, $event.target)"  -->
+                                        <b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
                                             View Details
                                         </b-button>
                                     </template>
@@ -118,8 +119,8 @@
                 timer: null,
                 striped: true,
                 items: [
-                    { isActive: false, application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
+                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: 'Intellectual Property Document Management System', agent_name: { first: 'Maria', last: 'dela Cruz' } },
+                    { isActive: false, application_no: '002', application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
                     {
                         application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' } //,
                         //_rowVariant: 'success'
@@ -187,10 +188,10 @@
             this.totalRows = this.items.length
         },
         methods: {
-            info(item, index, button) {
+            info(item, index /*, button*/) {
                 this.infoModal.title = `Row index: ${index}`
                 this.infoModal.content = JSON.stringify(item, null, 2)
-                this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+             //   this.$root.$emit('bv::show::modal', this.infoModal.id, button)
             },
             resetInfoModal() {
                 this.infoModal.title = ''

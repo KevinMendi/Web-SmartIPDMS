@@ -34,6 +34,12 @@ export default new Router({
             name: 'chart',
             component: () => import('../Pages/Monitoring/Chart.vue'),
         },
+        {
+            path: '/monitoring/file-manager/project-detail',
+            name: 'project-detail',
+            component: () => import('../Pages/Monitoring/ProjectDetail.vue'),
+        },
+
 
         // Pages
 
