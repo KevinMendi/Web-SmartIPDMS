@@ -12,7 +12,7 @@
                             </span>
                             <button type="button" tabindex="0" class="dropdown-item">Notifications</button>
                             <button type="button" tabindex="0" class="dropdown-item">Edit My Profile</button>
-                            <button type="button" tabindex="0" class="dropdown-item">Log Out</button>
+                            <button type="button" tabindex="0" class="dropdown-item"  @click="logout">Log Out</button>
                         </b-dropdown>
                     </div>
                     <div class="widget-content-left  ml-3 header-user-info">
@@ -69,7 +69,17 @@
 
         }),
 
-        methods: {}
+        methods: {
+            logout() {
+                
+                sessionStorage.removeItem("userInfo");
+
+                if (JSON.parse(sessionStorage.getItem('userInfo')) == null) {                   
+                    this.$router.push({ name: 'login-boxed' });
+                }
+                
+            }
+        }
     }
 
 

@@ -11,12 +11,15 @@ namespace ipdms.Models.AppDbContext
         public DbSet<Movie> Movies { get; set; }
         public DbSet<IpdmsUser> IpdmsUser { get; set; }
 
+        public DbSet<Project> Project { get; set; }
+
         public IpdmsDbContext(DbContextOptions<IpdmsDbContext> options) : base(options){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<Movie>().ToTable("Movie");
             modelBuilder.Entity<IpdmsUser>().ToTable("IpdmsUser");
+            modelBuilder.Entity<Project>().ToTable("Project");
         }
     }
 }

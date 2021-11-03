@@ -19,6 +19,11 @@ export default new Router({
             component: () => import('../Pages/Dashboards/Analytics.vue'),
         },
         {
+            path: '/register/register-project',
+            name: 'register-project',
+            component: () => import('../Pages/Dashboards/RegisterProject.vue'),
+        },
+        {
             path: '/uploads/upload-file',
             name: 'upload-file',
             component: () => import('../Pages/Uploads/UploadFile.vue'),

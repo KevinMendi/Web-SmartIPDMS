@@ -53,9 +53,14 @@
                     },
                     {
                         icon: 'pe-7s-cloud-upload',
-                        title: 'File Upload',
-                        href: '/uploads/upload-file',
+                        title: 'Register Project',
+                        href: '/register/register-project',
                     },
+                    //{
+                    //    icon: 'pe-7s-cloud-upload',
+                    //    title: 'File Upload',
+                    //    href: '/uploads/upload-file',
+                    //},
 
                     {
                         header: true,

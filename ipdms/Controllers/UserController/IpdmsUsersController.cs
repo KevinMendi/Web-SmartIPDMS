@@ -43,7 +43,7 @@ namespace ipdms.Controllers.UserController
         }
 
         // PUT: api/IpdmsUsers/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // To protect from overposting attacks, enable the specific properties you wnpm ant to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIpdmsUser(int id, IpdmsUser ipdmsUser)
@@ -86,6 +86,7 @@ namespace ipdms.Controllers.UserController
             return CreatedAtAction("GetIpdmsUser", new { id = ipdmsUser.ipdms_user_id }, ipdmsUser);
         }
 
+        //POST: api/IpdmsUsers/signin
         [HttpPost("signin")]
         public async Task<ActionResult<IpdmsUser>> ValidateCredential(IpdmsUser ipdmsUser)
         {

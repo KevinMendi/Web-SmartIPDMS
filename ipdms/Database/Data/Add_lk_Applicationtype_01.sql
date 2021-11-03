@@ -1,0 +1,2 @@
+IF NOT EXISTS (SELECT * FROM lk_ApplicationType WHERE application_type_name = 'Invention') INSERT INTO lk_ApplicationType VALUES ('Invention', 'Invention')
+IF NOT EXISTS (SELECT * FROM lk_ApplicationType WHERE application_type_name = 'Utility Model') INSERT INTO lk_ApplicationType VALUES ('Utility Model', 'Utility Model')

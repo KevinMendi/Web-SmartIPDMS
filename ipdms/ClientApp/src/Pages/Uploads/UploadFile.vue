@@ -106,10 +106,12 @@
                                                class="">File</label><input name="file"
                                                                            id="exampleFile"
                                                                            type="file"
+                                                                           @change="onFileChange"
                                                                            class="form-control-file">
                                         <small class="form-text text-muted">
                                             After selecting file to be uploaded, click button "Get Details".
                                         </small>
+                                        {{imageResult}}
                                     </div>
                                     <div class="">
                                         <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
@@ -216,6 +218,7 @@
 
 <script>
     import PageTitle from "../../Layout/Components/PageTitle.vue";
+    import FileDataService from "../../Services/FileDataService";
 
     export default {
         components: {
@@ -230,9 +233,52 @@
             counter: 99,
             max: 100,
             timer: null,
-            striped: true
+            striped: true,
+            image: '',
+            imageResult: ''
 
         }),
+        methods: {
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                var data = {
+                    image64: this.image
+                }
+                var reader = new FileReader();
+                //var vm = this;
+
+                reader.onload = (e) => {
+                    this.image = e.target.result;
+                    data.image64 = e.target.result;
+                    //console.log(data);
+                    FileDataService.AnalyzeImage(data)
+                        .then(response => {
+                            console.log(response);
+                            this.imageResult = response.data;
+                            //console.log(response.data);
+                        })
+                        .catch(e => {
+                            this.imageResult = e;
+                        });
+                };
+                reader.readAsDataURL(file);
+                
+            },
+            analyzeImage() {
+                FileDataService.AnalyzeImage(this.image)
+                    .then(response => {
+                        this.imageResult = response.data;
+                    })
+                    .catch(e => {
+                        this.imageResult = e;
+                    });
+            }
+        }
 
 
     }

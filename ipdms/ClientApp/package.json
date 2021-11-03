@@ -30,7 +30,9 @@
     "vue-chartjs": "^3.4.2",
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-router": "^3.0.5",
+    "vue-sessionstorage": "^1.0.0",
     "vue-sidebar-menu": "^3.7.0",
+    "vue2-datepicker": "^3.10.2",
     "vue2-google-maps": "^0.10.6",
     "vuex": "^3.6.2"
   },

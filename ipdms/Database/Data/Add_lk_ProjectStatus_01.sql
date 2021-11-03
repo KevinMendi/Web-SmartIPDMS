@@ -1,0 +1,3 @@
+IF NOT EXISTS (SELECT * FROM lk_ProjectStatus WHERE project_status_name = 'Pending') INSERT INTO lk_ProjectStatus VALUES ('Pending', 'Pending/On going')
+IF NOT EXISTS (SELECT * FROM lk_ProjectStatus WHERE project_status_name = 'Finished') INSERT INTO lk_ProjectStatus VALUES ('Finished', 'Finished Project')
+IF NOT EXISTS (SELECT * FROM lk_ProjectStatus WHERE project_status_name = 'Converted') INSERT INTO lk_ProjectStatus VALUES ('Converted', 'Converted to Utility Model')

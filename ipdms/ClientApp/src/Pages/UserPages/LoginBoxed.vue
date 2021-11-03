@@ -87,7 +87,12 @@
                     .then(response => {
                         this.submitted = true;
                         this.userInfo = response.data;
+                       // var test = response.data;
                         if (this.userInfo.ipdmsUserId != 0) {
+
+                            this.$store.dispatch('setUserInfo', this.userInfo);
+                            
+
                             this.$router.push({ path: 'dashboard' });
                         } else {
                             this.alertMessage = "Email or Password is incorrect!";
