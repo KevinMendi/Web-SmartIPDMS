@@ -1,7 +1,7 @@
 import http from "../http-common";
 
 class UserDataService {
-    getAllUsers() {
+    GetAllUsers() {
         return http.get("/IpdmsUsers");
     }
 

@@ -77,13 +77,20 @@
                                     <div class="col-md-4">
                                         <div class="position-relative form-group">
                                             <label for="agentName"
-                                                   class="">Agent Name</label><input name="agentName"
-                                                                                     id="agentName"
-                                                                                     placeholder="Agent Name"
-                                                                                     v-model="project.agentName"
-                                                                                     type="text"
-                                                                                     class="form-control"
-                                                                                     required>
+                                                   class="">Agent Name</label>
+                                            <!--<input name="agentName"
+                                                   id="agentName"
+                                                   placeholder="Agent Name"
+                                                   v-model="project.agentName"
+                                                   type="text"
+                                                   class="form-control"
+                                                   required>-->
+                                            <select name="agentName"
+                                                    id="officeAction"
+                                                    v-model="project.agentName"
+                                                    class="form-control">
+                                                <option v-for="(agent, index) in agents" :key="index">{{ agent.firstname + ' ' + agent.lastname  }}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -111,6 +118,7 @@
 <script>
     import PageTitle from "../../Layout/Components/PageTitle.vue";
     import FileDataService from "../../Services/FileDataService";
+    import UserDataService from "../../Services/UserDataService";
     import DatePicker from 'vue2-datepicker';
     import 'vue2-datepicker/index.css';
 
@@ -141,6 +149,7 @@
                 agentName: "",
                 pdfBase64: ""
             },
+            agents: [],
             stringJSON: '',
             submitted: false,
             showAlert: false,
@@ -210,8 +219,52 @@
                     .catch(e => {
                         this.imageResult = e;
                     });
+            },
+            getAgents() {
+                console.log("filterAgents");
+                UserDataService.GetAllUsers()
+                    .then(response => {
+                        var users = response.data;
+
+                        var frmFilter = "3";
+
+                        //var filterAgents = Object.keys(users).filter(function (key) {
+                        //    let entry = users[key];
+                        //    switch (frmFilter) {
+                        //        case '3':
+                        //            return entry.userRoleId === 3;
+                        //        default:
+                        //            return entry;
+                        //    }
+                        //}).reduce((res, key) => (res[key] = users[key], res), {});
+
+                        var filterAgents = Object.values(users).filter(function (entry) {
+                            switch (frmFilter) {
+                                case '3':
+                                    return entry.userRoleId === 3;
+                                default:
+                                    return entry;
+                            }
+                        });
+
+                        this.agents = filterAgents;
+                        //console.log("filterAgents");
+                        //console.log(filterAgents);
+                        //this.submitted = true;
+                        console.log("sulod");
+                        console.log(users);
+                        console.log(this.agents);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                    });
             }
 
+        },
+        beforeMount() {
+            this.getAgents()
+        },
+        computed: {
         }
 
 
