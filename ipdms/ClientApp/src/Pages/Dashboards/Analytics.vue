@@ -90,9 +90,9 @@
                             </div>
                         </div>
                         <div class="d-block text-center card-footer">
-                            <button class="btn-shadow btn-wide btn-pill btn btn-focus">
+                            <a class="btn-shadow btn-wide btn-pill btn btn-focus" href="../monitoring/file-manager">
                                 View Projects
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -381,7 +381,7 @@
                         </VuePerfectScrollbar>
                     </div>
                     <div class="d-block text-right card-footer">
-                        <button class="btn btn-primary">View Projects</button>
+                        <a class="btn btn-primary" href="../monitoring/file-manager">View Projects</a>
                     </div>
                 </div>
             </div>
