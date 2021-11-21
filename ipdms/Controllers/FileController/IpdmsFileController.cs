@@ -93,6 +93,18 @@ namespace ipdms.Controllers.FileController
                 _context.Document.Add(document);
                 await _context.SaveChangesAsync();
 
+                var document = new Document()
+                {
+                    office_action_id = (int)result["officeActionId"],
+                    project_id = projectId,
+                    mail_date = mailDate,
+                    filling_date = DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
+                    pdf_name = result["fileName"].ToString(),
+                    CREATE_USER_ID = (int)result["createUserId"],
+                    CREATE_USER_DATE = DateTime.Now,
+                    LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
+                    LAST_UPDATE_USER_DATE = DateTime.Now
+                };
 
                 var folderPath = $"{folderBaseName}_{folderName}/";
                 System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
