@@ -12,6 +12,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using System.Text;
+using System.IO;
+using System.Globalization;
+using System.Threading;
+
+
 namespace ipdms.Controllers.FileController
 {
     [ApiController]
@@ -29,53 +35,81 @@ namespace ipdms.Controllers.FileController
         [HttpPost]
         public async Task<ActionResult<string>> SaveProject([FromBody] string data)
         {
-            
             try
             {
-                var test = new Project();
-                
+                var result = JsonConvert.DeserializeObject<JToken>(data);
+                var mailDate = new DateTime();
 
-                var project = JsonConvert.DeserializeObject<Project>(data);
-                var document = JsonConvert.DeserializeObject<Document>(data);
-                Console.WriteLine(project.applicantName);
-                Console.WriteLine(document.officeActionId);
-                //Object dataObj = data;
-                //var project = new Project
-                //{
-                //    application_type_id = data.applicationType.Value
-                //    //project_status_id = 1,
-                //    //ipdms_user_id = 1,//need to change - get from session
-                //    //application_no = data.applicationNumber,
-                //    //project_title = data.projectName,
-                //    //applicant_name = data.applicantName,
-                //    //project_path = "C:/kmendi/smart-ipdms/ipdms/Files", //add a constant or in config files
-                //    //CREATE_USER_ID = "kmendi", // need to change - get from session
-                //    //CREATE_USER_DATE = DateTime.Now,
-                //    //LAST_UPDATE_USER_ID = "kmendi", // need to change - get from session
-                //    //LAST_UPDATE_USER_DATE = DateTime.Now
-                //};
+                if (string.IsNullOrEmpty(result["mailingDate"].ToString()))
+                {
+                    var pdefBase64 = new IpdmsFile()
+                    {
+                        image64 = result["pdfBase64"].ToString()
+                    };
 
-                //Make a method
-                //_context.Project.Add(project);
-                //await _context.SaveChangesAsync();
+                    var projectIdentifier = new ProjectIdentifier();
+                    projectIdentifier = AnalyzeImage(pdefBase64);
+                    mailDate = DateTime.Parse(projectIdentifier.MailDate);
+                }
+                else
+                {
+                    mailDate = DateTime.ParseExact(result["mailingDate"].ToString(), "dd/MM/yyyy", null);
+                }
+
+                var project = new Project()
+                {
+                    ipdms_user_id = (int)result["agentName"],
+                    applicant_name = result["applicantName"].ToString(),
+                    application_no = result["applicationNo"].ToString(),
+                    application_type_id = (int)result["applicationTypeId"],
+                    project_title = result["projectTitle"].ToString(),
+                    project_path = $"{Constants.Constants.projectBase}/{result["applicationTypeId"]}-{result["applicationNo"]}",
+                    CREATE_USER_ID = (int)result["createUserId"],
+                    CREATE_USER_DATE = DateTime.Now,
+                    LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
+                    LAST_UPDATE_USER_DATE = DateTime.Now
+                };
+
+                _context.Project.Add(project);
+                await _context.SaveChangesAsync();
+                int projectId = project.project_id;
+
+                var document = new Document()
+                {
+                    office_action_id = (int)result["officeActionId"],
+                    project_id = projectId,
+                    mail_date = mailDate,
+                    filling_date = DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
+                    pdf_name = result["fileName"].ToString(),
+                    CREATE_USER_ID = (int)result["createUserId"],
+                    CREATE_USER_DATE = DateTime.Now,
+                    LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
+                    LAST_UPDATE_USER_DATE = DateTime.Now
+                };
+
+                _context.Document.Add(document);
+                await _context.SaveChangesAsync();
+
+
+                var folderPath = $"{project.application_type_id}-{project.application_no}/";
+                System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
+                using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
+                {
+                    byte[] byteArray = Convert.FromBase64String((result["pdfBase64"].ToString()).Remove(0, 28));
+                    stream.Write(byteArray, 0, byteArray.Length);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                return ex.ToString();
             }
           
-
-
-            //_context.IpdmsUser.Add(data);
-            //await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetIpdmsUser");
-            return "";
+            return "Successfully Saved Project!";
         }
 
         //POST: api/IpdmsFile/analyze-file
         [HttpPost("analyze/image")]
-        public ActionResult<ProjectIdentifier> AnalyzeImage(IpdmsFile file)
+        public ProjectIdentifier AnalyzeImage(IpdmsFile file)
         {
             var fileContent = "";
             var fileContentList = new List<string>();

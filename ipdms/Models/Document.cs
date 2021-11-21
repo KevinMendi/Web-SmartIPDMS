@@ -10,28 +10,34 @@ namespace ipdms.Models
     public class Document
     {
         [Key]
-        [JsonPropertyName("document_id")]
-        public int documentId { get; set; }
+        [JsonPropertyName("documentId")]
+        public int document_id { get; set; }
 
-        [JsonPropertyName("office_action_id")]
-        public int officeActionId { get; set; }
+        [JsonPropertyName("officeActionId")]
+        public int office_action_id { get; set; }
 
-        [JsonPropertyName("project_id")]
-        public int projectId { get; set; }
+        [JsonPropertyName("projectId")]
+        public int project_id { get; set; }
 
-        [JsonPropertyName("mail_date")]
-        public DateTime? mailDate { get; set; }
+        [JsonPropertyName("pdfName")]
+        public string pdf_name { get; set; }
 
-        [JsonPropertyName("CREATE_USER_ID")]
-        public string createUserId { get; set; }
+        [JsonPropertyName("mailDate")]
+        public DateTime? mail_date { get; set; }
 
-        [JsonPropertyName("CREATE_USER_DATE")]
-        public DateTime? createUserDate { get; set; }
+        [JsonPropertyName("fillingDate")]
+        public DateTime? filling_date { get; set; }
 
-        [JsonPropertyName("LAST_UPDATE_USER_ID")]
-        public string lastUpdateUserId { get; set; }
+        [JsonPropertyName("createUserId")]
+        public int CREATE_USER_ID { get; set; }
 
-        [JsonPropertyName("LAST_UPDATE_USER_DATE")]
-        public DateTime? lastUpdateUserDate { get; set; }
+        [JsonPropertyName("createUserDate")]
+        public DateTime? CREATE_USER_DATE { get; set; }
+
+        [JsonPropertyName("lastUpdateUserId")]
+        public int LAST_UPDATE_USER_ID { get; set; }
+
+        [JsonPropertyName("lastUpdateUserDate")]
+        public DateTime? LAST_UPDATE_USER_DATE { get; set; }
     }
 }

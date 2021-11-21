@@ -10,40 +10,40 @@ namespace ipdms.Models
     public class Project
     {
         [Key]
-        [JsonPropertyName("project_id")]
-        public int projectId { get; set; }
+        [JsonPropertyName("projectId")]
+        public int project_id { get; set; }
 
-        [JsonPropertyName("application_type_id")]
-        public int applicationTypeId { get; set; }
+        [JsonPropertyName("applicationTypeId")]
+        public int application_type_id { get; set; }
 
-        [JsonPropertyName("project_status_id")]
-        public int projectStatusId { get; set; }
+        [JsonPropertyName("projectStatusId")]
+        public int project_status_id { get; set; }
 
-        [JsonPropertyName("ipdms_user_id")]
-        public int ipdmsUserId { get; set; }
+        [JsonPropertyName("ipdmsUserId")]
+        public int ipdms_user_id { get; set; }
 
-        [JsonPropertyName("application_no")]
-        public string applicationNo { get; set; }
+        [JsonPropertyName("applicationNo")]
+        public string application_no { get; set; }
 
-        [JsonPropertyName("project_title")]
-        public string projectTitle { get; set; }
+        [JsonPropertyName("projectTitle")]
+        public string project_title { get; set; }
 
-        [JsonPropertyName("applicant_name")]
-        public string applicantName { get; set; }
+        [JsonPropertyName("applicantName")]
+        public string applicant_name { get; set; }
 
-        [JsonPropertyName("project_path")]
-        public string projectPath { get; set; }
+        [JsonPropertyName("projectPath")]
+        public string project_path { get; set; }
 
-        [JsonPropertyName("CREATE_USER_ID")]
-        public string createUserId { get; set; }
+        [JsonPropertyName("createUserId")]
+        public int CREATE_USER_ID { get; set; }
 
-        [JsonPropertyName("CREATE_USER_DATE")]
-        public DateTime? createUserDate { get; set; }
+        [JsonPropertyName("createUserDate")]
+        public DateTime? CREATE_USER_DATE { get; set; }
 
-        [JsonPropertyName("LAST_UPDATE_USER_ID")]
-        public string lastUpdateUserId { get; set; }
+        [JsonPropertyName("lastUpdateUserId")]
+        public int LAST_UPDATE_USER_ID { get; set; }
 
-        [JsonPropertyName("LAST_UPDATE_USER_DATE")]
-        public DateTime? lastUpdateUserDate { get; set; }
+        [JsonPropertyName("lastUpdateUserDate")]
+        public DateTime? LAST_UPDATE_USER_DATE { get; set; }
     }
 }

@@ -14,9 +14,9 @@ namespace ipdms.Models
         public int application_type_id { get; set; }
 
         [JsonPropertyName("applicationTypeName")]
-        public int application_type_name { get; set; }
+        public string application_type_name { get; set; }
 
         [JsonPropertyName("applicationTypeDesc")]
-        public int application_type_desc { get; set; }
+        public string application_type_desc { get; set; }
     }
 }
