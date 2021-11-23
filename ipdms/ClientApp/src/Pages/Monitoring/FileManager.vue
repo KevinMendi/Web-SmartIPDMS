@@ -28,10 +28,10 @@
                                     <b-form-checkbox-group v-model="filterOn"
                                                            :aria-describedby="ariaDescribedby"
                                                            class="mt-1">
-                                        <b-form-checkbox value="project_name">Project Name</b-form-checkbox>
-                                        <b-form-checkbox value="application_no">Application No.</b-form-checkbox>
-                                        <b-form-checkbox value="application_type">Agent Name</b-form-checkbox>
-                                        <b-form-checkbox value="isActive">Application Type</b-form-checkbox>
+                                        <b-form-checkbox value="application">Application Type/No</b-form-checkbox>
+                                        <b-form-checkbox value="project">Project Name</b-form-checkbox>
+                                        <b-form-checkbox value="agent_name">Agent Name</b-form-checkbox>
+                                        <b-form-checkbox value="no_of_files">No. of files</b-form-checkbox>
                                     </b-form-checkbox-group>
                                 </b-form-group>
 
@@ -59,14 +59,20 @@
                                     <!--<template #cell(project_name)>
 
     </template>-->
-                                    <template #cell(project_name)="row">
+                                    <template #cell(application)="row">
                                         <i class="pe-7s-folder px-2"></i>
-                                        <span><a href="">{{row.value.name}}</a></span>
+                                        <span><a href="file-manager/project-detail">{{ row.value.type }} {{ row.value.number }}</a></span>
 
                                         <!-- You can also use the font-awesome-icon component here -->
                                     </template>
+                                    <template #cell(project)="row">
+                                        {{ row.value.pname }}
+                                    </template>
+                                    <template #cell(no_of_files)="row">
+                                        {{ row.value }}
+                                    </template>
                                     <template #cell(agent_name)="row">
-                                        {{ row.value.first }} {{ row.value.last }}
+                                        {{ row.value.first}} {{ row.value.last }}
                                     </template>
 
                                     <template #cell(actions)="row">
@@ -440,6 +446,7 @@
 
 <script>
     import PageTitle from "../../Layout/Components/PageTitle.vue";
+    import FileDataService from "../../Services/FileDataService";
 
     export default {
         components: {
@@ -457,39 +464,19 @@
                 timer: null,
                 striped: true,
                 items: [
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 1' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 2' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 3' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 4' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 5' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 6' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 7' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 8' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    { isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 9' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '002', application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
                     //{
-                    //    application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' } //,
-                    //    //_rowVariant: 'success'
-                    //},
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{
-                    //    isActive: true,
-                    //    age: 87,
-                    //    name: { first: 'Larsen', last: 'Shaw' }//,
-                    //    //_cellVariants: { age: 'danger', isActive: 'warning' }
-                    //},
-                    //{ isActive: false, age: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: {first: 'Maria', last: 'dela Cruz'}  }
+                    //    isActive: false,
+                    //    project_id: 0,
+                    //    application: { icon: 'pe-7s-folder', type: 'Invention', number: '1/2014/000317' },
+                    //    project: { pname: 'Sample Project Title 1' },
+                    //    no_of_files: 2,
+                    //    agent_name: { first: 'Maria', last: 'dela Cruz' }
+                    //}, 
                 ],
                 fields: [
-                    { key: 'project_name', label: 'Project Name', sortable: true, sortDirection: 'desc' },
-                    { key: 'application_no', label: 'Application No', sortable: true, class: 'text-center' },
-                    { key: 'application_type', label: 'Application Type', sortable: true, class: 'text-center' },
+                    { key: 'application', label: 'Application Type/No', sortable: true, sortDirection: 'desc' },
+                    { key: 'project', label: 'Project Name', sortable: true, class: 'text-center' },
+                    { key: 'no_of_files', label: 'No. of files', sortable: true, class: 'text-center' },
                     { key: 'agent_name', label: 'Agent', sortable: true, sortDirection: 'desc'},
                     {
                         /*key: 'isActive',*/
@@ -516,7 +503,14 @@
                     id: 'info-modal',
                     title: '',
                     content: ''
-                }
+                },
+                projectList: [],
+
+                submitted: false,
+                showAlert: false,
+                alertMessage: "",
+                error: null,
+                user: null
             }
         },
         computed: {
@@ -547,7 +541,31 @@
                 // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
+            },
+            getProjectList() {
+                FileDataService.GetProjectList()
+                    .then(response => {
+                        console.log(response);
+                        /*this.projectList = response.data;*/
+                        this.items = response.data;
+                        /*var result = response.data;*/
+
+
+
+
+                        //this.imageResult = response.data;
+                        //console.log(response.data);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
             }
+        },
+        beforeMount() {
+            this.getProjectList();
+            console.log("sulod");
+            console.log(this.projectList);
         }
     }
 </script>

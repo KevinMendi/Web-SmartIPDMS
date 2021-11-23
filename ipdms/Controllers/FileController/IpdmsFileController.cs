@@ -16,7 +16,7 @@ using System.Text;
 using System.IO;
 using System.Globalization;
 using System.Threading;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace ipdms.Controllers.FileController
 {
@@ -56,6 +56,9 @@ namespace ipdms.Controllers.FileController
                     mailDate = DateTime.ParseExact(result["mailingDate"].ToString(), "dd/MM/yyyy", null);
                 }
 
+                var folderBaseName = result["applicationTypeId"].ToString() == "1" ? "Invention" : "Utility Model";
+                var folderName = (result["applicationNo"].ToString()).Replace("/", "_");
+
                 var project = new Project()
                 {
                     ipdms_user_id = (int)result["agentName"],
@@ -63,7 +66,7 @@ namespace ipdms.Controllers.FileController
                     application_no = result["applicationNo"].ToString(),
                     application_type_id = (int)result["applicationTypeId"],
                     project_title = result["projectTitle"].ToString(),
-                    project_path = $"{Constants.Constants.projectBase}/{result["applicationTypeId"]}-{result["applicationNo"]}",
+                    project_path = $"{Constants.Constants.projectBase}/{folderBaseName}_{folderName}",
                     CREATE_USER_ID = (int)result["createUserId"],
                     CREATE_USER_DATE = DateTime.Now,
                     LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
@@ -91,7 +94,7 @@ namespace ipdms.Controllers.FileController
                 await _context.SaveChangesAsync();
 
 
-                var folderPath = $"{project.application_type_id}-{project.application_no}/";
+                var folderPath = $"{folderBaseName}_{folderName}/";
                 System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
                 using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
                 {
@@ -103,7 +106,7 @@ namespace ipdms.Controllers.FileController
             {
                 return ex.ToString();
             }
-          
+
             return "Successfully Saved Project!";
         }
 
@@ -151,7 +154,7 @@ namespace ipdms.Controllers.FileController
                 "NOTICE OF ISSUANCE OF CERTIFICATE",
                 "Revival Order",
                 "Certificate of Registration",
-                "Acknowledgement" 
+                "Acknowledgement"
             };
 
             var applicationTypeList = new List<string>(){
@@ -175,7 +178,7 @@ namespace ipdms.Controllers.FileController
             {
                 applicationType = extractedText.FirstOrDefault(s => s.Contains(a));
 
-                if(applicationType != null)
+                if (applicationType != null)
                 {
                     projectIdentifier.ApplicationType = applicationType;
                     break;
@@ -204,7 +207,7 @@ namespace ipdms.Controllers.FileController
                 //Check if it is digit
                 if (!Char.IsDigit(ch))
                 {
-                    format1 = true; 
+                    format1 = true;
                 }
                 else
                 {
@@ -216,7 +219,8 @@ namespace ipdms.Controllers.FileController
             {
                 projectIdentifier.MailDate = MailDateFormat1(result);
             }
-            else{
+            else
+            {
 
             }
 
@@ -319,6 +323,32 @@ namespace ipdms.Controllers.FileController
             Console.WriteLine($"Mail Date: {mailDateStr}");
 
             return mailDateStr;
+        }
+
+
+        //[HttpGet("projects")]
+        //public async Task<ActionResult<IEnumerable<Project>>> GetProjectList()
+        //{
+        //    var test = await _context.Project.ToListAsync();
+        //    return test;
+        //}
+        [HttpGet("projects")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectList()
+        {
+            var result = await (from p in _context.Project
+                         join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
+                         join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
+                         select new
+                         {
+                             isActive = false,
+                             project_id = p.project_id,
+                             application = new { icon =  "pe-7s-folder", type =  a.application_type_name , number = p.application_no },
+                             project = new { pname = p.project_title },
+                             agent_name = new { first = i.first_name, last = i.last_name },
+                             no_of_files = _context.Document.Where(d => d.project_id == p.project_id).Count()
+                         }).ToListAsync();
+
+            return result;
         }
     }
 }

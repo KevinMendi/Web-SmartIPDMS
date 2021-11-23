@@ -9,6 +9,10 @@ class FileDataService {
         return http.post("/IpdmsFile", data);
     } 
 
+    GetProjectList() {
+        return http.get("/IpdmsFile/projects");
+    }
+
 }
 
 export default new FileDataService();
