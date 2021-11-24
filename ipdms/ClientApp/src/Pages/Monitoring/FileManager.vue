@@ -70,7 +70,7 @@
                                     <template #cell(numberOfFiles)="row">
                                         {{ row.value }}
                                     </template>
-                                    <template #cell(agentName)="row">
+                                    <template #cell(agent)="row">
                                         {{ row.value.first}} {{ row.value.last }}
                                     </template>
 
@@ -475,8 +475,8 @@
                 fields: [
                     { key: 'application', label: 'Application Type/No', sortable: true, sortDirection: 'desc' },
                     { key: 'project', label: 'Project Name', sortable: true, class: 'text-center' },
-                    { key: 'numberOFiles', label: 'No. of files', sortable: true, class: 'text-center' },
-                    { key: 'agentName', label: 'Agent', sortable: true, sortDirection: 'desc'},
+                    { key: 'numberOfFiles', label: 'No. of files', sortable: true, class: 'text-center' },
+                    { key: 'agent', label: 'Agent', sortable: true, sortDirection: 'desc'},
                     {
                         /*key: 'isActive',*/
                         label: 'Is Active',
