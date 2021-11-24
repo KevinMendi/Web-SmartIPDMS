@@ -43,6 +43,9 @@ export default new Router({
             path: '/monitoring/file-manager/project-detail',
             name: 'project-detail',
             component: () => import('../Pages/Monitoring/ProjectDetail.vue'),
+            props(route) {
+                return { projectId: route.query.projectId }
+            }
         },
 
 

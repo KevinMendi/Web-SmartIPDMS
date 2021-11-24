@@ -13,6 +13,10 @@ class FileDataService {
         return http.get("/IpdmsFile/projects");
     }
 
+    GetDocumentListByProjectId(projectId) {
+        return http.get(`/IpdmsFile/project/document/${projectId}`);
+    }
+    
 }
 
 export default new FileDataService();

@@ -61,17 +61,16 @@
     </template>-->
                                     <template #cell(application)="row">
                                         <i class="pe-7s-folder px-2"></i>
-                                        <span><a href="file-manager/project-detail">{{ row.value.type }} {{ row.value.number }}</a></span>
-
+                                        <span><router-link :to="{ name: 'project-detail', query: { projectId: row.value.projectId } }">{{ row.value.type }} {{ row.value.number }}</router-link></span>
                                         <!-- You can also use the font-awesome-icon component here -->
                                     </template>
                                     <template #cell(project)="row">
                                         {{ row.value.pname }}
                                     </template>
-                                    <template #cell(no_of_files)="row">
+                                    <template #cell(numberOfFiles)="row">
                                         {{ row.value }}
                                     </template>
-                                    <template #cell(agent_name)="row">
+                                    <template #cell(agentName)="row">
                                         {{ row.value.first}} {{ row.value.last }}
                                     </template>
 
@@ -476,8 +475,8 @@
                 fields: [
                     { key: 'application', label: 'Application Type/No', sortable: true, sortDirection: 'desc' },
                     { key: 'project', label: 'Project Name', sortable: true, class: 'text-center' },
-                    { key: 'no_of_files', label: 'No. of files', sortable: true, class: 'text-center' },
-                    { key: 'agent_name', label: 'Agent', sortable: true, sortDirection: 'desc'},
+                    { key: 'numberOFiles', label: 'No. of files', sortable: true, class: 'text-center' },
+                    { key: 'agentName', label: 'Agent', sortable: true, sortDirection: 'desc'},
                     {
                         /*key: 'isActive',*/
                         label: 'Is Active',

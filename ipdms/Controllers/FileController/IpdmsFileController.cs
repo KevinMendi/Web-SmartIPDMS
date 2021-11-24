@@ -340,15 +340,33 @@ namespace ipdms.Controllers.FileController
                          join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
                          select new
                          {
-                             isActive = false,
-                             project_id = p.project_id,
-                             application = new { icon =  "pe-7s-folder", type =  a.application_type_name , number = p.application_no },
-                             project = new { pname = p.project_title },
-                             agent_name = new { first = i.first_name, last = i.last_name },
-                             no_of_files = _context.Document.Where(d => d.project_id == p.project_id).Count()
+                             IsActive = false,
+                             ProjectId = p.project_id,
+                             Application = new { icon =  "pe-7s-folder", projectId = p.project_id, type =  a.application_type_name , number = p.application_no },
+                             Project = new { pname = p.project_title },
+                             Agent = new { first = i.first_name, last = i.last_name },
+                             NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count()
                          }).ToListAsync();
 
             return result;
         }
+        [HttpGet("project/document/{projectId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetDocumentListByProjectId(int projectId)
+        {
+            var documents = await (from p in _context.Project
+                                   join d in _context.Document on p.project_id equals d.project_id
+                                   join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                   where d.project_id == projectId
+                                   select new
+                                   {
+                                       IsActive = false,
+                                       OfficeAction = new { icon = "pe-7s-file", type = oa.office_action_name},
+                                       File = new { fname = d.pdf_name }, fileSize = "0Kb" 
+                                   }).ToListAsync();
+
+            return documents;
+        }
+
+        
     }
 }

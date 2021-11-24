@@ -7,7 +7,7 @@
                     <div class="content">
                         <b-card class="mb-3" no-body>
                             <div class="card-body">
-
+                                <pre>ProjectId: {{ this.projectId }}</pre>
                                 <b-input-group size="sm"
                                                cols-sm="2">
                                     <b-form-input id="filter-input"
@@ -60,7 +60,7 @@
                                                 <!--<template #cell(project_name)>
 
                                 </template>-->
-                                                <template #cell(office_action)="row">
+                                                <template #cell(officeAction)="row">
                                                     <i class="pe-7s-file px-2"></i>
                                                     <span><a href="file-manager/project-detail">{{ row.value.type }}</a></span>
 
@@ -69,7 +69,7 @@
                                                 <template #cell(file)="row">
                                                     {{ row.value.fname }}
                                                 </template>
-                                                <template #cell(file_size)="row">
+                                                <template #cell(fileSize)="row">
                                                     {{ row.value }}
                                                 </template>
 
@@ -243,11 +243,19 @@
 
 <script>
     import PageTitle from "../../Layout/Components/PageTitle.vue";
+    import FileDataService from "../../Services/FileDataService";
 
     export default {
+        name: 'project-detail',
         components: {
             PageTitle,
 
+        },
+        props: {
+            projectId: {
+                type: Number,
+                required: true
+            }
         },
         data() {
             return {
@@ -260,40 +268,13 @@
                 timer: null,
                 striped: true,
                 items: [
-                    { isActive: false, office_action: { icon: 'pe-7s-file', type: 'Acknowledgement' }, file: { fname: '2017_NOWA_PA12014000317.pdf' }, file_size: '2kb' },
-                    { isActive: false, office_action: { icon: 'pe-7s-file', type: 'Formality Examination Report' }, file: { fname: '2019 SSER PA12014000318.pdf' }, file_size: '3kb' },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 2' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 3' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 4' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 5' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 6' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 7' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 8' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '001', application_type: 'Invention', project_name: { icon: 'pe-7s-folder', name: 'Sample Project Title 9' }, agent_name: { first: 'Maria', last: 'dela Cruz' } },
-                    //{ isActive: false, application_no: '002', application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{
-                    //    application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' } //,
-                    //    //_rowVariant: 'success'
-                    //},
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{
-                    //    isActive: true,
-                    //    age: 87,
-                    //    name: { first: 'Larsen', last: 'Shaw' }//,
-                    //    //_cellVariants: { age: 'danger', isActive: 'warning' }
-                    //},
-                    //{ isActive: false, age: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: { first: 'Maria', last: 'dela Cruz' }  },
-                    //{ application_no: 40, application_type: 'Invention', project_name: 'Sample Project Title 1', agent_name: {first: 'Maria', last: 'dela Cruz'}  }
+           /*         { isActive: false, office_action: { icon: 'pe-7s-file', type: 'Acknowledgement' }, file: { fname: '2017_NOWA_PA12014000317.pdf' }, file_size: '2kb' },*/
+
                 ],
                 fields: [
-                    { key: 'office_action', label: 'Office Action/Document', sortable: true, sortDirection: 'desc' },
+                    { key: 'officeAction', label: 'Office Action/Document', sortable: true, sortDirection: 'desc' },
                     { key: 'file', label: 'File Name', sortable: true, class: 'text-center' },
-                    { key: 'file_size', label: 'File size', sortable: true, class: 'text-center' },
+                    { key: 'fileSize', label: 'File size', sortable: true, class: 'text-center' },
                     //{ key: 'agent_name', label: 'Agent', sortable: true, sortDirection: 'desc' },
                     //{
                     //    /*key: 'isActive',*/
@@ -369,7 +350,22 @@
                 // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
+            },
+            getDocumentListByProjectId(id) {
+                FileDataService.GetDocumentListByProjectId(id)
+                    .then(response => {
+                        console.log(response);
+                        this.items = response.data;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
             }
+        },
+        beforeMount() {
+            this.getDocumentListByProjectId(this.projectId);
+
         }
     }
 </script>
