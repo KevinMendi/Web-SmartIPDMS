@@ -59,6 +59,24 @@ namespace ipdms.Controllers.FileController
                 var folderBaseName = result["applicationTypeId"].ToString() == "1" ? "Invention" : "Utility Model";
                 var folderName = (result["applicationNo"].ToString()).Replace("/", "_");
 
+                //save PDF
+                var folderPath = $"{folderBaseName}_{folderName}/";
+                var fileSize = 0;
+                System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
+                using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
+                {
+                    byte[] byteArray = Convert.FromBase64String((result["pdfBase64"].ToString()).Remove(0, 28));
+                    stream.Write(byteArray, 0, byteArray.Length);
+                    int counter = 0;
+                    decimal number = (decimal)byteArray.Length;
+                    while (Math.Round(number / 1024) >= 1)
+                    {
+                        number = number / 1024;
+                        counter++;
+                    }
+                    fileSize = (int)Math.Ceiling(number);
+                }
+
                 var project = new Project()
                 {
                     ipdms_user_id = (int)result["agentName"],
@@ -84,6 +102,8 @@ namespace ipdms.Controllers.FileController
                     mail_date = mailDate,
                     filling_date = DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
                     pdf_name = result["fileName"].ToString(),
+                    pdf_content = result["pdfBase64"].ToString(),
+                    pdf_file_size = fileSize,
                     CREATE_USER_ID = (int)result["createUserId"],
                     CREATE_USER_DATE = DateTime.Now,
                     LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
@@ -106,13 +126,7 @@ namespace ipdms.Controllers.FileController
                 //    LAST_UPDATE_USER_DATE = DateTime.Now
                 //};
 
-                var folderPath = $"{folderBaseName}_{folderName}/";
-                System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
-                using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
-                {
-                    byte[] byteArray = Convert.FromBase64String((result["pdfBase64"].ToString()).Remove(0, 28));
-                    stream.Write(byteArray, 0, byteArray.Length);
-                }
+                
             }
             catch (Exception ex)
             {
@@ -344,12 +358,13 @@ namespace ipdms.Controllers.FileController
         //    var test = await _context.Project.ToListAsync();
         //    return test;
         //}
-        [HttpGet("projects")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectList()
+        [HttpGet("projects/{userId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectList(int userId)
         {
             var result = await (from p in _context.Project
                          join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
                          join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
+                         where p.ipdms_user_id == userId
                          select new
                          {
                              IsActive = false,
@@ -368,12 +383,13 @@ namespace ipdms.Controllers.FileController
             var documents = await (from p in _context.Project
                                    join d in _context.Document on p.project_id equals d.project_id
                                    join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
-                                   where d.project_id == projectId
+                                   where d.project_id == projectId && d.is_deleted == false
                                    select new
                                    {
                                        IsActive = false,
                                        OfficeAction = new { icon = "pe-7s-file", type = oa.office_action_name},
-                                       File = new { fname = d.pdf_name }, fileSize = "0Kb" 
+                                       File = new { fname = d.pdf_name }, fileSize = d.pdf_file_size,
+                                       Actions = new { documentId = d.document_id }
                                    }).ToListAsync();
 
             return documents;

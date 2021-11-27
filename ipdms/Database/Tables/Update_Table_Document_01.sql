@@ -1,0 +1,3 @@
+ALTER TABLE Document
+ADD is_deleted Bit NOT NULL DEFAULT(0)
+GO

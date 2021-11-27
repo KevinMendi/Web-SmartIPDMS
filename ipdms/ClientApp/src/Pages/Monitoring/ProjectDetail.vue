@@ -4,104 +4,106 @@
         <b-alert show dismissible fade variant="danger"> Upcoming Office Action response submission deadline is on 08/09/2021! </b-alert>
 
 
-                    <div class="content">
-                        <b-card class="mb-3" no-body>
-                            <div class="card-body">
-                                <pre>ProjectId: {{ this.projectId }}</pre>
-                                <b-input-group size="sm"
-                                               cols-sm="2">
-                                    <b-form-input id="filter-input"
-                                                  v-model="filter"
-                                                  type="search"
-                                                  placeholder="Type to Search">
-                                    </b-form-input>
-                                    <b-input-group-append>
-                                        <b-button :disabled="!filter" @click="filter = ''" variant="primary">Clear</b-button>
-                                    </b-input-group-append>
-                                </b-input-group>
+        <div class="content">
+            <b-card class="mb-3" no-body>
+                <div class="card-body">
+                    <pre>ProjectId: {{ this.projectId }}</pre>
+                    <b-input-group size="sm"
+                                   cols-sm="2">
+                        <b-form-input id="filter-input"
+                                      v-model="filter"
+                                      type="search"
+                                      placeholder="Type to Search">
+                        </b-form-input>
+                        <b-input-group-append>
+                            <b-button :disabled="!filter" @click="filter = ''" variant="primary">Clear</b-button>
+                        </b-input-group-append>
+                    </b-input-group>
 
-                                <b-form-group v-model="sortDirection"
-                                              label="Filter By:"
-                                              description="Leave all unchecked to filter on all data"
-                                              label-cols-sm="1"
-                                              label-align-sm="right"
-                                              label-size="sm"
-                                              class="mb-0"
-                                              v-slot="{ ariaDescribedby }">
-                                    <b-form-checkbox-group v-model="filterOn"
-                                                           :aria-describedby="ariaDescribedby"
-                                                           class="mt-1">
-                                        <b-form-checkbox value="office_action">Office Action</b-form-checkbox>
-                                        <b-form-checkbox value="file">File Name</b-form-checkbox>
-                                        <!--<b-form-checkbox value="application_type">Agent Name</b-form-checkbox>
-                                        <b-form-checkbox value="isActive">Application Type</b-form-checkbox>-->
-                                    </b-form-checkbox-group>
-                                </b-form-group>
+                    <b-form-group v-model="sortDirection"
+                                  label="Filter By:"
+                                  description="Leave all unchecked to filter on all data"
+                                  label-cols-sm="1"
+                                  label-align-sm="right"
+                                  label-size="sm"
+                                  class="mb-0"
+                                  v-slot="{ ariaDescribedby }">
+                        <b-form-checkbox-group v-model="filterOn"
+                                               :aria-describedby="ariaDescribedby"
+                                               class="mt-1">
+                            <b-form-checkbox value="office_action">Office Action</b-form-checkbox>
+                            <b-form-checkbox value="file">File Name</b-form-checkbox>
+                            <!--<b-form-checkbox value="application_type">Agent Name</b-form-checkbox>
+                        <b-form-checkbox value="isActive">Application Type</b-form-checkbox>-->
+                        </b-form-checkbox-group>
+                    </b-form-group>
 
 
-                            </div>
-                                    <template>
-                                        <b-container fluid>
-                                            <!--Main table element-->
-                                            <b-table :items="items"
-                                                     :fields="fields"
-                                                     :current-page="currentPage"
-                                                     :per-page="perPage"
-                                                     :filter="filter"
-                                                     :filter-included-fields="filterOn"
-                                                     :sort-by.sync="sortBy"
-                                                     :sort-desc.sync="sortDesc"
-                                                     :sort-direction="sortDirection"
-                                                     stacked="md"
-                                                     show-empty
-                                                     small
-                                                     @filtered="onFiltered">
+                </div>
+                <template>
+                    <b-container fluid>
+                        <!--Main table element-->
+                        <b-table :items="items"
+                                 :fields="fields"
+                                 :current-page="currentPage"
+                                 :per-page="perPage"
+                                 :filter="filter"
+                                 :filter-included-fields="filterOn"
+                                 :sort-by.sync="sortBy"
+                                 :sort-desc.sync="sortDesc"
+                                 :sort-direction="sortDirection"
+                                 stacked="md"
+                                 show-empty
+                                 small
+                                 @filtered="onFiltered">
 
-                                                <!--<template #cell(project_name)>
+                            <!--<template #cell(project_name)>
 
-                                </template>-->
-                                                <template #cell(officeAction)="row">
-                                                    <i class="pe-7s-file px-2"></i>
-                                                    <span><a href="file-manager/project-detail">{{ row.value.type }}</a></span>
+                        </template>-->
+                            <template #cell(officeAction)="row">
+                                <i class="pe-7s-file px-2"></i>
+                                <span>{{ row.value.type }}</span>
 
-                                                    <!-- You can also use the font-awesome-icon component here -->
-                                                </template>
-                                                <template #cell(file)="row">
-                                                    {{ row.value.fname }}
-                                                </template>
-                                                <template #cell(fileSize)="row">
-                                                    {{ row.value }}
-                                                </template>
+                                <!-- You can also use the font-awesome-icon component here -->
+                            </template>
+                            <template #cell(file)="row">
+                                {{ row.value.fname }}
+                            </template>
+                            <template #cell(fileSize)="row">
+                                {{ row.value }} KB
+                            </template>
 
-                                                <template #cell(actions)="row">
-                                                    <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
-                                                    <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
+                            <template #cell(actions)="row">
+                                <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
+                                <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
         View Details
     </b-button>-->
-                                                    <b-button pill variant="success" v-b-tooltip title="View"><i class="pe-7s-look"></i></b-button>&nbsp;
-                                                    <b-button pill variant="warning" v-b-tooltip title="Download"><i class="pe-7s-download"></i></b-button>&nbsp;
-                                                    <b-button pill variant="danger" v-b-tooltip title="Delete"><i class="pe-7s-trash"></i></b-button>
-                                                </template>
+                                <b-button pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.documentId)"><i class="pe-7s-look"></i></b-button>&nbsp;
+                                <b-button pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.documentId)"><i class="pe-7s-download"></i></b-button>&nbsp;
+                                <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteDocumentById(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>
+                                <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
+                            </template>
 
-                                                <template #row-details="row">
-                                                    <b-card>
-                                                        <ul>
-                                                            <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                                        </ul>
-                                                    </b-card>
-                                                </template>
-                                            </b-table>
-                                            <!--Info modal-->
-                                            <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-                                                <pre>{{ infoModal.content }}</pre>
-                                            </b-modal>
-                                        </b-container>
-                                    </template>
-                                    <b-pagination align="center" :total-rows="100" v-model="currentPage" :per-page="10">
-                                    </b-pagination>
+                            <template #row-details="row">
+                                <b-card>
+                                    <ul>
+                                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+                                    </ul>
+                                </b-card>
+                            </template>
+                        </b-table>
+                        <!--Info modal-->
+                        <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
+                            <pre>{{ infoModal.content }}</pre>
+                        </b-modal>
+                    </b-container>
+                </template>
 
-                        </b-card>
-                    </div>
+                <b-pagination align="center" :total-rows="100" v-model="currentPage" :per-page="10">
+                </b-pagination>
+
+            </b-card>
+        </div>
 
         <!---->
         <div class="main-card mb-3 card">
@@ -228,6 +230,7 @@
             <b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>
             <b-button class="mt-2" variant="outline-warning" block @click="toggleModalConvert">No</b-button>
         </b-modal>
+
         <b-modal ref="finish-project" hide-header hide-footer title="Warning" size="sm">
             <div class="page-title-icon d-flex justify-content-center">
                 <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
@@ -238,12 +241,24 @@
             <b-button class="mt-3" variant="outline-danger" block @click="hideModalFinish">Yes</b-button>
             <b-button class="mt-2" variant="outline-warning" block @click="toggleModalFinish">No</b-button>
         </b-modal>
+
+        <b-modal ref="delete-document" hide-header hide-footer title="Warning" size="sm">
+            <div class="page-title-icon d-flex justify-content-center">
+                <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
+            </div>
+            <div class="d-block text-center">
+                Are you sure you want to delete this document ?
+            </div>
+            <b-button class="mt-3" variant="outline-danger" block @click="deletePdfFile(deleteDocId)">Yes</b-button>
+            <b-button class="mt-2" variant="outline-warning" block @click="toggleModalDelete">No</b-button>
+        </b-modal>
     </div>
 </template>
 
 <script>
     import PageTitle from "../../Layout/Components/PageTitle.vue";
     import FileDataService from "../../Services/FileDataService";
+    import LookUpDataService from "../../Services/LookUpDataService";
 
     export default {
         name: 'project-detail',
@@ -268,7 +283,7 @@
                 timer: null,
                 striped: true,
                 items: [
-           /*         { isActive: false, office_action: { icon: 'pe-7s-file', type: 'Acknowledgement' }, file: { fname: '2017_NOWA_PA12014000317.pdf' }, file_size: '2kb' },*/
+                    /*         { isActive: false, office_action: { icon: 'pe-7s-file', type: 'Acknowledgement' }, file: { fname: '2017_NOWA_PA12014000317.pdf' }, file_size: '2kb' },*/
 
                 ],
                 fields: [
@@ -301,7 +316,9 @@
                     id: 'info-modal',
                     title: '',
                     content: ''
-                }
+                },
+                pdfBase64: "",
+                deleteDocId: 0
             }
         },
         computed: {
@@ -337,6 +354,20 @@
                 // when the modal has hidden
                 this.$refs['finish-project'].toggle('#toggle-btn')
             },
+            hideModalDelete() {
+                this.$refs['delete-document'].hide()
+            },
+            toggleModalDelete() {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.$refs['delete-document'].toggle('#toggle-btn')
+            },
+            toggleModalDeleteDocumentById(id) {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.deleteDocId = id;
+                this.$refs['delete-document'].toggle('#toggle-btn')
+            },
             info(item, index /*, button*/) {
                 this.infoModal.title = `Row index: ${index}`
                 this.infoModal.content = JSON.stringify(item, null, 2)
@@ -356,6 +387,72 @@
                     .then(response => {
                         console.log(response);
                         this.items = response.data;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            downloadPdfFile(id) {
+                LookUpDataService.GetDocumentById(id)
+                    .then(response => {
+                        this.pdfBase64 = response.data.pdfContent;
+
+                        const downloadLink = document.createElement("a");
+                        const fileName = response.data.pdfName;
+
+                        downloadLink.href = this.pdfBase64;
+                        downloadLink.download = fileName;
+                        downloadLink.click();
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            previewPdfFile(id) {
+                LookUpDataService.GetDocumentById(id)
+                    .then(response => {
+                        this.pdfBase64 = response.data.pdfContent;
+
+                        var byteCharacters = atob(this.pdfBase64.substring(28));
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var file = new Blob([byteArray], { type: 'application/pdf;base64' });
+                        var fileURL = URL.createObjectURL(file);
+                        window.open(fileURL);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            deletePdfFile(id) {
+                
+                LookUpDataService.GetDocumentById(id)
+                    .then(response => {
+                        response.data.isDeleted = true;
+                        console.log("deletePdfFile");
+                        console.log(response.data);
+                        this.flagDocumentDeleted(id, response.data);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+
+                
+            },
+            flagDocumentDeleted(id, data) {
+                
+                LookUpDataService.DeleteDocumentById(id, data)
+                    .then(result => {
+                        console.log(result.data);
+                        this.hideModalDelete();
+                        this.getDocumentListByProjectId(this.projectId);
                     })
                     .catch(e => {
                         this.alertMessage = e;

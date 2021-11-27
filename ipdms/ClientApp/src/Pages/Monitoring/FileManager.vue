@@ -74,12 +74,12 @@
                                         {{ row.value.first}} {{ row.value.last }}
                                     </template>
 
-                                    <template #cell(actions)="row">
+                                    <!--<template #cell(actions)="row">-->
                                         <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
-                                        <b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
+                                        <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
                                             View Details
                                         </b-button>
-                                    </template>
+                                    </template>-->
 
                                     <template #row-details="row">
                                         <b-card>
@@ -477,17 +477,17 @@
                     { key: 'project', label: 'Project Name', sortable: true, class: 'text-center' },
                     { key: 'numberOfFiles', label: 'No. of files', sortable: true, class: 'text-center' },
                     { key: 'agent', label: 'Agent', sortable: true, sortDirection: 'desc'},
-                    {
-                        /*key: 'isActive',*/
-                        label: 'Is Active',
-                        formatter: (value) => {
-                            return value ? 'Yes' : 'No'
-                        },
-                        sortable: true,
-                        sortByFormatted: true,
-                        filterByFormatted: true
-                    },
-                    { key: 'actions', label: 'Actions', class: 'text-end' }
+                    //{
+                    //    key: 'isActive',
+                    //    label: 'Is Active',
+                    //    formatter: (value) => {
+                    //        return value ? 'Yes' : 'No'
+                    //    },
+                    //    sortable: true,
+                    //    sortByFormatted: true,
+                    //    filterByFormatted: true
+                    //},
+                  /*  { key: 'actions', label: 'Actions', class: 'text-end' }*/
                 ],
                 totalRows: 1,
                 currentPage: 1,
@@ -509,7 +509,8 @@
                 showAlert: false,
                 alertMessage: "",
                 error: null,
-                user: null
+                user: null,
+                userInfoSession: null
             }
         },
         computed: {
@@ -542,18 +543,10 @@
                 this.currentPage = 1
             },
             getProjectList() {
-                FileDataService.GetProjectList()
+                FileDataService.GetProjectList(this.userInfoSession.ipdmsUserId)
                     .then(response => {
                         console.log(response);
-                        /*this.projectList = response.data;*/
                         this.items = response.data;
-                        /*var result = response.data;*/
-
-
-
-
-                        //this.imageResult = response.data;
-                        //console.log(response.data);
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -562,9 +555,12 @@
             }
         },
         beforeMount() {
+            this.userInfoSession = JSON.parse(sessionStorage.getItem('userInfo'));
             this.getProjectList();
-            console.log("sulod");
-            console.log(this.projectList);
+            
+            
+            console.log("userInfo");
+            console.log(this.userInfoSession);
         }
     }
 </script>

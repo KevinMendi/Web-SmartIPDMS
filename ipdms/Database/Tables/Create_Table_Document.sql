@@ -9,6 +9,8 @@ CREATE TABLE [dbo].[Document](
 	[office_action_id] [int] NOT NULL,
 	[project_id] [int] NOT NULL,
 	[pdf_name] [nvarchar](100) NOT NULL,
+	[pdf_content] [nvarchar](max) NOT NULL,
+	[pdf_file_size] [int] NOT NULL,
 	[mail_date] [datetime] NULL,
 	[filling_date] [datetime] NULL,
 	[CREATE_USER_ID] [int] NULL,

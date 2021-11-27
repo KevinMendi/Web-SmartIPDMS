@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ipdms.Models
 {
@@ -22,11 +19,20 @@ namespace ipdms.Models
         [JsonPropertyName("pdfName")]
         public string pdf_name { get; set; }
 
+        [JsonPropertyName("pdfContent")]
+        public string pdf_content { get; set; }
+
+        [JsonPropertyName("pdfFileSize")]
+        public int pdf_file_size { get; set; }
+
         [JsonPropertyName("mailDate")]
         public DateTime? mail_date { get; set; }
 
         [JsonPropertyName("fillingDate")]
         public DateTime? filling_date { get; set; }
+
+        [JsonPropertyName("isDeleted")]
+        public bool is_deleted { get; set; }
 
         [JsonPropertyName("createUserId")]
         public int CREATE_USER_ID { get; set; }
