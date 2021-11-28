@@ -84,7 +84,7 @@ namespace ipdms.Controllers.FileController
                     application_no = result["applicationNo"].ToString(),
                     application_type_id = (int)result["applicationTypeId"],
                     project_title = result["projectTitle"].ToString(),
-                    project_path = $"{Constants.Constants.projectBase}/{folderBaseName}_{folderName}",
+                    project_path = $"{Constants.Constants.projectPath}{folderBaseName}_{folderName}",
                     CREATE_USER_ID = (int)result["createUserId"],
                     CREATE_USER_DATE = DateTime.Now,
                     LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
@@ -102,7 +102,7 @@ namespace ipdms.Controllers.FileController
                     mail_date = mailDate,
                     filling_date = DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
                     pdf_name = result["fileName"].ToString(),
-                    pdf_content = result["pdfBase64"].ToString(),
+                    //pdf_content = result["pdfBase64"].ToString(),
                     pdf_file_size = fileSize,
                     CREATE_USER_ID = (int)result["createUserId"],
                     CREATE_USER_DATE = DateTime.Now,
@@ -389,8 +389,8 @@ namespace ipdms.Controllers.FileController
                                        IsActive = false,
                                        OfficeAction = new { icon = "pe-7s-file", type = oa.office_action_name},
                                        File = new { fname = d.pdf_name }, fileSize = d.pdf_file_size,
-                                       Actions = new { documentId = d.document_id }
-                                   }).ToListAsync();
+                                       Actions = new { documentId = d.document_id, folder = p.project_path, fname = d.pdf_name }, 
+        }).ToListAsync();
 
             return documents;
         }

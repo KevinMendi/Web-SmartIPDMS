@@ -7,6 +7,8 @@ namespace ipdms.Constants
 {
     public abstract class Constants
     {
-        public const string projectBase = "C:/kmendi/smart-ipdms/ipdms/PDF/";
+        public const string projectBase = "C:/kmendi/smart-ipdms/ipdms/ClientApp/public/PDF/";
+
+        public const string projectPath = "./../../../PDF/";
     }
 }

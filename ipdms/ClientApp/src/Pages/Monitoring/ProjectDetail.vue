@@ -78,10 +78,11 @@
                                 <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
         View Details
     </b-button>-->
-                                <b-button pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.documentId)"><i class="pe-7s-look"></i></b-button>&nbsp;
-                                <b-button pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.documentId)"><i class="pe-7s-download"></i></b-button>&nbsp;
+                                <b-button pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-look"></i></b-button>&nbsp;
+                                <b-button pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-download"></i></b-button>&nbsp;
                                 <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteDocumentById(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>
-                                <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
+                                <!--<b-button pill variant="danger" v-b-tooltip title="test"><a href="C:/kmendi/smart-ipdms\ipdms\PDF\Invention_1_2014_000318/2018_FER_PA12018050147.pdf" type="application/pdf" target="_blank">zxcvxcv</a></b-button>-->
+                                    <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
                             </template>
 
                             <template #row-details="row">
@@ -393,42 +394,48 @@
                         this.error = true;
                     });
             },
-            downloadPdfFile(id) {
-                LookUpDataService.GetDocumentById(id)
-                    .then(response => {
-                        this.pdfBase64 = response.data.pdfContent;
+            downloadPdfFile(folder, fname) {
+                //LookUpDataService.GetDocumentById(id)
+                //    .then(response => {
+                //        this.pdfBase64 = response.data.pdfContent;
 
-                        const downloadLink = document.createElement("a");
-                        const fileName = response.data.pdfName;
+                //        const downloadLink = document.createElement("a");
+                //        const fileName = response.data.pdfName;
 
-                        downloadLink.href = this.pdfBase64;
-                        downloadLink.download = fileName;
-                        downloadLink.click();
-                    })
-                    .catch(e => {
-                        this.alertMessage = e;
-                        this.error = true;
-                    });
+                //        downloadLink.href = this.pdfBase64;
+                //        downloadLink.download = fileName;
+                //        downloadLink.click();
+                //    })
+                //    .catch(e => {
+                //        this.alertMessage = e;
+                //        this.error = true;
+                //    });
+
+                var link = document.createElement('a');
+                link.href = `${folder}/${fname}`;
+                link.download = fname;
+                link.dispatchEvent(new MouseEvent('click'));
             },
-            previewPdfFile(id) {
-                LookUpDataService.GetDocumentById(id)
-                    .then(response => {
-                        this.pdfBase64 = response.data.pdfContent;
+            previewPdfFile(folder, fname) {
+                //LookUpDataService.GetDocumentById(id)
+                //    .then(response => {
+                //        this.pdfBase64 = response.data.pdfContent;
 
-                        var byteCharacters = atob(this.pdfBase64.substring(28));
-                        var byteNumbers = new Array(byteCharacters.length);
-                        for (var i = 0; i < byteCharacters.length; i++) {
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
-                        }
-                        var byteArray = new Uint8Array(byteNumbers);
-                        var file = new Blob([byteArray], { type: 'application/pdf;base64' });
-                        var fileURL = URL.createObjectURL(file);
-                        window.open(fileURL);
-                    })
-                    .catch(e => {
-                        this.alertMessage = e;
-                        this.error = true;
-                    });
+                //        var byteCharacters = atob(this.pdfBase64.substring(28));
+                //        var byteNumbers = new Array(byteCharacters.length);
+                //        for (var i = 0; i < byteCharacters.length; i++) {
+                //            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                //        }
+                //        var byteArray = new Uint8Array(byteNumbers);
+                //        var file = new Blob([byteArray], { type: 'application/pdf;base64' });
+                //        var fileURL = URL.createObjectURL(file);
+                //        window.open(fileURL);
+                //    })
+                //    .catch(e => {
+                //        this.alertMessage = e;
+                //        this.error = true;
+                //    });
+                window.open(`${folder}/${fname}`, '_blank');
             },
             deletePdfFile(id) {
                 

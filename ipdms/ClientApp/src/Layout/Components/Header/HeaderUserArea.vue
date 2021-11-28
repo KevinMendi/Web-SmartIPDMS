@@ -7,7 +7,7 @@
                         <b-dropdown toggle-class="p-0 mr-2" menu-class="dropdown-menu-lg" variant="link" right>
                             <span slot="button-content">
                                 <div class="icon-wrapper icon-wrapper-alt rounded-circle">
-                                    <img width="42" class="rounded-circle" src="@/assets/images/avatars/1.jpg" alt="">
+                                    <img width="42" class="rounded-circle" src="@/assets/images/avatars/avatar.png" alt="">
                                 </div>
                             </span>
                             <button type="button" tabindex="0" class="dropdown-item">Notifications</button>
