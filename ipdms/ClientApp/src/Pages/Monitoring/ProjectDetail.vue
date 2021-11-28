@@ -7,7 +7,6 @@
         <div class="content">
             <b-card class="mb-3" no-body>
                 <div class="card-body">
-                    <pre>ProjectId: {{ this.projectId }}</pre>
                     <b-input-group size="sm"
                                    cols-sm="2">
                         <b-form-input id="filter-input"
