@@ -120,7 +120,222 @@
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-6 d-inline-flex p-2 d-flex justify-content-end">
-                        <b-button class="mr-2 mb-2 border-0 btn-transition" variant="info"> + Upload </b-button>
+                        <!--<b-button class="mr-2 mb-2 border-0 btn-transition" variant="info"> + Upload </b-button>-->
+                        <b-button v-b-modal.modal-multi-1 class="mr-2 mb-2 border-0 btn-transition" variant="info">+ Upload</b-button>
+
+                        <b-modal id="modal-multi-1" size="lg" title="First Modal" ok-only ok-variant="secondary" ok-title="Cancel" no-stacking>
+                            <div class="content">
+                                <b-row>
+                                    <b-col md="12">
+                                        <b-card class="mb-3 nav-justified" no-body>
+                                            <b-tabs pills card>
+                                                <b-tab title="Scan Document" active>
+                                                    <form class="">
+                                                        <div class="">
+                                                            <b-button block class="mr-2 mb-2" variant="warning" :size="sm" :key="sm">
+                                                                Open Camera to Scan the Document
+                                                            </b-button>
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="applicationType" class="">Application Type</label><select name="applicationType"
+                                                                                                                                  id="applicationType"
+                                                                                                                                  class="form-control">
+                                                                <option value="1">Invention</option>
+                                                                <option value="2">Utility Model</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="applicationNumber"
+                                                                   class="">Application Number</label><input name="applicationNumber"
+                                                                                                             id="applicationNumber"
+                                                                                                             placeholder="Application Number"
+                                                                                                             type="text"
+                                                                                                             class="form-control">
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="projectName"
+                                                                   class="">Project Name</label><input name="projectName"
+                                                                                                       id="projectName"
+                                                                                                       placeholder="Project Name"
+                                                                                                       type="text"
+                                                                                                       class="form-control">
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="officeAction"
+                                                                   class="">Office Action Type</label><input name="officeAction"
+                                                                                                             id="officeAction"
+                                                                                                             placeholder="Office Action"
+                                                                                                             type="text"
+                                                                                                             class="form-control">
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="officeAction" class="">Office Action:</label><select name="officeAction"
+                                                                                                                             id="officeAction"
+                                                                                                                             class="form-control">
+                                                                <option value="1">Acknowledgement</option>
+                                                                <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
+                                                                <option value="3">Notice of Publication</option>
+                                                                <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
+                                                                <option value="5">Completion of Final Requirements</option>
+                                                                <option value="6">Notice of Allowance</option>
+                                                                <option value="7">Certificate</option>
+                                                                <option value="11">Notice of Issuance of Certificate</option>
+                                                                <option value="12">Notice of Withdrawn Application</option>
+                                                                <option value="13">Revival Order</option>
+                                                                <option value="14">Notice of Forfeiture of Application</option>
+
+                                                            </select>
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="filingDate"
+                                                                   class="">Document Filing Date</label><input name="filingDate"
+                                                                                                               id="filingDate"
+                                                                                                               placeholder="Filing Date"
+                                                                                                               type="datetime"
+                                                                                                               class="form-control">
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="mailingDate"
+                                                                   class="">Document Mailing Date</label><input name="mailingDate"
+                                                                                                                id="mailingDate"
+                                                                                                                placeholder="Mailing Date"
+                                                                                                                type="datetime"
+                                                                                                                class="form-control">
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <label for="agentName"
+                                                                   class="">Agent Name</label><input name="agentName"
+                                                                                                     id="agentName"
+                                                                                                     placeholder="Agent Name"
+                                                                                                     type="text"
+                                                                                                     class="form-control">
+                                                        </div>
+                                                        <div class="position-relative form-group">
+                                                            <div class="custom-checkbox custom-control">
+                                                                <input type="checkbox"
+                                                                       id="exampleCustomCheckbox"
+                                                                       class="custom-control-input"><label class="custom-control-label" for="exampleCustomCheckbox">
+                                                                    Please check the box if the details are all correct and click Submit.
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <button class="mt-1 btn btn-primary">Submit</button>
+                                                    </form>
+                                                </b-tab>
+                                                <b-tab title="Upload Document" active>
+                                                    <form  @submit.prevent="saveProject" ref="ProjectDetailForm">
+                                                        <b-overlay :show="busy"
+                                                                   rounded
+                                                                   opacity="0.6"
+                                                                   spinner-large
+                                                                   spinner-variant="primary"
+                                                                   class="d-inline-block col-md-12"
+                                                                   @hidden="onHidden"
+                                                                  >
+                                                            <div class="card-body">
+                                                                <div class="position-relative form-group">
+                                                                    <label for="exampleFile"
+                                                                           class="">File</label><input name="file"
+                                                                                                       id="uploadFile"
+                                                                                                       type="file"
+                                                                                                       @change="onFileChange"
+                                                                                                       class="form-control-file">
+                                                                    <small class="form-text text-muted">
+                                                                        After selecting file to be uploaded, click button "Get Details".
+                                                                    </small>
+                                                                    <!--{{imageResult}}-->
+                                                                </div>
+                                                                <!--<div class="">
+        <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
+            Check Details
+        </b-button>
+    </div>-->
+                                                                <!-- elements to collapse -->
+                                                                <!--<b-collapse id="collapseDetails" class="mt-2">-->
+
+                                                                <div class="position-relative form-group">
+                                                                    <label for="applicationType" class="">Application Type</label>
+                                                                    <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
+            <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
+            <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+        </select>-->
+                                                                    <input name="applicationType"
+                                                                           id="applicationType"
+                                                                           placeholder="Application Type"
+                                                                           v-model="projectIdentifier.applicationTypeName"
+                                                                           type="text"
+                                                                           class="form-control" readonly>
+                                                                </div>
+                                                                <div class="position-relative form-group">
+                                                                    <label for="applicationNumber"
+                                                                           class="">Application Number</label><input name="applicationNumber"
+                                                                                                                     id="applicationNumber"
+                                                                                                                     placeholder="Application Number"
+                                                                                                                     v-model="projectIdentifier.applicationNo"
+                                                                                                                     type="text"
+                                                                                                                     class="form-control" readonly>
+                                                                </div>
+
+
+                                                                <div class="position-relative form-group">
+                                                                    <label for="officeAction" class="">Office Action:</label>
+                                                                    <!--<select name="officeAction"
+                                                                         id="officeAction"
+                                                                         class="form-control">
+            <option value="1">Acknowledgement</option>
+            <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
+            <option value="3">Notice of Publication</option>
+            <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
+            <option value="5">Completion of Final Requirements</option>
+            <option value="6">Notice of Allowance</option>
+            <option value="7">Certificate</option>
+            <option value="11">Notice of Issuance of Certificate</option>
+            <option value="12">Notice of Withdrawn Application</option>
+            <option value="13">Revival Order</option>
+            <option value="14">Notice of Forfeiture of Application</option>
+
+        </select>-->
+                                                                    <input name="officeAction"
+                                                                           id="officeAction"
+                                                                           placeholder="Office Action"
+                                                                           v-model="projectIdentifier.officeActionName"
+                                                                           type="text"
+                                                                           class="form-control" readonly>
+                                                                </div>
+                                                                <div class="position-relative form-group">
+                                                                    <label for="mailingDate"
+                                                                           class="">Document Mailing Date</label><input name="mailingDate"
+                                                                                                                        id="mailingDate"
+                                                                                                                        placeholder="Mailing Date"
+                                                                                                                        v-model="projectIdentifier.mailDate"
+                                                                                                                        type="datetime"
+                                                                                                                        class="form-control" readonly>
+                                                                </div>
+                                                                <!--<div class="position-relative form-group">
+        <label for="agentName"
+               class="">Agent Name</label><input name="agentName"
+                                                 id="agentName"
+                                                 placeholder="Agent Name"
+                                                 type="text"
+                                                 class="form-control">
+
+    </div>-->
+                                                                <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
+                                                                    {{alertMessage}}
+                                                                </b-alert><br />
+                                                                <button :disabled="disable" class="mt-1 btn btn-primary">Submit</button>
+                                                                <!--</b-overlay>-->
+                                                                <!--</b-collapse>-->
+                                                            </div>
+                                                        </b-overlay>
+                                                    </form>
+                                                </b-tab>
+                                            </b-tabs>
+                                        </b-card>
+                                    </b-col>
+                                </b-row>
+                            </div>
+                        </b-modal>
                     </div>
                 </div>
 
@@ -259,6 +474,7 @@
     import PageTitle from "../../Layout/Components/PageTitle.vue";
     import FileDataService from "../../Services/FileDataService";
     import LookUpDataService from "../../Services/LookUpDataService";
+    import UserDataService from "../../Services/UserDataService";
 
     export default {
         name: 'project-detail',
@@ -277,6 +493,8 @@
                 heading: 'Smart Intellectual Property Document Management System',
                 subheading: 'Short project description here ',
                 icon: 'pe-7s-portfolio icon-gradient bg-happy-itmeo',
+                busy: false,
+                disable: false,
 
                 counter: 99,
                 max: 100,
@@ -318,7 +536,28 @@
                     content: ''
                 },
                 pdfBase64: "",
-                deleteDocId: 0
+                deleteDocId: 0,
+                image: "",
+                imageResult: '',
+                projectIdentifier: {
+                    applicationTypeId: null,
+                    applicationTypeName: "",
+                    applicationNo: "",
+                    officeActionId: null,
+                    officeActionName: "",
+                    mailDate: "",
+                    projectTitle: "",
+                    fillingDate: null,
+                    applicantName: "",
+                    agentName: "",
+                    fileName:"",
+                    
+                },
+                showAlert: false,
+                alertMessage: "",
+                agents: [],
+                applicationTypes: [],
+                user: null
             }
         },
         computed: {
@@ -336,7 +575,14 @@
             this.totalRows = this.items.length
         },
         methods: {
-
+            onShown() {
+                // Focus the cancel button when the overlay is showing
+                this.$refs.cancel.focus()
+            },
+            onHidden() {
+                // Focus the show button when the overlay is removed
+                this.$refs.show.focus()
+            },
             hideModalConvert() {
                 this.$refs['utility-model'].hide()
             },
@@ -464,11 +710,162 @@
                         this.alertMessage = e;
                         this.error = true;
                     });
-            }
+            },
+            //Upload Document 
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+
+                var fileInput = document.getElementById('uploadFile');
+                this.projectIdentifier.fileName = fileInput.files[0].name;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                var data = {
+                    image64: this.image,
+                    projectId: null,
+                }
+                var reader = new FileReader();
+                //var vm = this;
+
+                reader.onload = (e) => {
+                    this.image = e.target.result;
+                    data.image64 = e.target.result;
+                    data.projectId = this.projectId;
+                    console.log(data);
+                    this.busy = true;
+                    this.disable = true;
+                    FileDataService.AnalyzeImage(data)
+                        .then(response => {
+                            console.log(response);
+                            this.busy = false;
+                            this.disable = false;
+                            this.imageResult = response.data;
+                            this.projectIdentifier.applicationTypeId = response.data.applicationTypeId;
+                            this.projectIdentifier.applicationTypeName = response.data.applicationTypeName;
+                            this.projectIdentifier.applicationNo = response.data.applicationNo;
+                            this.projectIdentifier.officeActionId = response.data.officeActionId;
+                            this.projectIdentifier.officeActionName = response.data.officeActionName;
+                            this.projectIdentifier.mailDate = response.data.mailDate;
+
+                        })
+                        .catch(e => {
+                            this.alertMessage = e;
+                            this.error = true;
+                            this.busy = false;
+                            this.disable = false;
+                        });
+                };
+                reader.readAsDataURL(file);
+
+            },
+            getAgents() {
+                UserDataService.GetAllUsers()
+                    .then(response => {
+                        var users = response.data;
+
+                        var frmFilter = "3";
+
+                        var filterAgents = Object.values(users).filter(function (entry) {
+                            switch (frmFilter) {
+                                case '3':
+                                    return entry.userRoleId === 3;
+                                default:
+                                    return entry;
+                            }
+                        });
+
+                        this.agents = filterAgents;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                    });
+            },
+            getApplicationTypes() {
+                LookUpDataService.GetApplicationTypes()
+                    .then(response => {
+                        this.applicationTypes = response.data;
+                        console.log("applicationTypes");
+                        console.log(this.applicationTypes);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                    });
+            },
+            delayedAlert() {
+                this.showAlert = true;
+                setTimeout(() => {
+                    this.showAlert = false;
+                }, 5000);
+            },
+            currentDate() {
+                const current = new Date();
+                const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
+                return date;
+            },
+            saveProject() {
+                this.busy = true;
+                this.disable = true;
+
+                
+
+                var data = {
+                    applicationTypeId: this.projectIdentifier.applicationTypeId,
+                    applicationNo: this.projectIdentifier.applicationNo,
+                    projectTitle: "",
+                    projectId: this.projectId,
+                    officeActionId: this.projectIdentifier.officeActionId,
+                    fillingDate: null,//add
+                    mailingDate: this.projectIdentifier.mailDate,
+                    applicantName: "",
+                    agentName: "",//add
+                    pdfBase64: this.image,
+                    fileName: this.projectIdentifier.fileName,
+                    createUserId: this.user.ipdmsUserId,
+                    createUserDate: this.currentDate(),
+                    lastUpdateUserId: this.user.ipdmsUserId,
+                    lastUpdateDate: this.currentDate(),
+                };
+
+                //var data2 = {
+                //    pdf: this.pdfData 
+                //};
+
+                console.log(data);
+                this.show = true;
+                FileDataService.SaveProject(JSON.stringify(data))
+                    .then(response => {
+                        this.busy = false;
+                        this.disable = false;
+                        // this.$refs.registerProjectForm.reset();//reset form
+                        this.alertMessage = response.data;
+                        this.error = false;
+                        this.delayedAlert();
+                        //this.imageResult = response.data;
+                        //console.log(response.data);
+                        this.getDocumentListByProjectId(this.projectId);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                        this.busy = false;
+                        this.disable = false;
+                    });
+            },
         },
         beforeMount() {
             this.getDocumentListByProjectId(this.projectId);
+            this.getAgents();
+            this.getApplicationTypes();
+            this.user = JSON.parse(sessionStorage.getItem('userInfo'));
 
         }
     }
 </script>
+<style>
+
+    .b-overlay div {
+        background-color: white !important;
+    }
+</style>

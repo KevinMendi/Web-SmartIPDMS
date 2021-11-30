@@ -6,7 +6,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[lk_OfficeAction](
 	[office_action_id] [int] IDENTITY(1,1) NOT NULL,
-	[office_action_name] [nvarchar](200) NOT NULL,
+	[office_action_name1] [nvarchar](200) NOT NULL,
+	[office_action_name2] [nvarchar](200) NOT NULL,
+	[office_action_name3] [nvarchar](200) NOT NULL,
 	[office_action_desc] [nvarchar](200) NULL,
 	[office_action_due] [int] NULL,
 

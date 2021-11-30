@@ -8,6 +8,9 @@ namespace ipdms.Models
 {
     public class IpdmsFile
     {
+        [JsonPropertyName("projectId")]
+        public int projectId { get; set; }
+
         [JsonPropertyName("image64")]
         public string image64 { get; set; }
 

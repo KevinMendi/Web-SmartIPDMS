@@ -10,8 +10,14 @@ namespace ipdms.Models
         [JsonPropertyName("officeActionId")]
         public int office_action_id { get; set; }
 
-        [JsonPropertyName("officeActionName")]
-        public string office_action_name { get; set; }
+        [JsonPropertyName("officeActionName1")]
+        public string office_action_name1 { get; set; }
+
+        [JsonPropertyName("officeActionName2")]
+        public string office_action_name2 { get; set; }
+
+        [JsonPropertyName("officeActionName3")]
+        public string office_action_name3 { get; set; }
 
         [JsonPropertyName("officeActionDesc")]
         public string office_action_desc { get; set; }

@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Freeware.Pdf2Png" Version="1.0.1" />
     <PackageReference Include="Google.Cloud.Vision.V1" Version="2.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
@@ -21,6 +22,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Pdf2Image" Version="2.0.0" />
     <PackageReference Include="VueCliMiddleware" Version="5.0.0" />
   </ItemGroup>
 

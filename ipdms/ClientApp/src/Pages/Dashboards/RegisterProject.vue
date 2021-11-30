@@ -1,12 +1,18 @@
 <template>
     <div>
         
-            <form @submit.prevent="saveProject">
+            <form @submit.prevent="saveProject" ref="registerProjectForm">
                 <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
                 <div class="submit-form">
                     <div class="content">
                         <div class="main-card mb-3 card">
-                            <b-overlay :show="show" rounded="sm" @shown="onShown" @hidden="onHidden">
+                            <b-overlay :show="busy"
+                                       rounded
+                                       opacity="0.6"
+                                       spinner-small
+                                       spinner-variant="primary"
+                                       class="d-inline-block"
+                                       @hidden="onHidden">
                                 <div class="card-body">
                                     <!--<h5 class="card-title">Grid Rows</h5>-->
 
@@ -95,12 +101,12 @@
                                                 <label for="agentName"
                                                        class="">Agent Name</label>
                                                 <!--<input name="agentName"
-                id="agentName"
-                placeholder="Agent Name"
-                v-model="project.agentName"
-                type="text"
-                class="form-control"
-                required>-->
+                    id="agentName"
+                    placeholder="Agent Name"
+                    v-model="project.agentName"
+                    type="text"
+                    class="form-control"
+                    required>-->
                                                 <select name="agentName"
                                                         id="officeAction"
                                                         v-model="project.agentName"
@@ -125,27 +131,15 @@
                                     <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
                                         {{alertMessage}}
                                     </b-alert><br />
-                                    <button class="mt-2 btn btn-primary" :disabled="show" >Register Project</button>
+                                    <button class="mt-2 btn btn-primary" :disabled="disable">Register Project</button>
                                     <!--<b-button type="submit" ref="show" :disabled="show" variant="primary" @click="show = true">
-                                        Show overlay
-                                    </b-button>-->
+            Show overlay
+        </b-button>-->
                                     <!--<b-button ref="show" :disabled="show" variant="primary" @click="show = true">
-                                        Show overlay
-                                    </b-button>-->
+            Show overlay
+        </b-button>-->
                                 </div>
-                                <template #overlay>
-                                    <div class="text-center">
-                                        <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
-                                        <p id="cancel-label">Please wait...</p>
-                                        <!--<b-button ref="cancel"
-                                                  variant="outline-danger"
-                                                  size="sm"
-                                                  aria-describedby="cancel-label"
-                                                  @click="show = false">
-                                            Cancel
-                                        </b-button>-->
-                                    </div>
-                                </template>
+
                             </b-overlay>
                         </div>
                     </div>
@@ -174,7 +168,8 @@
             heading: 'Register Project',
             subheading: 'Register a Project by providing the details and uploading the Acknowledgement Office Action',
             icon: 'pe-7s-folder icon-gradient bg-happy-itmeo',
-            show: false,
+            busy: false,
+            disable: false,
 
             counter: 99,
             max: 100,
@@ -192,7 +187,8 @@
                 applicantName: "",
                 agentName: "",
                 pdfBase64: "",
-                fileName: ""
+                fileName: "",
+                
             },
             agents: [],
             applicationTypes:[],
@@ -256,6 +252,8 @@
                     });
             },
             saveProject() {
+                this.busy = true;
+                this.disable = true;
                 var data = {
                     applicationTypeId: this.project.applicationType,
                     applicationNo: (this.project.applicationNumber).trim(),
@@ -270,16 +268,21 @@
                     createUserId: this.user.ipdmsUserId,
                     createUserDate: this.currentDate(),
                     lastUpdateUserId: this.user.ipdmsUserId,
-                    lastUpdateDate: this.currentDate()
+                    lastUpdateDate: this.currentDate(),
                 };
+
+                //var data2 = {
+                //    pdf: this.pdfData 
+                //};
 
                console.log(data);
                 this.show = true;
                 FileDataService.SaveProject(JSON.stringify(data))
                     .then(response => {
-                        console.log(response);
+                        this.busy = false;
+                        this.disable = false;
+                       // this.$refs.registerProjectForm.reset();//reset form
                         this.alertMessage = response.data;
-                        this.show = false;
                         this.error = false;
                         this.delayedAlert();
                         //this.imageResult = response.data;
@@ -288,6 +291,8 @@
                     .catch(e => {
                         this.alertMessage = e;
                         this.error = true;
+                        this.busy = false;
+                        this.disable = false;
                     });
             },
             getAgents() {
