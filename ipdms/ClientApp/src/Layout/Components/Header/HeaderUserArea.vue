@@ -16,8 +16,10 @@
                         </b-dropdown>
                     </div>
                     <div class="widget-content-left  ml-3 header-user-info">
-                        <div class="widget-heading">Maria dela Cruz</div>
-                        <div class="widget-subheading">System Administrator</div>
+                        <div class="widget-heading">{{ user.firstname + ' ' + user.lastname }}</div>
+                        <div v-if="user.userRoleId == 1" class="widget-subheading">Super Admin</div>
+                        <div v-if="user.userRoleId == 2" class="widget-subheading">System Admin</div>
+                        <div v-if="user.userRoleId == 3" class="widget-subheading">Agent</div>
                     </div>
                     <div class="widget-content-right header-user-info ml-3">
                         <b-btn v-b-tooltip.hover title="Tooltip Example" class="btn-shadow p-1" size="sm" variant="info">
@@ -65,10 +67,11 @@
         components: {
             'font-awesome-icon': FontAwesomeIcon,
         },
-        data: () => ({
-
-        }),
-
+        data() {
+            return {
+                user: null,
+            }
+        },
         methods: {
             logout() {
                 
@@ -79,6 +82,10 @@
                 }
                 
             }
+        },
+        beforeMount() {
+            this.user = JSON.parse(sessionStorage.getItem('userInfo'));
+
         }
     }
 

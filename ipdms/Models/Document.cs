@@ -31,6 +31,9 @@ namespace ipdms.Models
         [JsonPropertyName("fillingDate")]
         public DateTime? filling_date { get; set; }
 
+        [JsonPropertyName("responseDate")]
+        public DateTime? response_date { get; set; }
+
         [JsonPropertyName("isDeleted")]
         public bool is_deleted { get; set; }
 

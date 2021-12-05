@@ -503,8 +503,13 @@ namespace ipdms.Controllers.FileController
                                    select new
                                    {
                                        IsActive = false,
-                                       OfficeAction = new { icon = "pe-7s-file", type = oa.office_action_name1},
-                                       File = new { fname = d.pdf_name }, fileSize = d.pdf_file_size,
+                                       OfficeAction = new { icon = "pe-7s-file", type = oa.office_action_name1, id = oa.office_action_id},
+                                       File = new { fname = d.pdf_name }, 
+                                       fileSize = d.pdf_file_size, 
+                                       created_on =  d.CREATE_USER_DATE == null ? null: d.CREATE_USER_DATE.Value.ToShortDateString(),
+                                       response_date = d.response_date == null ? null : d.response_date.Value.ToShortDateString(),
+                                       mail_date = d.mail_date == null ? null : d.mail_date.Value.ToShortDateString(),
+                                       due = d.mail_date != null ? d.mail_date.Value.AddDays(oa.office_action_due.Value).ToShortDateString() : null,
                                        Actions = new { documentId = d.document_id, folder = p.project_path, fname = d.pdf_name }, 
         }).ToListAsync();
 

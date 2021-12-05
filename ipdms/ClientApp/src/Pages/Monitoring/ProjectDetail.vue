@@ -75,13 +75,13 @@
                             <template #cell(actions)="row">
                                 <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
                                 <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
-        View Details
-    </b-button>-->
+                                View Details
+                            </b-button>-->
                                 <b-button pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-look"></i></b-button>&nbsp;
                                 <b-button pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-download"></i></b-button>&nbsp;
                                 <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteDocumentById(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>
                                 <!--<b-button pill variant="danger" v-b-tooltip title="test"><a href="C:/kmendi/smart-ipdms\ipdms\PDF\Invention_1_2014_000318/2018_FER_PA12018050147.pdf" type="application/pdf" target="_blank">zxcvxcv</a></b-button>-->
-                                    <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
+                                <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
                             </template>
 
                             <template #row-details="row">
@@ -110,12 +110,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-xl-6">
+                        <!--<div>
+                        Status: <div class="mb-2 mr-2 badge badge-warning">Completion of Final Requirements</div>
+                        <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
+                    </div>-->
                         <div>
-                            Status: <div class="mb-2 mr-2 badge badge-warning">Completion of Final Requirements</div>
-                            <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
-                        </div>
-                        <div>
-                            Agent: <a href="javascript:void(0);" class="mb-2 mr-2 badge badge-light">Maria dela Cruz</a>
+                            Agent: <a href="javascript:void(0);" class="mb-2 mr-2 badge badge-light">{{ user.firstname + ' ' + user.lastname  }}</a>
                         </div>
                     </div>
 
@@ -223,15 +223,14 @@
                                                     </form>
                                                 </b-tab>
                                                 <b-tab title="Upload Document" active>
-                                                    <form  @submit.prevent="saveProject" ref="ProjectDetailForm">
+                                                    <form @submit.prevent="saveProject" ref="ProjectDetailForm">
                                                         <b-overlay :show="busy"
                                                                    rounded
                                                                    opacity="0.6"
                                                                    spinner-large
                                                                    spinner-variant="primary"
                                                                    class="d-inline-block col-md-12"
-                                                                   @hidden="onHidden"
-                                                                  >
+                                                                   @hidden="onHidden">
                                                             <div class="card-body">
                                                                 <div class="position-relative form-group">
                                                                     <label for="exampleFile"
@@ -246,19 +245,19 @@
                                                                     <!--{{imageResult}}-->
                                                                 </div>
                                                                 <!--<div class="">
-        <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
-            Check Details
-        </b-button>
-    </div>-->
+                                                                <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
+                                                                    Check Details
+                                                                </b-button>
+                                                            </div>-->
                                                                 <!-- elements to collapse -->
                                                                 <!--<b-collapse id="collapseDetails" class="mt-2">-->
 
                                                                 <div class="position-relative form-group">
                                                                     <label for="applicationType" class="">Application Type</label>
                                                                     <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
-            <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
-            <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
-        </select>-->
+                                                                    <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
+                                                                    <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+                                                                </select>-->
                                                                     <input name="applicationType"
                                                                            id="applicationType"
                                                                            placeholder="Application Type"
@@ -280,21 +279,21 @@
                                                                 <div class="position-relative form-group">
                                                                     <label for="officeAction" class="">Office Action:</label>
                                                                     <!--<select name="officeAction"
-                                                                         id="officeAction"
-                                                                         class="form-control">
-            <option value="1">Acknowledgement</option>
-            <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
-            <option value="3">Notice of Publication</option>
-            <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
-            <option value="5">Completion of Final Requirements</option>
-            <option value="6">Notice of Allowance</option>
-            <option value="7">Certificate</option>
-            <option value="11">Notice of Issuance of Certificate</option>
-            <option value="12">Notice of Withdrawn Application</option>
-            <option value="13">Revival Order</option>
-            <option value="14">Notice of Forfeiture of Application</option>
+                                                                                                                                 id="officeAction"
+                                                                                                                                 class="form-control">
+                                                                    <option value="1">Acknowledgement</option>
+                                                                    <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
+                                                                    <option value="3">Notice of Publication</option>
+                                                                    <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
+                                                                    <option value="5">Completion of Final Requirements</option>
+                                                                    <option value="6">Notice of Allowance</option>
+                                                                    <option value="7">Certificate</option>
+                                                                    <option value="11">Notice of Issuance of Certificate</option>
+                                                                    <option value="12">Notice of Withdrawn Application</option>
+                                                                    <option value="13">Revival Order</option>
+                                                                    <option value="14">Notice of Forfeiture of Application</option>
 
-        </select>-->
+                                                                </select>-->
                                                                     <input name="officeAction"
                                                                            id="officeAction"
                                                                            placeholder="Office Action"
@@ -312,14 +311,14 @@
                                                                                                                         class="form-control" readonly>
                                                                 </div>
                                                                 <!--<div class="position-relative form-group">
-        <label for="agentName"
-               class="">Agent Name</label><input name="agentName"
-                                                 id="agentName"
-                                                 placeholder="Agent Name"
-                                                 type="text"
-                                                 class="form-control">
+                                                                <label for="agentName"
+                                                                       class="">Agent Name</label><input name="agentName"
+                                                                                                         id="agentName"
+                                                                                                         placeholder="Agent Name"
+                                                                                                         type="text"
+                                                                                                         class="form-control">
 
-    </div>-->
+                                                            </div>-->
                                                                 <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
                                                                     {{alertMessage}}
                                                                 </b-alert><br />
@@ -347,81 +346,92 @@
                 <div>
                     <div class="divider"></div>
                     <div class="vertical-time-simple vertical-without-time vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
-                        <div class="dot-info vertical-timeline-element">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Acknowledgement</h4>
-                                    <p>
-                                        Received on <span class="text-success">01/01/2021 10:00 AM</span>
-                                        Submitted response on <span class="text-success">N/A</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dot-success vertical-timeline-element">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Formality Examination Report</h4>
-                                    <p>
-                                        Received on <span class="text-success">06/01/2021 10:00 AM</span>
-                                        Submitted response on <span class="text-success">07/01/2021 7:00 AM</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dot-success vertical-timeline-element">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Formality Examination Report</h4>
-                                    <p>
-                                        Received on <span class="text-success">08/01/2021 10:00 AM</span>
-                                        Submitted response on <span class="text-success">09/01/2021 7:00 AM</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dot-success vertical-timeline-element">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Formality Examination Report</h4>
-                                    <p>
-                                        Received on <span class="text-success">10/01/2021 10:00 AM</span>
-                                        Submitted response on <span class="text-success">11/01/2021 7:00 AM</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dot-success vertical-timeline-element">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Formality Examination Report</h4>
-                                    <p>
-                                        Received on <span class="text-success">12/23/2021 10:00 AM</span>
-                                        Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dot-warning vertical-timeline-element">
+                        <div v-for="(item, i) in items" :key="i" :class=" item.officeAction.id == 1 ? 'dot-info vertical-timeline-element' : item.response_date == null ? 'dot-warning vertical-timeline-element' : 'dot-success vertical-timeline-element' ">
                             <div>
                                 <span class="vertical-timeline-element-icon bounce-in"></span>
                                 <div class="vertical-timeline-element-content bounce-in">
                                     <h4 class="timeline-title">
-                                        Notice of Publication
-                                        <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
+                                        {{ item.officeAction.type }}
+                                        <div v-if="item.officeAction.id != 1 && item.response_date == null" class="badge badge-danger ml-2">DUE {{ item.due }}</div>
                                     </h4>
+
                                     <p>
-                                        Received on <span class="text-success">12/23/2021 10:00 AM</span>
-                                        Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
+                                        File uploaded <span class="text-success">{{ item.created_on }}</span><br />
+                                        Mail Date <span class="text-success">{{ item.mail_date }}</span><br />
+                                        Submitted response on
+                                        <span class="text-success">
+                                            {{ item.response_date == null && item.officeAction.id == 1 ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
+                                            <b-button v-if="item.response_date == null && item.officeAction.id != 1" variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
+                                        </span>
+                                        <!--<span v-if="item.response_date == null && item.officeAction.id != 1">(set response date)</span>-->
+
                                     </p>
                                 </div>
                             </div>
                         </div>
+                        <!--<div class="dot-success vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in"></span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="timeline-title">Formality Examination Report</h4>
+                                <p>
+                                    Received on <span class="text-success">06/01/2021 10:00 AM</span>
+                                    Submitted response on <span class="text-success">07/01/2021 7:00 AM</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dot-success vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in"></span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="timeline-title">Formality Examination Report</h4>
+                                <p>
+                                    Received on <span class="text-success">08/01/2021 10:00 AM</span>
+                                    Submitted response on <span class="text-success">09/01/2021 7:00 AM</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dot-success vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in"></span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="timeline-title">Formality Examination Report</h4>
+                                <p>
+                                    Received on <span class="text-success">10/01/2021 10:00 AM</span>
+                                    Submitted response on <span class="text-success">11/01/2021 7:00 AM</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dot-success vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in"></span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="timeline-title">Formality Examination Report</h4>
+                                <p>
+                                    Received on <span class="text-success">12/23/2021 10:00 AM</span>
+                                    Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dot-warning vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in"></span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="timeline-title">
+                                    Notice of Publication
+                                    <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
+                                </h4>
+                                <p>
+                                    Received on <span class="text-success">12/23/2021 10:00 AM</span>
+                                    Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>-->
                     </div>
                     <div class="divider"></div>
                     <div class="row">
@@ -467,6 +477,27 @@
             <b-button class="mt-3" variant="outline-danger" block @click="deletePdfFile(deleteDocId)">Yes</b-button>
             <b-button class="mt-2" variant="outline-warning" block @click="toggleModalDelete">No</b-button>
         </b-modal>
+
+        <b-modal ref="set-response-date" hide-header hide-footer title="Warning" size="sm">
+            <!--<div class="page-title-icon d-flex justify-content-center">-->
+            <!--<i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />-->
+            <!--Response Date
+    </div>-->
+            <div class="d-block text-center">
+                <h5>Response Date</h5>
+                <date-picker v-model="setRDate" valueType="format" format="DD/MM/YYYY" required></date-picker>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <b-button variant="outline-danger" block @click="setResponseDate(setDocId)">Set</b-button>
+                    </div>
+                    <div class="col-md-6">
+                        <b-button variant="outline-warning" block @click="toggleModalSetResponseDate">Cancel</b-button>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </b-modal>
     </div>
 </template>
 
@@ -475,11 +506,14 @@
     import FileDataService from "../../Services/FileDataService";
     import LookUpDataService from "../../Services/LookUpDataService";
     import UserDataService from "../../Services/UserDataService";
+    import DatePicker from 'vue2-datepicker';
+    import 'vue2-datepicker/index.css';
 
     export default {
         name: 'project-detail',
         components: {
             PageTitle,
+            DatePicker,
 
         },
         props: {
@@ -537,6 +571,7 @@
                 },
                 pdfBase64: "",
                 deleteDocId: 0,
+                setDocId: 0,
                 image: "",
                 imageResult: '',
                 projectIdentifier: {
@@ -557,7 +592,8 @@
                 alertMessage: "",
                 agents: [],
                 applicationTypes: [],
-                user: null
+                user: null,
+                setRDate: null
             }
         },
         computed: {
@@ -603,6 +639,9 @@
             hideModalDelete() {
                 this.$refs['delete-document'].hide()
             },
+            hideModalSetResponseDate() {
+                this.$refs['set-response-date'].hide()
+            },
             toggleModalDelete() {
                 // We pass the ID of the button that we want to return focus to
                 // when the modal has hidden
@@ -613,6 +652,17 @@
                 // when the modal has hidden
                 this.deleteDocId = id;
                 this.$refs['delete-document'].toggle('#toggle-btn')
+            },
+            toggleSetResponseDate(id) {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.setDocId = id;
+                this.$refs['set-response-date'].toggle('#toggle-btn')
+            },
+            toggleModalSetResponseDate() {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.$refs['set-response-date'].toggle('#toggle-btn')
             },
             info(item, index /*, button*/) {
                 this.infoModal.title = `Row index: ${index}`
@@ -851,6 +901,63 @@
                         this.error = true;
                         this.busy = false;
                         this.disable = false;
+                    });
+            },
+            setResponseDate(id) {
+                console.log("setResponseDate");
+                console.log(id);
+                //var data = {
+                //    responseDate: this.setRDate
+                //};
+                //console.log(data);
+                //this.flagResponseDate(id, data);
+                LookUpDataService.GetDocumentById(id)
+                    .then(response => {
+                        var dateParts = this.setRDate.split("/");
+                        // month is 0-based, that's why we need dataParts[1] - 1
+                        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0] + 1);
+
+                        response.data.responseDate = dateObject;
+                        console.log("deletePdfFile");
+                        console.log(response.data);
+                        this.flagResponseDate(id, response.data);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+
+                    });
+
+                //FileDataService.SetResponseDate()
+                //    .then(response => {
+                //        response.data.responseDate = this.setRDate;
+                //        console.log("deletePdfFile");
+                //        console.log(response.data);
+                //        this.flagResponseDate(id, response.data);
+                //    })
+                //    .catch(e => {
+                //        this.alertMessage = e;
+                //        this.error = true;
+
+                //    });
+
+
+            },
+            flagResponseDate(id, data) {
+                console.log("flagResponseDate");
+                console.log(id);
+                console.log(data);
+                LookUpDataService.DeleteDocumentById(id, data)
+                    .then(result => {
+                        console.log("flagResponseDate");
+                        console.log(result.data);
+                        this.hideModalSetResponseDate();
+                        this.getDocumentListByProjectId(this.projectId);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        console.log(e);
+                        this.error = true;
                     });
             },
         },
