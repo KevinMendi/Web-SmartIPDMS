@@ -116,7 +116,10 @@
                         <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
                     </div>-->
                         <div>
-                            Agent: <a href="javascript:void(0);" class="mb-2 mr-2 badge badge-light">{{ user.firstname + ' ' + user.lastname  }}</a>
+                            <b>Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
+                            <b>Applicant Name:</b>&nbsp;&nbsp; {{ items[0].project.applicantName }}<br />
+                            <b> Application Type/No:</b>&nbsp;&nbsp; {{ items[0].project.appType + ' ' + items[0].project.appNumber }}<br />
+                            <b>Title:</b>&nbsp;&nbsp; {{ items[0].project.projectTitle }}
                         </div>
                     </div>
 

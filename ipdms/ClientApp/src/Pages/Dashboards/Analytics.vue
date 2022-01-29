@@ -16,15 +16,15 @@
                             <i class="pe-7s-ribbon text-white opacity-8"></i>
                         </div>
                         <div class="widget-chart-content">
-                            <div class="widget-subheading">Patented</div>
-                            <div class="widget-numbers">50</div>
-                            <div class="widget-description opacity-8 text-focus">
+                            <div class="widget-subheading">Invention - In Progress</div>
+                            <div class="widget-numbers">{{ inventionInProgressCount }}</div>
+                            <!--<div class="widget-description opacity-8 text-focus">
                                 <div class="d-inline text-danger pr-1">
                                     <font-awesome-icon icon="angle-down" />
                                     <span class="pl-1">54.1%</span>
                                 </div>
                                 out of total projects
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <div class="divider m-0 d-md-none d-sm-block"></div>
@@ -36,15 +36,15 @@
                             <i class="pe-7s-tools text-white"></i>
                         </div>
                         <div class="widget-chart-content">
-                            <div class="widget-subheading">Utility Model</div>
-                            <div class="widget-numbers"><span>5</span></div>
-                            <div class="widget-description opacity-8 text-focus">
+                            <div class="widget-subheading">Utility Model - In Progress</div>
+                            <div class="widget-numbers"><span>{{ utilityModelInProgressCount }}</span></div>
+                            <!--<div class="widget-description opacity-8 text-focus">
                                 Convert Rate:
                                 <span class="text-info pl-1">
                                     <font-awesome-icon icon="angle-up" />
                                     <span class="pl-1">14.1%</span>
                                 </span>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <div class="divider m-0 d-md-none d-sm-block"></div>
@@ -56,15 +56,15 @@
                             <i class="pe-7s-timer text-white"></i>
                         </div>
                         <div class="widget-chart-content">
-                            <div class="widget-subheading">Pending</div>
-                            <div class="widget-numbers text-success"><span>100</span></div>
-                            <div class="widget-description text-focus">
+                            <div class="widget-subheading">Finished Projects</div>
+                            <div class="widget-numbers text-success"><span>{{ finishedProjectsCount }}</span></div>
+                            <!--<div class="widget-description text-focus">
                                 Increased by
                                 <span class="text-warning pl-1">
                                     <font-awesome-icon icon="angle-up" />
                                     <span class="pl-1">7.35%</span>
                                 </span>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -90,9 +90,9 @@
                             </div>
                         </div>
                         <div class="d-block text-center card-footer">
-                            <a class="btn-shadow btn-wide btn-pill btn btn-focus" href="../monitoring/file-manager">
+                            <!--<a class="btn-shadow btn-wide btn-pill btn btn-focus" href="../monitoring/file-manager">
                                 View Projects
-                            </a>
+                            </a>-->
                         </div>
                     </div>
                 </div>
@@ -106,19 +106,20 @@
                         </div>
                     </div>
                     <div class="scroll-area-lg">
-                        <VuePerfectScrollbar class="scrollbar-container" v-once>
+                        <!--<VuePerfectScrollbar class="scrollbar-container" v-once>-->
                             <div class="p-4">
                                 <div class="vertical-time-simple vertical-without-time vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
-                                    <div class="dot-primary vertical-timeline-element">
+                                    <div v-for="(oa, i) in latestOfficeActionUpdate" :key="i" class="dot-primary vertical-timeline-element">
                                         <div>
                                             <span class="vertical-timeline-element-icon bounce-in"></span>
                                             <div class="vertical-timeline-element-content bounce-in">
-                                                <h4 class="timeline-title">Utility Model Application</h4>
-                                                <p>Sample Project Title 2</p>
+                                                <h4 class="timeline-title">{{ oa.document.officeAction }}</h4>
+                                                <p>{{ oa.project.appType + ' ' + oa.project.appNumber}}</p>
                                             </div>
+                                       
                                         </div>
                                     </div>
-                                    <div class="dot-warning vertical-timeline-element">
+                                    <!--<div class="dot-warning vertical-timeline-element">
                                         <div>
                                             <span class="vertical-timeline-element-icon bounce-in"></span>
                                             <div class="vertical-timeline-element-content bounce-in">
@@ -177,15 +178,15 @@
                                                 <p> Sample Project Title 7</p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
-                        </VuePerfectScrollbar>
+                        <!--</VuePerfectScrollbar>-->
                     </div>
                     <div class="d-block text-center card-footer">
-                        <button class="btn-shadow btn-wide btn-pill btn btn-focus">
+                        <!--<button class="btn-shadow btn-wide btn-pill btn btn-focus">
                             Upload File
-                        </button>
+                        </button>-->
                     </div>
                 </div>
             </div>
@@ -277,9 +278,24 @@
                         </div>
                     </div>
                     <div class="scroll-area-lg">
-                        <VuePerfectScrollbar class="scrollbar-container" v-once>
-                            <ul class="todo-list-wrapper list-group list-group-flush">
-                                <li class="list-group-item">
+                        <!--<VuePerfectScrollbar class="scrollbar-container" v-once>-->
+                            <ul  class="todo-list-wrapper list-group list-group-flush">
+                                <li  v-for="(rp, i) in recentProjects" :key="i" class="list-group-item">
+                                    <div class="todo-indicator bg-warning"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">
+                                                    {{ rp.applicationNo }}
+                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
+                                                </div>
+                                                <div class="widget-subheading"><i>Applicant: {{ rp.applicantName + ' - ' + rp.applicationNo }}</i></div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!--<li class="list-group-item">
                                     <div class="todo-indicator bg-warning"></div>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">
@@ -362,23 +378,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                </li>-->
                             </ul>
-                        </VuePerfectScrollbar>
+                        <!--</VuePerfectScrollbar>-->
                     </div>
                     <div class="d-block text-right card-footer">
                         <a class="btn btn-primary" href="../monitoring/file-manager">View Projects</a>
@@ -393,9 +395,9 @@
                         </div>
                     </div>
                     <div class="scroll-area-lg">
-                        <VuePerfectScrollbar class="scrollbar-container" v-once>
+                        <!--<VuePerfectScrollbar class="scrollbar-container" v-once>-->
                             <ul class="todo-list-wrapper list-group list-group-flush">
-                                <li class="list-group-item">
+                                <li v-for="(ra, i) in recentAgents" :key="i" class="list-group-item">
                                     <div class="todo-indicator bg-info"></div>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">
@@ -408,163 +410,18 @@
                                                 </div>
                                             </div>
                                             <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
+                                                
+                                                <div class="widget-heading">{{ ra.firstname + ' ' + ra.lastname }}</div>
                                                 <div class="widget-subheading">
-                                                    College of Engineering
+                                                    {{ ra.email }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-info"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-2">
-                                            </div>
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
-                                                         alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">Maria dela Cruz</div>
-                                                <div class="widget-subheading">
-                                                    College of Engineering
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                             
                             </ul>
-                        </VuePerfectScrollbar>
+                        <!--</VuePerfectScrollbar>-->
                     </div>
                     <div class="d-block text-right card-footer">
                         <button class="btn btn-primary">Add New Agent</button>
@@ -580,8 +437,9 @@
 <script>
 
     /*    import PageTitle from "../../Layout/Components/PageTitle.vue";*/
-    import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+/*    import VuePerfectScrollbar from 'vue-perfect-scrollbar';*/
     import bar from '../../Pages/Charts/Chartjs/Bar';
+    import DashboardDataService from "../../Services/DashboardDataService";
 
     // import chart1 from './Analytics/chart1';
     // import chart2 from './Analytics/chart2';
@@ -596,7 +454,7 @@
         faAngleUp,
         faTh,
     } from '@fortawesome/free-solid-svg-icons'
-    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+    //import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
     library.add(
         faTrashAlt,
@@ -611,21 +469,111 @@
         components: {
             // PageTitle,
             bar,
-            VuePerfectScrollbar,
-            'font-awesome-icon': FontAwesomeIcon,
+/*            VuePerfectScrollbar,*/
+            //'font-awesome-icon': FontAwesomeIcon,
             // chart1,
 
             // chart2,
             // chart3,
 
         },
-        data: () => ({
-            heading: 'Analytics Dashboard',
-            subheading: 'This is an example dashboard created using build-in elements and components.',
-            icon: 'pe-7s-plane icon-gradient bg-tempting-azure',
-        }),
+        data() {
+            return {
+                heading: 'Analytics Dashboard',
+                subheading: 'This is an example dashboard created using build-in elements and components.',
+                icon: 'pe-7s-plane icon-gradient bg-tempting-azure',
 
-        methods: {},
+                userInfoSession: null,
+                inventionInProgressCount: 0,
+                utilityModelInProgressCount: 0,
+                finishedProjectsCount: 0,
+                latestOfficeActionUpdate: [],
+                recentProjects: [],
+                recentAgents:[]
+            }
+        },
+
+        methods: {
+            getInventionCount() {
+                DashboardDataService.GetInventionCount(this.userInfoSession.ipdmsUserId)
+                    .then(response => {
+                        this.inventionInProgressCount = response.data;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            getUtilityModelCount() {
+                DashboardDataService.GetUtilityModelCount(this.userInfoSession.ipdmsUserId)
+                    .then(response => {
+                        this.utilityModelInProgressCount = response.data;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            getFinishedProjectsCount() {
+                DashboardDataService.GetFinishedProjectsCount(this.userInfoSession.ipdmsUserId)
+                    .then(response => {
+                        this.finishedProjectsCount = response.data;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            getInventionFinishedCount() { },
+            getUtilityModelFinishedCount() { },
+            getOfficeActionUpdateList() {
+                DashboardDataService.GetOfficeActionUpdateList(this.userInfoSession.ipdmsUserId)
+                    .then(response => {
+                        this.latestOfficeActionUpdate = response.data;
+                        console.log("GetOfficeActionUpdateList");
+                        console.log(response.data);
+                        //console.log(response.data);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            getRecentProjects() {
+                DashboardDataService.GetRecentProjects(this.userInfoSession.ipdmsUserId)
+                    .then(response => {
+                        this.recentProjects = response.data;
+                        
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            getAgents() {
+                DashboardDataService.GetAgents()
+                    .then(response => {
+                        this.recentAgents = response.data;
+                        console.log("GetAgents");
+                        console.log(response.data);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            }
+
+
+        },
+        beforeMount() {
+            this.userInfoSession = JSON.parse(sessionStorage.getItem('userInfo'));
+            this.getInventionCount();
+            this.getUtilityModelCount();
+            this.getFinishedProjectsCount();
+            this.getOfficeActionUpdateList();
+            this.getRecentProjects();
+            this.getAgents();
+        }
 
     }
 

@@ -733,11 +733,95 @@ namespace ipdms.Controllers.FileController
                                        mail_date = d.mail_date == null ? null : d.mail_date.Value.ToShortDateString(),
                                        due = d.mail_date != null ? d.mail_date.Value.AddDays(oa.office_action_due.Value).ToShortDateString() : null,
                                        Actions = new { documentId = d.document_id, folder = p.project_path, fname = d.pdf_name }, 
+                                       project = new { appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title, applicantName = p.applicant_name}
         }).ToListAsync();
 
             return documents;
         }
 
-        
+
+        ////////////////////////DASHBOARD
+        [HttpGet("count/projects/user/{userId}")]
+        public int GetProjectsCount(int userId)
+        {
+            var result = _context.Project.Count(n => n.ipdms_user_id == userId);
+
+            return result;
+        }
+
+        [HttpGet("count/invention/user/{userId}")]
+        public  int GetInventionCount(int userId)
+        {
+            var result =  _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 0);
+                                
+            return result;
+        }
+
+        [HttpGet("count/utility-model/user/{userId}")]
+        public int GetUtilityModelCount(int userId)
+        {
+            var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0);
+
+            return result;
+        }
+
+        [HttpGet("count/invention/finished/user/{userId}")]
+        public int GetInventionFinishedCount(int userId)
+        {
+            var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
+
+            return result;
+        }
+
+        [HttpGet("count/utility-model/finished/user/{userId}")]
+        public int GetUtilityModelFinishedCount(int userId)
+        {
+            var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
+
+            return result;
+        }
+
+        [HttpGet("count/projects/finished/user/{userId}")]
+        public int GetFinishedProjectsCount(int userId)
+        {
+            var result = _context.Project.Count(n => n.ipdms_user_id == userId  && n.project_status_id == 1);
+
+            return result;
+        }
+
+
+        [HttpGet("dashboard/uploaded/office-action/user/{userId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetOfficeActionUpdateList(int userId)
+        {
+            var result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.ipdms_user_id == userId
+                                select new
+                                {
+                                    Project = new {projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE }
+                                    
+                                }).OrderByDescending(o => o.Document.createDate).ToListAsync();
+
+            return result;
+        }
+
+        [HttpGet("dashboard/project/recent/user/{userId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetRecentProjects(int userId)
+        {
+            var result = await _context.Project.ToListAsync();
+
+            return result;
+        }
+
+        [HttpGet("dashboard/agents")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetAgents(int userId)
+        {
+            var result = await _context.IpdmsUser.Where(a => a.user_role_id == 3).ToListAsync();
+
+            return result;
+        }
+
     }
 }
