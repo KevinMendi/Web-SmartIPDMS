@@ -1,8 +1,9 @@
 <template>
     <div>
         <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
-        <b-alert show dismissible fade variant="danger"> Upcoming Office Action response submission deadline is on 08/09/2021! </b-alert>
-
+        <div v-for="(item, i) in items" :key="i">
+            <b-alert show dismissible fade variant="danger" v-if="item.response_date == null && (item.officeAction.id != 1 && item.officeAction.id != 9)"> {{ item.officeAction.type }} response submission deadline is on {{ item. due }}! </b-alert>
+        </div>
 
         <div class="content">
             <b-card class="mb-3" no-body>
@@ -255,24 +256,43 @@
                                                                 <div class="position-relative form-group">
                                                                     <label for="applicationType" class="">Application Type</label>
                                                                     <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
-                                                                    <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
-                                                                    <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
-                                                                </select>-->
+        <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
+        <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+    </select>-->
                                                                     <input name="applicationType"
+                                                                           v-if="projectIdentifier.applicationTypeName"
                                                                            id="applicationType"
                                                                            placeholder="Application Type"
                                                                            v-model="projectIdentifier.applicationTypeName"
                                                                            type="text"
-                                                                           class="form-control" readonly>
+                                                                           class="form-control" readonly required>
+
+                                                                    <input name="applicationType"
+                                                                           v-if="!projectIdentifier.applicationTypeName"
+                                                                           id="applicationType"
+                                                                           placeholder="Application Type"
+                                                                           v-model="projectIdentifier.applicationTypeName"
+                                                                           type="text"
+                                                                           class="form-control" required>
                                                                 </div>
                                                                 <div class="position-relative form-group">
                                                                     <label for="applicationNumber"
-                                                                           class="">Application Number</label><input name="applicationNumber"
-                                                                                                                     id="applicationNumber"
-                                                                                                                     placeholder="Application Number"
-                                                                                                                     v-model="projectIdentifier.applicationNo"
-                                                                                                                     type="text"
-                                                                                                                     class="form-control" readonly>
+                                                                           class="">Application Number</label>
+                                                                    <input name="applicationNumber"
+                                                                           v-if="projectIdentifier.applicationNo"
+                                                                           id="applicationNumber"
+                                                                           placeholder="Application Number"
+                                                                           v-model="projectIdentifier.applicationNo"
+                                                                           type="text"
+                                                                           class="form-control" readonly required>
+
+                                                                    <input name="applicationNumber"
+                                                                           v-if="!projectIdentifier.applicationNo"
+                                                                           id="applicationNumber"
+                                                                           placeholder="Application Number"
+                                                                           v-model="projectIdentifier.applicationNo"
+                                                                           type="text"
+                                                                           class="form-control" required>
                                                                 </div>
 
 
@@ -295,20 +315,35 @@
 
                                                                 </select>-->
                                                                     <input name="officeAction"
+                                                                           v-if="projectIdentifier.officeActionName"
                                                                            id="officeAction"
                                                                            placeholder="Office Action"
                                                                            v-model="projectIdentifier.officeActionName"
                                                                            type="text"
-                                                                           class="form-control" readonly>
+                                                                           class="form-control" readonly required>
+
+                                                                    <input name="officeAction"
+                                                                           v-if="!projectIdentifier.officeActionName"
+                                                                           id="officeAction"
+                                                                           placeholder="Office Action"
+                                                                           v-model="projectIdentifier.officeActionName"
+                                                                           type="text"
+                                                                           class="form-control" required>
                                                                 </div>
                                                                 <div class="position-relative form-group">
                                                                     <label for="mailingDate"
-                                                                           class="">Document Mailing Date</label><input name="mailingDate"
-                                                                                                                        id="mailingDate"
-                                                                                                                        placeholder="Mailing Date"
-                                                                                                                        v-model="projectIdentifier.mailDate"
-                                                                                                                        type="datetime"
-                                                                                                                        class="form-control" readonly>
+                                                                           class="">Document Mailing Date</label>
+
+                                                                    <input name="mailingDate"
+                                                                           v-if="projectIdentifier.mailDate"
+                                                                           id="mailingDate"
+                                                                           placeholder="Mailing Date"
+                                                                           v-model="projectIdentifier.mailDate"
+                                                                           type="datetime"
+                                                                           class="form-control" readonly required>
+                                                                    <br />
+                                                                    <date-picker v-if="!projectIdentifier.mailDate && !checked" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required ></date-picker>&nbsp;&nbsp;&nbsp;
+                                                                    <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
                                                                 </div>
                                                                 <!--<div class="position-relative form-group">
                                                                 <label for="agentName"
@@ -352,16 +387,16 @@
                                 <div class="vertical-timeline-element-content bounce-in">
                                     <h4 class="timeline-title">
                                         {{ item.officeAction.type }}
-                                        <div v-if="item.officeAction.id != 1 && item.response_date == null" class="badge badge-danger ml-2">DUE {{ item.due }}</div>
+                                        <div v-if="item.officeAction.id != 1 && item.response_date == null && item.mail_date != null" class="badge badge-danger ml-2">DUE {{ item.due }}</div>
                                     </h4>
 
                                     <p>
                                         File uploaded <span class="text-success">{{ item.created_on }}</span><br />
-                                        Mail Date <span class="text-success">{{ item.mail_date }}</span><br />
+                                        Mail Date <span class="text-success">{{ item.officeAction.id == 9 ? "N/A" : item.mail_date }}</span><br />
                                         Submitted response on
                                         <span class="text-success">
-                                            {{ item.response_date == null && item.officeAction.id == 1 ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
-                                            <b-button v-if="item.response_date == null && item.officeAction.id != 1" variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
+                                            {{ item.response_date == null && (item.officeAction.id == 1 || item.officeAction.id == 9) ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
+                                            <b-button v-if="item.response_date == null && (item.officeAction.id != 1 && item.officeAction.id != 9)" variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
                                         </span>
                                         <!--<span v-if="item.response_date == null && item.officeAction.id != 1">(set response date)</span>-->
 
@@ -593,7 +628,8 @@
                 agents: [],
                 applicationTypes: [],
                 user: null,
-                setRDate: null
+                setRDate: null,
+                checked: false
             }
         },
         computed: {
@@ -775,6 +811,7 @@
                 var data = {
                     image64: this.image,
                     projectId: null,
+                    type: 1//Upload File - FileManager
                 }
                 var reader = new FileReader();
                 //var vm = this;
@@ -876,6 +913,7 @@
                     createUserDate: this.currentDate(),
                     lastUpdateUserId: this.user.ipdmsUserId,
                     lastUpdateDate: this.currentDate(),
+                    saveType: 2
                 };
 
                 //var data2 = {

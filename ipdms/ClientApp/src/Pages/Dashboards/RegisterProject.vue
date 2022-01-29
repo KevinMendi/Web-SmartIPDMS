@@ -269,13 +269,11 @@
                     createUserDate: this.currentDate(),
                     lastUpdateUserId: this.user.ipdmsUserId,
                     lastUpdateDate: this.currentDate(),
+                    saveType: 1
                 };
 
-                //var data2 = {
-                //    pdf: this.pdfData 
-                //};
-
-               console.log(data);
+                console.log(data);
+                console.log(JSON.stringify(data));
                 this.show = true;
                 FileDataService.SaveProject(JSON.stringify(data))
                     .then(response => {

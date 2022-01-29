@@ -14,5 +14,8 @@ namespace ipdms.Models
         [JsonPropertyName("image64")]
         public string image64 { get; set; }
 
+        [JsonPropertyName("type")]
+        public int type { get; set; }
+
     }
 }

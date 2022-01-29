@@ -24,7 +24,7 @@ export default new Router({
             component: () => import('../Pages/Dashboards/RegisterProject.vue'),
         },
         {
-            path: '/uploads/upload-file',
+            path: '/upload/upload-file',
             name: 'upload-file',
             component: () => import('../Pages/Uploads/UploadFile.vue'),
         },

@@ -28,6 +28,7 @@
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.4.2",
+    "vue-media-recorder": "^0.1.25",
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-router": "^3.0.5",
     "vue-sessionstorage": "^1.0.0",

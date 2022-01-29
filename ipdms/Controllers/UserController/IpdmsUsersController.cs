@@ -18,7 +18,15 @@ namespace ipdms.Controllers.UserController
 
         public IpdmsUsersController(IpdmsDbContext context)
         {
-            _context = context;
+            try
+            {
+                _context = context;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
         }
 
         // GET: api/IpdmsUsers

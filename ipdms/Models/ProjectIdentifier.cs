@@ -7,7 +7,9 @@ namespace ipdms.Models
 {
     public class ProjectIdentifier
     {
-        public int OfficeActionId { get; set; }
+        public int? OfficeActionId { get; set; }
+
+        public string OfficeActionName { get; set; }
 
         public int ProjectId { get; set; }
 
@@ -15,13 +17,11 @@ namespace ipdms.Models
 
         public int PdfFileSize { get; set; }
 
-        public int ApplicationTypeId { get; set; }
+        public int? ApplicationTypeId { get; set; }
 
         public string ApplicationTypeName { get; set; }
 
         public string ApplicationNo { get; set; }
-
-        public string OfficeActionName { get; set; }
 
         public string MailDate { get; set; }
     }
