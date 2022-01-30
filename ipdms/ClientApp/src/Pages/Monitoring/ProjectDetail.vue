@@ -115,8 +115,9 @@
                         Status: <div class="mb-2 mr-2 badge badge-warning">Completion of Final Requirements</div>
                         <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
                     </div>-->
+                        
                         <div>
-                            <b>Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
+                            <b >Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
                             <b>Applicant Name:</b>&nbsp;&nbsp; {{ items[0].project.applicantName }}<br />
                             <b> Application Type/No:</b>&nbsp;&nbsp; {{ items[0].project.appType + ' ' + items[0].project.appNumber }}<br />
                             <b>Title:</b>&nbsp;&nbsp; {{ items[0].project.projectTitle }}
@@ -127,7 +128,7 @@
                         <!--<b-button class="mr-2 mb-2 border-0 btn-transition" variant="info"> + Upload </b-button>-->
                         <b-button v-b-modal.modal-multi-1 class="mr-2 mb-2 border-0 btn-transition" variant="info">+ Upload</b-button>
 
-                        <b-modal id="modal-multi-1" size="lg" title="First Modal" ok-only ok-variant="secondary" ok-title="Cancel" no-stacking>
+                        <b-modal id="modal-multi-1" size="lg" title="Project Detail" ok-only ok-variant="secondary" ok-title="Cancel" no-stacking @ok="refreshData()">
                             <div class="content">
                                 <b-row>
                                     <b-col md="12">
@@ -383,6 +384,7 @@
             dot-dark : if it exceeds submission date-->
                 <div>
                     <div class="divider"></div>
+                    <h4 style="color: #56CC9D;">Timeline</h4>
                     <div class="vertical-time-simple vertical-without-time vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                         <div v-for="(item, i) in items" :key="i" :class=" item.officeAction.id == 1 ? 'dot-info vertical-timeline-element' : item.response_date == null ? 'dot-warning vertical-timeline-element' : 'dot-success vertical-timeline-element' ">
                             <div>
@@ -390,16 +392,16 @@
                                 <div class="vertical-timeline-element-content bounce-in">
                                     <h4 class="timeline-title">
                                         {{ item.officeAction.type }}
-                                        <div v-if="item.officeAction.id != 1 && item.response_date == null && item.mail_date != null" class="badge badge-danger ml-2">DUE {{ item.due }}</div>
+                                        <div v-if="item.officeAction.id != 1 && item.response_date == null " class="badge badge-danger ml-2">DUE {{ item.due }}</div>
                                     </h4>
 
                                     <p>
                                         File uploaded <span class="text-success">{{ item.created_on }}</span><br />
-                                        Mail Date <span class="text-success">{{ item.officeAction.id == 9 ? "N/A" : item.mail_date }}</span><br />
+                                        Mail Date <span class="text-success">{{ item.mail_date }}</span><br />
                                         Submitted response on
                                         <span class="text-success">
-                                            {{ item.response_date == null && (item.officeAction.id == 1 || item.officeAction.id == 9) ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
-                                            <b-button v-if="item.response_date == null && (item.officeAction.id != 1 && item.officeAction.id != 9)" variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
+                                            {{ item.response_date == null && item.officeAction.id == 1  ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
+                                            <b-button v-if="item.response_date == null && item.officeAction.id != 1 " variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
                                         </span>
                                         <!--<span v-if="item.response_date == null && item.officeAction.id != 1">(set response date)</span>-->
 
@@ -408,68 +410,68 @@
                             </div>
                         </div>
                         <!--<div class="dot-success vertical-timeline-element">
-                        <div>
-                            <span class="vertical-timeline-element-icon bounce-in"></span>
-                            <div class="vertical-timeline-element-content bounce-in">
-                                <h4 class="timeline-title">Formality Examination Report</h4>
-                                <p>
-                                    Received on <span class="text-success">06/01/2021 10:00 AM</span>
-                                    Submitted response on <span class="text-success">07/01/2021 7:00 AM</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dot-success vertical-timeline-element">
-                        <div>
-                            <span class="vertical-timeline-element-icon bounce-in"></span>
-                            <div class="vertical-timeline-element-content bounce-in">
-                                <h4 class="timeline-title">Formality Examination Report</h4>
-                                <p>
-                                    Received on <span class="text-success">08/01/2021 10:00 AM</span>
-                                    Submitted response on <span class="text-success">09/01/2021 7:00 AM</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dot-success vertical-timeline-element">
-                        <div>
-                            <span class="vertical-timeline-element-icon bounce-in"></span>
-                            <div class="vertical-timeline-element-content bounce-in">
-                                <h4 class="timeline-title">Formality Examination Report</h4>
-                                <p>
-                                    Received on <span class="text-success">10/01/2021 10:00 AM</span>
-                                    Submitted response on <span class="text-success">11/01/2021 7:00 AM</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dot-success vertical-timeline-element">
-                        <div>
-                            <span class="vertical-timeline-element-icon bounce-in"></span>
-                            <div class="vertical-timeline-element-content bounce-in">
-                                <h4 class="timeline-title">Formality Examination Report</h4>
-                                <p>
-                                    Received on <span class="text-success">12/23/2021 10:00 AM</span>
-                                    Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dot-warning vertical-timeline-element">
-                        <div>
-                            <span class="vertical-timeline-element-icon bounce-in"></span>
-                            <div class="vertical-timeline-element-content bounce-in">
-                                <h4 class="timeline-title">
-                                    Notice of Publication
-                                    <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
-                                </h4>
-                                <p>
-                                    Received on <span class="text-success">12/23/2021 10:00 AM</span>
-                                    Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>-->
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in"></span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">Formality Examination Report</h4>
+                    <p>
+                        Received on <span class="text-success">06/01/2021 10:00 AM</span>
+                        Submitted response on <span class="text-success">07/01/2021 7:00 AM</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="dot-success vertical-timeline-element">
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in"></span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">Formality Examination Report</h4>
+                    <p>
+                        Received on <span class="text-success">08/01/2021 10:00 AM</span>
+                        Submitted response on <span class="text-success">09/01/2021 7:00 AM</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="dot-success vertical-timeline-element">
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in"></span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">Formality Examination Report</h4>
+                    <p>
+                        Received on <span class="text-success">10/01/2021 10:00 AM</span>
+                        Submitted response on <span class="text-success">11/01/2021 7:00 AM</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="dot-success vertical-timeline-element">
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in"></span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">Formality Examination Report</h4>
+                    <p>
+                        Received on <span class="text-success">12/23/2021 10:00 AM</span>
+                        Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="dot-warning vertical-timeline-element">
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in"></span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">
+                        Notice of Publication
+                        <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
+                    </h4>
+                    <p>
+                        Received on <span class="text-success">12/23/2021 10:00 AM</span>
+                        Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
+                    </p>
+                </div>
+            </div>
+        </div>-->
                     </div>
                     <div class="divider"></div>
                     <div class="row">
@@ -650,6 +652,22 @@
             this.totalRows = this.items.length
         },
         methods: {
+            refreshData() {
+                this.projectIdentifier =  {
+                    applicationTypeId: null,
+                    applicationTypeName: "",
+                    applicationNo: "",
+                    officeActionId: null,
+                    officeActionName: "",
+                    mailDate: "",
+                    projectTitle: "",
+                    fillingDate: null,
+                    applicantName: "",
+                    agentName: "",
+                    fileName:"",
+                    
+                }
+            },
             onShown() {
                 // Focus the cancel button when the overlay is showing
                 this.$refs.cancel.focus()

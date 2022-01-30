@@ -29,6 +29,13 @@ class DashboardDataService {
         return http.get(`/IpdmsFile/dashboard/agents`);
     }
 
+    GetProjectWithDueCount(userId) {
+        return http.get(`/IpdmsFile/project/due/user/${userId}`);
+    }
+
+    GetProjectSummaryData(userId, year) {
+        return http.get(`/IpdmsFile/project/user/${userId}/year/${year}`);
+    }
 
 }
 

@@ -823,5 +823,74 @@ namespace ipdms.Controllers.FileController
             return result;
         }
 
+        [HttpGet("project/due/user/{userId}")]
+        public async Task<OfficeActionDueDto> GetProjectWithDueCount(int userId)
+        {
+            var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
+            var todaysDate = DateTime.Today;
+            var officeActionDue = new OfficeActionDueDto()
+            {
+                officeActionDueToday  = 0,
+                officeActionDueThisWeek = 0,
+                officeActionDueThisMonth = 0
+            };
+
+            var result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.ipdms_user_id == userId && d.is_deleted == false && !officeActionsWithNoDue.Contains(d.office_action_id) && d.response_date == null
+                                select new
+                                {
+                                    Project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+
+            foreach (var o in result)
+            {
+                //var officeDueDate = DateTime.ParseExact(o.Document.due.ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                if (o.Document.due.Year == DateTime.Now.Year && o.Document.due.Month == DateTime.Now.Month && o.Document.due.Day == DateTime.Now.Day)
+                {
+                    officeActionDue.officeActionDueToday += 1;
+                }
+
+
+                if (o.Document.due.Year == DateTime.Now.Year && o.Document.due.Month == DateTime.Now.Month)
+                {
+                    officeActionDue.officeActionDueThisMonth += 1;
+
+                    var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+                    var d1 = DateTime.Now.Date.AddDays(-1 * (int)cal.GetDayOfWeek(DateTime.Now));
+                    var d2 = o.Document.due.Date.AddDays(-1 * (int)cal.GetDayOfWeek(o.Document.due));
+
+                    if (d1 == d2)
+                    {
+                        officeActionDue.officeActionDueThisWeek += 1;
+                    }
+                }
+            }
+            return officeActionDue;
+        }
+
+        [HttpGet("project/user/{userId}/year/{year}")]
+        public async Task<int[]> GetProjectSummaryData(int userId, int year)
+        {
+            var data = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            var result = await (from p in _context.Project
+                                where p.CREATE_USER_DATE.Value.Year == year
+                                select new
+                                {
+                                    Project = new { projectId = p.project_id, projectMonthCreated =  p.CREATE_USER_DATE.Value.Month}
+                                }).ToListAsync();
+
+
+            foreach (var i in result)
+            {
+                data[i.Project.projectMonthCreated - 1] += 1;
+            }
+
+            return data;
+        }
     }
 }

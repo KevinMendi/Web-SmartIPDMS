@@ -76,7 +76,7 @@
                     <div class="card-header-tab card-header">
                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                             <i class="header-icon lnr-cloud-download icon-gradient bg-happy-itmeo"> </i>
-                            {Year} Project Summary
+                            {{ new Date().getFullYear() }} Project Summary
                         </div>
                     </div>
                     <div class="p-0 card-body">
@@ -192,7 +192,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-12 col-xl-4">
                 <div class="card mb-3 widget-chart widget-chart2 text-left card-btm-border card-shadow-success border-success">
                     <div class="widget-chat-wrapper-outer">
                         <div class="widget-chart-content pt-3 pl-3 pb-1">
@@ -200,7 +200,7 @@
                                 <div class="widget-numbers">
                                     <div class="widget-chart-flex">
                                         <div class="fsize-4">
-                                            <span>1</span>
+                                            <span>{{ projectDue.officeActionDueToday }}</span>
                                             <small class="opacity-5"> Project</small>
                                         </div>
                                     </div>
@@ -211,7 +211,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-12 col-xl-4">
                 <div class="card mb-3 widget-chart widget-chart2 text-left card-btm-border card-shadow-primary border-primary">
                     <div class="widget-chat-wrapper-outer">
                         <div class="widget-chart-content pt-3 pl-3 pb-1">
@@ -219,7 +219,7 @@
                                 <div class="widget-numbers">
                                     <div class="widget-chart-flex">
                                         <div class="fsize-4">
-                                            <span>100</span>
+                                            <span>{{ projectDue.officeActionDueThisWeek }}</span>
                                             <small class="opacity-5"> Projects</small>
                                         </div>
                                     </div>
@@ -230,7 +230,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-12 col-xl-4">
                 <div class="card mb-3 widget-chart widget-chart2 text-left card-btm-border card-shadow-warning border-warning">
                     <div class="widget-chat-wrapper-outer">
                         <div class="widget-chart-content pt-3 pl-3 pb-1">
@@ -238,32 +238,13 @@
                                 <div class="widget-numbers">
                                     <div class="widget-chart-flex">
                                         <div class="fsize-4">
-                                            <span>10</span>
+                                            <span>{{ projectDue.officeActionDueThisMonth }}</span>
                                             <small class="opacity-5"> Projects</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <h6 class="widget-subheading mb-0 opacity-5">Due This Month</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="card mb-3 widget-chart widget-chart2 text-left card-btm-border card-shadow-danger border-danger">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content pt-3 pl-3 pb-1">
-                            <div class="widget-chart-flex">
-                                <div class="widget-numbers">
-                                    <div class="widget-chart-flex">
-                                        <div class="fsize-4">
-                                            <span>1000</span>
-                                            <small class="opacity-5"> Projects</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h6 class="widget-subheading mb-0 opacity-5">Due Last Month</h6>
                         </div>
                     </div>
                 </div>
@@ -295,90 +276,6 @@
                                         </div>
                                     </div>
                                 </li>
-                                <!--<li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="todo-indicator bg-warning"></div>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">
-                                                    Project Title Sample 1
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
-                                                </div>
-                                                <div class="widget-subheading"><i>Owner: John Doe</i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>-->
                             </ul>
                         <!--</VuePerfectScrollbar>-->
                     </div>
@@ -489,7 +386,8 @@
                 finishedProjectsCount: 0,
                 latestOfficeActionUpdate: [],
                 recentProjects: [],
-                recentAgents:[]
+                recentAgents: [],
+                projectDue: []
             }
         },
 
@@ -530,9 +428,6 @@
                 DashboardDataService.GetOfficeActionUpdateList(this.userInfoSession.ipdmsUserId)
                     .then(response => {
                         this.latestOfficeActionUpdate = response.data;
-                        console.log("GetOfficeActionUpdateList");
-                        console.log(response.data);
-                        //console.log(response.data);
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -554,14 +449,26 @@
                 DashboardDataService.GetAgents()
                     .then(response => {
                         this.recentAgents = response.data;
-                        console.log("GetAgents");
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                    });
+            },
+            getProjectWithDueCount() {
+                DashboardDataService.GetProjectWithDueCount(this.userInfoSession.ipdmsUserId)
+                    .then(response => {
+                        this.projectDue = response.data;
+                        console.log("GetProjectWithDueCount");
                         console.log(response.data);
                     })
                     .catch(e => {
                         this.alertMessage = e;
                         this.error = true;
                     });
-            }
+            },
+
+
 
 
         },
@@ -573,6 +480,7 @@
             this.getOfficeActionUpdateList();
             this.getRecentProjects();
             this.getAgents();
+            this.getProjectWithDueCount();
         }
 
     }

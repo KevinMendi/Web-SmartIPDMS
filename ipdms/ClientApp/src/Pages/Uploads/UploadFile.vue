@@ -59,97 +59,6 @@
                                     </b-overlay>
                                 </form>
                                     
-                                    <!--<form class="">
-            <div class="">
-                <b-button block class="mr-2 mb-2" variant="warning" :size="sm" :key="sm">
-                    Open Camera to Scan the Document
-                </b-button>
-            </div>
-            <div class="position-relative form-group">
-                <label for="applicationType" class="">Application Type</label><select name="applicationType"
-                                                                                      id="applicationType"
-                                                                                      class="form-control">
-                    <option value="1">Invention</option>
-                    <option value="2">Utility Model</option>
-                </select>
-            </div>
-            <div class="position-relative form-group">
-                <label for="applicationNumber"
-                       class="">Application Number</label><input name="applicationNumber"
-                                                                 id="applicationNumber"
-                                                                 placeholder="Application Number"
-                                                                 type="text"
-                                                                 class="form-control">
-            </div>
-            <div class="position-relative form-group">
-                <label for="projectName"
-                       class="">Project Name</label><input name="projectName"
-                                                           id="projectName"
-                                                           placeholder="Project Name"
-                                                           type="text"
-                                                           class="form-control">
-            </div>
-            <div class="position-relative form-group">
-                <label for="officeAction"
-                       class="">Office Action Type</label><input name="officeAction"
-                                                                 id="officeAction"
-                                                                 placeholder="Office Action"
-                                                                 type="text"
-                                                                 class="form-control">
-            </div>
-            <div class="position-relative form-group">
-                <label for="officeAction" class="">Office Action:</label><select name="officeAction"
-                                                                                 id="officeAction"
-                                                                                 class="form-control">
-                    <option value="1">Acknowledgement</option>
-                    <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
-                    <option value="3">Notice of Publication</option>
-                    <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
-                    <option value="5">Completion of Final Requirements</option>
-                    <option value="6">Notice of Allowance</option>
-                    <option value="7">Certificate</option>
-                    <option value="11">Notice of Issuance of Certificate</option>
-                    <option value="12">Notice of Withdrawn Application</option>
-                    <option value="13">Revival Order</option>
-                    <option value="14">Notice of Forfeiture of Application</option>
-
-                </select>
-            </div>
-            <div class="position-relative form-group">
-                <label for="filingDate"
-                       class="">Document Filing Date</label><input name="filingDate"
-                                                                   id="filingDate"
-                                                                   placeholder="Filing Date"
-                                                                   type="datetime"
-                                                                   class="form-control">
-            </div>
-            <div class="position-relative form-group">
-                <label for="mailingDate"
-                       class="">Document Mailing Date</label><input name="mailingDate"
-                                                                    id="mailingDate"
-                                                                    placeholder="Mailing Date"
-                                                                    type="datetime"
-                                                                    class="form-control">
-            </div>
-            <div class="position-relative form-group">
-                <label for="agentName"
-                       class="">Agent Name</label><input name="agentName"
-                                                         id="agentName"
-                                                         placeholder="Agent Name"
-                                                         type="text"
-                                                         class="form-control">
-            </div>
-            <div class="position-relative form-group">
-                <div class="custom-checkbox custom-control">
-                    <input type="checkbox"
-                           id="exampleCustomCheckbox"
-                           class="custom-control-input"><label class="custom-control-label" for="exampleCustomCheckbox">
-                        Please check the box if the details are all correct and click Submit.
-                    </label>
-                </div>
-            </div>
-            <button class="mt-1 btn btn-primary">Submit</button>
-        </form>-->
                             </b-tab>
                             <b-tab title="Upload Document" active>
                                 <form @submit.prevent="saveProject" ref="UploadForm">
@@ -284,10 +193,23 @@
                                                 {{alertMessage}}
                                             </b-alert><br />
 
-                                            <b-button :disabled="disable" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
-                                                      size="lg">
-                                                Upload
-                                            </b-button>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <b-button :disabled="disable" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
+                                                              size="lg">
+                                                        Upload
+                                                    </b-button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b-button :disabled="disable" type="button" variant="danger" @click="refreshData()" class="btn-wide btn-pill btn-shadow btn-hover-shine float-right"
+                                                              size="lg" >
+                                                        Cancel
+                                                    </b-button>
+                                                </div>
+                                            </div>
+                                           
+
+                                            
                                             <!--</b-overlay>-->
                                             <!--</b-collapse>-->
                                         </div>
@@ -358,6 +280,21 @@
             checked: false
         }),
         methods: {
+            refreshData() {
+                this.projectIdentifier = {
+                applicationTypeId: null,
+                applicationTypeName: "",
+                applicationNo: "",
+                officeActionId: null,
+                officeActionName: "",
+                mailDate: "",
+                projectTitle: "",
+                fillingDate: null,
+                applicantName: "",
+                agentName: "",
+                fileName: "",
+                }
+            },
             onFileChange(e) {
                 var files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
