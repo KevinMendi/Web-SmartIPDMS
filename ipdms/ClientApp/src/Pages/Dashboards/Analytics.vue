@@ -102,7 +102,7 @@
                     <div class="card-header-tab card-header">
                         <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                             <i class="header-icon lnr-lighter icon-gradient bg-amy-crisp"> </i>
-                            Latest Office Action Updates
+                            Latest Office Action Updates 
                         </div>
                     </div>
                     <div class="scroll-area-lg">
@@ -267,8 +267,8 @@
                                         <div class="widget-content-wrapper">
                                             <div class="widget-content-left">
                                                 <div class="widget-heading">
-                                                    {{ rp.applicationNo }}
-                                                    <div class="badge badge-primary ml-2">Acknowledge</div>
+                                                    {{ rp.projectTitle }}
+                                                    <!--<div class="badge badge-primary ml-2">{{ rp }}</div>-->
                                                 </div>
                                                 <div class="widget-subheading"><i>Applicant: {{ rp.applicantName + ' - ' + rp.applicationNo }}</i></div>
                                                 
@@ -393,7 +393,7 @@
 
         methods: {
             getInventionCount() {
-                DashboardDataService.GetInventionCount(this.userInfoSession.ipdmsUserId)
+                DashboardDataService.GetInventionCount(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.inventionInProgressCount = response.data;
                     })
@@ -403,7 +403,7 @@
                     });
             },
             getUtilityModelCount() {
-                DashboardDataService.GetUtilityModelCount(this.userInfoSession.ipdmsUserId)
+                DashboardDataService.GetUtilityModelCount(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.utilityModelInProgressCount = response.data;
                     })
@@ -413,7 +413,7 @@
                     });
             },
             getFinishedProjectsCount() {
-                DashboardDataService.GetFinishedProjectsCount(this.userInfoSession.ipdmsUserId)
+                DashboardDataService.GetFinishedProjectsCount(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.finishedProjectsCount = response.data;
                     })
@@ -425,9 +425,10 @@
             getInventionFinishedCount() { },
             getUtilityModelFinishedCount() { },
             getOfficeActionUpdateList() {
-                DashboardDataService.GetOfficeActionUpdateList(this.userInfoSession.ipdmsUserId)
+                DashboardDataService.GetOfficeActionUpdateList(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.latestOfficeActionUpdate = response.data;
+                        
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -435,7 +436,7 @@
                     });
             },
             getRecentProjects() {
-                DashboardDataService.GetRecentProjects(this.userInfoSession.ipdmsUserId)
+                DashboardDataService.GetRecentProjects(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.recentProjects = response.data;
                         
@@ -456,7 +457,7 @@
                     });
             },
             getProjectWithDueCount() {
-                DashboardDataService.GetProjectWithDueCount(this.userInfoSession.ipdmsUserId)
+                DashboardDataService.GetProjectWithDueCount(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.projectDue = response.data;
                         console.log("GetProjectWithDueCount");

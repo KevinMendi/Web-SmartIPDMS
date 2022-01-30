@@ -5,36 +5,36 @@ class DashboardDataService {
         return http.get(`/IpdmsFile/count/projects/user/${userId}`);
     }
 
-    GetInventionCount(userId) {
-        return http.get(`/IpdmsFile/count/invention/user/${userId}`);
+    GetInventionCount(userId, roleId) {
+        return http.get(`/IpdmsFile/count/invention/user/${userId}/role/${roleId}`);
     }
 
-    GetUtilityModelCount(userId) {
-        return http.get(`/IpdmsFile/count/utility-model/user/${userId}`);
+    GetUtilityModelCount(userId, roleId) {
+        return http.get(`/IpdmsFile/count/utility-model/user/${userId}/role/${roleId}`);
     }
 
-    GetFinishedProjectsCount(userId) {
-        return http.get(`/IpdmsFile/count/projects/finished/user/${userId}`);
+    GetFinishedProjectsCount(userId, roleId) {
+        return http.get(`/IpdmsFile/count/projects/finished/user/${userId}/role/${roleId}`);
     }
 
-    GetOfficeActionUpdateList(userId) {
-        return http.get(`/IpdmsFile/dashboard/uploaded/office-action/user/${userId}`);
+    GetOfficeActionUpdateList(userId, roleId) {
+        return http.get(`/IpdmsFile/dashboard/uploaded/office-action/user/${userId}/role/${roleId}`);
     }
 
-    GetRecentProjects(userId) {
-        return http.get(`/IpdmsFile/dashboard/project/recent/user/${userId}`);
+    GetRecentProjects(userId, roleId) {
+        return http.get(`/IpdmsFile/dashboard/project/recent/user/${userId}/role/${roleId}`);
     }
 
     GetAgents() {
         return http.get(`/IpdmsFile/dashboard/agents`);
     }
 
-    GetProjectWithDueCount(userId) {
-        return http.get(`/IpdmsFile/project/due/user/${userId}`);
+    GetProjectWithDueCount(userId, roleId) {
+        return http.get(`/IpdmsFile/project/due/user/${userId}/role/${roleId}`);
     }
 
-    GetProjectSummaryData(userId, year) {
-        return http.get(`/IpdmsFile/project/user/${userId}/year/${year}`);
+    GetProjectSummaryData(userId, roleId, year) {
+        return http.get(`/IpdmsFile/project/user/${userId}/role/${roleId}/year/${year}`);
     }
 
 }

@@ -10,7 +10,7 @@
                                 <div class="modal-dialog w-100">
                                     <div class="modal-content">
                                         <div class="modal-body">
-                                            <b-alert show variant="danger" dismissible fade v-model="showAlert">
+                                            <b-alert show :variant="ipdmsVariant" dismissible fade v-model="showAlert">
                                                 {{alertMessage}}
                                             </b-alert>
                                             <h4 class="mt-2">
@@ -20,8 +20,8 @@
                                             <div class="divider" />
                                             <select class="mb-2 form-control" name="userRoleId" id="userRoleId" v-model="user.userRoleId">
                                                 <option value="-1" disabled>Please select *</option>
-                                                <option value="1">Super Admin</option>
-                                                <option value="2">Admin</option>
+                                                <!--<option value="1">Super Admin</option>-->
+                                                <!--<option value="2">Admin</option>-->
                                                 <option value="3">Agent</option>
                                             </select>
                                             <div class="row">
@@ -142,7 +142,8 @@
                 },
                 submitted: false,
                 showAlert: false,
-                alertMessage: ""
+                alertMessage: "",
+                ipdmsVariant: 'success'
             };
         },
         methods: {
@@ -168,8 +169,16 @@
                 else {
                     UserDataService.SaveUser(data)
                         .then(response => {
-                            this.user.user_id = response.data.id;
+                            this.user.user_id = response.data.ipdmsUserId;
                             this.submitted = true;
+                            if (this.user.user_id != 0) {
+                                this.alertMessage = "Successfuly Saved!";
+                                this.delayedAlert();
+                            } else {
+                                this.ipdmsVariant = 'danger';
+                                this.alertMessage = "Email address already exists!";
+                                this.delayedAlert();
+                            }
                         })
                         .catch(e => {
                             this.alertMessage = e;

@@ -76,6 +76,26 @@
                         title: 'File Manager',
                         href: '/monitoring/file-manager'
                     },
+
+                    {
+                        header: true,
+                        title: 'Settings'
+                    },
+                    {
+                        icon: 'pe-7s-users',
+                        title: 'Manage Users',
+                        href: '/settings/manage-users'
+                    },
+                    {
+                        icon: 'pe-7s-folder',
+                        title: 'Manage Projects',
+                        href: '/settings/manage-projects'
+                    },
+                    {
+                        icon: 'pe-7s-news-paper',
+                        title: 'Manage Office Actions',
+                        href: '/settings/manage-office-action'
+                    },
                     //{
                     //    icon: 'pe-7s-graph2',
                     //    title: 'Chart',

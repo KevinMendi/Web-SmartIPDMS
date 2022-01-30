@@ -9,8 +9,8 @@ class FileDataService {
         return http.post("/IpdmsFile", data);
     } 
 
-    GetProjectList(userId) {
-        return http.get(`/IpdmsFile/projects/${userId}`);
+    GetProjectList(userId, roleId, year) {
+        return http.get(`/IpdmsFile/projects/user/${userId}/role/${roleId}/year/${year}`);
     }
 
     GetDocumentListByProjectId(projectId) {

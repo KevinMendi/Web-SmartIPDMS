@@ -11,7 +11,7 @@ export default {
     },
     methods: {
         getProjectSummaryData() {
-            DashboardDataService.GetProjectSummaryData(this.userInfoSession.ipdmsUserId, new Date().getFullYear())
+            DashboardDataService.GetProjectSummaryData(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId, new Date().getFullYear())
                 .then(response => {
                     this.chartData = response.data;
                     console.log("GetProjectSummaryData");

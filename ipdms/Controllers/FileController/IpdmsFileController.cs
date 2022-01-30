@@ -696,8 +696,8 @@ namespace ipdms.Controllers.FileController
         //    var test = await _context.Project.ToListAsync();
         //    return test;
         //}
-        [HttpGet("projects/{userId}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectList(int userId)
+        [HttpGet("projects/user/{userId}/role/{roleId}/year/{year}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectList(int userId, int roleId, int year)
         {
             var result = await (from p in _context.Project
                          join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
@@ -708,10 +708,26 @@ namespace ipdms.Controllers.FileController
                              IsActive = false,
                              ProjectId = p.project_id,
                              Application = new { icon =  "pe-7s-folder", projectId = p.project_id, type =  a.application_type_name , number = p.application_no },
-                             Project = new { pname = p.project_title },
+                             Project = new { pname = p.project_title, createDate = p.CREATE_USER_DATE },
                              Agent = new { first = i.first_name, last = i.last_name },
                              NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count()
-                         }).ToListAsync();
+                         }).OrderByDescending(o => o.Project.createDate).ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
+                                join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
+                                select new
+                                {
+                                    IsActive = false,
+                                    ProjectId = p.project_id,
+                                    Application = new { icon = "pe-7s-folder", projectId = p.project_id, type = a.application_type_name, number = p.application_no },
+                                    Project = new { pname = p.project_title, createDate = p.CREATE_USER_DATE },
+                                    Agent = new { first = i.first_name, last = i.last_name },
+                                    NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count()
+                                }).OrderByDescending(o => o.Project.createDate).ToListAsync();
+            }
 
             return result;
         }
@@ -749,54 +765,80 @@ namespace ipdms.Controllers.FileController
             return result;
         }
 
-        [HttpGet("count/invention/user/{userId}")]
-        public  int GetInventionCount(int userId)
+        [HttpGet("count/invention/user/{userId}/role/{roleId}")]
+        public  int GetInventionCount(int userId, int roleId)
         {
-            var result =  _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 0);
+            var result = 0;
+            if (roleId == 1)
+            {
+                result = _context.Project.Count(n => n.application_type_id == 1 && n.project_status_id == 0);
+            }
+            else
+            {
+                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 0);
+            }
+            
                                 
             return result;
         }
 
-        [HttpGet("count/utility-model/user/{userId}")]
-        public int GetUtilityModelCount(int userId)
+        [HttpGet("count/utility-model/user/{userId}/role/{roleId}")]
+        public int GetUtilityModelCount(int userId, int roleId)
         {
-            var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0);
+            var result = 0;
+            if (roleId == 1)
+            {
+                _context.Project.Count(n =>  n.application_type_id == 2 && n.project_status_id == 0);
+            }
+            else
+            {
+                _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0);
+            }
 
             return result;
         }
 
-        [HttpGet("count/invention/finished/user/{userId}")]
-        public int GetInventionFinishedCount(int userId)
+        [HttpGet("count/invention/finished/user/{userId}/role/{roleId}")]
+        public int GetInventionFinishedCount(int userId, int roleId)
         {
             var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
 
             return result;
         }
 
-        [HttpGet("count/utility-model/finished/user/{userId}")]
-        public int GetUtilityModelFinishedCount(int userId)
+        [HttpGet("count/utility-model/finished/user/{userId}/role/{roleId}")]
+        public int GetUtilityModelFinishedCount(int userId, int roleId)
         {
             var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
 
             return result;
         }
 
-        [HttpGet("count/projects/finished/user/{userId}")]
-        public int GetFinishedProjectsCount(int userId)
+        [HttpGet("count/projects/finished/user/{userId}/role/{roleId}")]
+        public int GetFinishedProjectsCount(int userId, int roleId)
         {
-            var result = _context.Project.Count(n => n.ipdms_user_id == userId  && n.project_status_id == 1);
+            var result = 0;
+            if (roleId == 1)
+            {
+                result = _context.Project.Count(n => n.project_status_id == 1);
+            }
+            else
+            {
+               result = _context.Project.Count(n => n.ipdms_user_id == userId && n.project_status_id == 1);
+            }
+               
 
             return result;
         }
 
 
-        [HttpGet("dashboard/uploaded/office-action/user/{userId}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetOfficeActionUpdateList(int userId)
+        [HttpGet("dashboard/uploaded/office-action/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetOfficeActionUpdateList(int userId, int roleId)
         {
             var result = await (from p in _context.Project
                                 join d in _context.Document on p.project_id equals d.project_id
                                 join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
-                                where p.ipdms_user_id == userId
+                                where p.ipdms_user_id == userId && d.is_deleted == false
                                 select new
                                 {
                                     Project = new {projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
@@ -804,13 +846,38 @@ namespace ipdms.Controllers.FileController
                                     
                                 }).OrderByDescending(o => o.Document.createDate).ToListAsync();
 
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where d.is_deleted == false
+                                select new
+                                {
+                                    Project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE }
+
+                                }).OrderByDescending(o => o.Document.createDate).ToListAsync();
+            }
+
+
             return result;
         }
 
-        [HttpGet("dashboard/project/recent/user/{userId}")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetRecentProjects(int userId)
+        [HttpGet("dashboard/project/recent/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetRecentProjects(int userId, int roleId)
         {
-            var result = await _context.Project.ToListAsync();
+            var result = await _context.Project
+                .Where(p => p.ipdms_user_id == userId)
+                .OrderByDescending(p => p.CREATE_USER_DATE)
+                .ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await _context.Project
+                .OrderByDescending(p => p.CREATE_USER_DATE)
+                .ToListAsync();
+            }
 
             return result;
         }
@@ -818,13 +885,13 @@ namespace ipdms.Controllers.FileController
         [HttpGet("dashboard/agents")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetAgents(int userId)
         {
-            var result = await _context.IpdmsUser.Where(a => a.user_role_id == 3).ToListAsync();
+            var result = await _context.IpdmsUser.Where(a => a.user_role_id == 3).OrderByDescending(b => b.CREATE_USER_DATE).ToListAsync();
 
             return result;
         }
 
-        [HttpGet("project/due/user/{userId}")]
-        public async Task<OfficeActionDueDto> GetProjectWithDueCount(int userId)
+        [HttpGet("project/due/user/{userId}/role/{roleId}")]
+        public async Task<OfficeActionDueDto> GetProjectWithDueCount(int userId, int roleId)
         {
             var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
             var todaysDate = DateTime.Today;
@@ -844,6 +911,19 @@ namespace ipdms.Controllers.FileController
                                     Project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
                                     Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
                                 }).ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where d.is_deleted == false && !officeActionsWithNoDue.Contains(d.office_action_id) && d.response_date == null
+                                select new
+                                {
+                                    Project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+            }
 
             foreach (var o in result)
             {
@@ -872,17 +952,29 @@ namespace ipdms.Controllers.FileController
             return officeActionDue;
         }
 
-        [HttpGet("project/user/{userId}/year/{year}")]
-        public async Task<int[]> GetProjectSummaryData(int userId, int year)
+        [HttpGet("project/user/{userId}/role/{roleId}/year/{year}")]
+        public async Task<int[]> GetProjectSummaryData(int userId, int roleId, int year)
         {
             var data = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+         
+
             var result = await (from p in _context.Project
-                                where p.CREATE_USER_DATE.Value.Year == year
+                                where p.CREATE_USER_DATE.Value.Year == year && p.ipdms_user_id == userId
                                 select new
                                 {
-                                    Project = new { projectId = p.project_id, projectMonthCreated =  p.CREATE_USER_DATE.Value.Month}
+                                    Project = new { projectId = p.project_id, projectMonthCreated = p.CREATE_USER_DATE.Value.Month }
                                 }).ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                where p.CREATE_USER_DATE.Value.Year == year 
+                                select new
+                                {
+                                    Project = new { projectId = p.project_id, projectMonthCreated = p.CREATE_USER_DATE.Value.Month }
+                                }).ToListAsync();
+            }
 
 
             foreach (var i in result)
