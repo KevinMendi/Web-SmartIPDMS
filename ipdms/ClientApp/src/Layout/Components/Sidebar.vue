@@ -79,22 +79,30 @@
 
                     {
                         header: true,
-                        title: 'Settings'
+                        title: 'Users'
                     },
                     {
                         icon: 'pe-7s-users',
                         title: 'Manage Users',
-                        href: '/settings/manage-users'
+                        href: '/admin/manage-users'
+                    },
+                    {
+                        header: true,
+                        title: 'Projects'
                     },
                     {
                         icon: 'pe-7s-folder',
                         title: 'Manage Projects',
-                        href: '/settings/manage-projects'
+                        href: '/admin/manage-projects'
+                    },
+                    {
+                        header: true,
+                        title: 'Documents'
                     },
                     {
                         icon: 'pe-7s-news-paper',
                         title: 'Manage Office Actions',
-                        href: '/settings/manage-office-action'
+                        href: '/admin/manage-office-action'
                     },
                     //{
                     //    icon: 'pe-7s-graph2',

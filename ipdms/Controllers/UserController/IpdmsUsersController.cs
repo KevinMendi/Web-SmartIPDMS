@@ -36,6 +36,21 @@ namespace ipdms.Controllers.UserController
             return await _context.IpdmsUser.ToListAsync();
         }
 
+        [HttpGet("GetUserListTable")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetUserListTable()
+        {
+            var result = await (from u in _context.IpdmsUser
+                                select new
+                                {
+                                    Name = new { id = u.ipdms_user_id,lastname = u.last_name, firstname = u.first_name, middlename = u.middle_name },
+                                    Email = u.email,
+                                    Role = new { id = u.user_role_id, desc = u.user_role_id == 1 ? "Super Admin" : u.user_role_id == 2 ? "Admin" : "Agent" },
+                                    Actions = new { userId = u.ipdms_user_id }
+                                }).ToListAsync();
+
+            return result;
+        }
+
         // GET: api/IpdmsUsers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IpdmsUser>> GetIpdmsUser(int id)

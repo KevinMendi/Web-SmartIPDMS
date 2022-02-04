@@ -211,5 +211,35 @@ export default new Router({
             name: 'users',
             component: () => import('../Pages/Testdb/UserDisplay.vue'),
         },
+
+        //Admin
+        {
+            path: '/admin/manage-users',
+            name: 'manage-users',
+            component: () => import('../Pages/Admin/ManageUser.vue'),
+        },
+        {
+            path: '/admin/manage-projects',
+            name: 'manage-projects',
+            component: () => import('../Pages/Admin/ManageProject.vue'),
+        },
+        {
+            path: '/admin/manage-documents',
+            name: 'manage-documents',
+            component: () => import('../Pages/Admin/ManageDocument.vue'),
+        },
+        {
+            path: '/admin/manage-users/user-info',
+            name: 'user-info',
+            component: () => import('../Pages/Admin/UserInfo.vue'),
+            props(route) {
+                return { userId: route.query.userId, action: route.query.action }
+            }
+        },
+        {
+            path: '/admin/manage-users/user-register',
+            name: 'user-register',
+            component: () => import('../Pages/Admin/UserRegister.vue'),
+        },
     ]
 })

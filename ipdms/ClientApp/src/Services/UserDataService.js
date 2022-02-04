@@ -28,6 +28,9 @@ class UserDataService {
     FindUserById(id) {
         return http.get(`/IpdmsUsers?id=${id}`);
     }
+    GetUserListTable() {
+        return http.get("/IpdmsUsers/GetUserListTable");
+    }
 }
 
 export default new UserDataService();
