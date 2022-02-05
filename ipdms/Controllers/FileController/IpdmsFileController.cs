@@ -1,7 +1,9 @@
 ﻿using Google.Cloud.Vision.V1;
+using ipdms.Dtos;
 using ipdms.Models;
 using ipdms.Models.AppDbContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,13 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
-using System.Text;
-using System.IO;
-using System.Globalization;
-using System.Threading;
-using Microsoft.EntityFrameworkCore;
-using ipdms.Dtos;
 
 namespace ipdms.Controllers.FileController
 {
@@ -702,7 +697,7 @@ namespace ipdms.Controllers.FileController
             var result = await (from p in _context.Project
                          join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
                          join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
-                         where p.ipdms_user_id == userId
+                         where p.ipdms_user_id == userId && p.is_deleted == false 
                          select new
                          {
                              IsActive = false,
@@ -710,7 +705,8 @@ namespace ipdms.Controllers.FileController
                              Application = new { icon =  "pe-7s-folder", projectId = p.project_id, type =  a.application_type_name , number = p.application_no },
                              Project = new { pname = p.project_title, createDate = p.CREATE_USER_DATE },
                              Agent = new { first = i.first_name, last = i.last_name },
-                             NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count()
+                             NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count(),
+                             Actions = new { projectId = p.project_id}
                          }).OrderByDescending(o => o.Project.createDate).ToListAsync();
 
             if (roleId == 1)
@@ -718,6 +714,7 @@ namespace ipdms.Controllers.FileController
                 result = await (from p in _context.Project
                                 join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
                                 join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
+                                where  p.is_deleted == false 
                                 select new
                                 {
                                     IsActive = false,
@@ -725,7 +722,8 @@ namespace ipdms.Controllers.FileController
                                     Application = new { icon = "pe-7s-folder", projectId = p.project_id, type = a.application_type_name, number = p.application_no },
                                     Project = new { pname = p.project_title, createDate = p.CREATE_USER_DATE },
                                     Agent = new { first = i.first_name, last = i.last_name },
-                                    NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count()
+                                    NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count(),
+                                    Actions = new { projectId = p.project_id }
                                 }).OrderByDescending(o => o.Project.createDate).ToListAsync();
             }
 
@@ -983,6 +981,49 @@ namespace ipdms.Controllers.FileController
             }
 
             return data;
+        }
+
+        //Admin
+        [HttpGet("project/{projectId}")]
+        public async Task<ActionResult<dynamic>> GetProjectById(int projectId)
+        {
+            var projectById = await (from p in _context.Project
+                                   where p.project_id == projectId && p.is_deleted == false
+                                   select new
+                                   {
+                                       project = new { appTypeId = p.application_type_id, appNumber = p.application_no, projectTitle = p.project_title, applicantName = p.applicant_name, projectStatusId = p.project_status_id, agentId = p.ipdms_user_id, createUserId = p.CREATE_USER_ID, lastUpdateUserId = p.LAST_UPDATE_USER_ID }
+                                   }).FirstOrDefaultAsync();
+
+            return projectById;
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProject(int id, Project project)
+        {
+            if (id != project.project_id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(project).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await _context.Project.AnyAsync(x => x.project_id == id) == false)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
     }
 }

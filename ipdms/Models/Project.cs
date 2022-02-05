@@ -34,6 +34,9 @@ namespace ipdms.Models
         [JsonPropertyName("projectPath")]
         public string project_path { get; set; }
 
+        [JsonPropertyName("isDeleted")]
+        public bool is_deleted { get; set; }
+
         [JsonPropertyName("createUserId")]
         public int CREATE_USER_ID { get; set; }
 

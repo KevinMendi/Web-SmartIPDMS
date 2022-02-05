@@ -219,16 +219,6 @@ export default new Router({
             component: () => import('../Pages/Admin/ManageUser.vue'),
         },
         {
-            path: '/admin/manage-projects',
-            name: 'manage-projects',
-            component: () => import('../Pages/Admin/ManageProject.vue'),
-        },
-        {
-            path: '/admin/manage-documents',
-            name: 'manage-documents',
-            component: () => import('../Pages/Admin/ManageDocument.vue'),
-        },
-        {
             path: '/admin/manage-users/user-info',
             name: 'user-info',
             component: () => import('../Pages/Admin/UserInfo.vue'),
@@ -241,5 +231,28 @@ export default new Router({
             name: 'user-register',
             component: () => import('../Pages/Admin/UserRegister.vue'),
         },
+
+
+        {
+            path: '/admin/manage-projects',
+            name: 'manage-projects',
+            component: () => import('../Pages/Admin/ManageProject.vue'),
+        },
+        {
+            path: '/admin/manage-users/project-info',
+            name: 'project-info',
+            component: () => import('../Pages/Admin/ProjectInfo.vue'),
+            props(route) {
+                return { projectId: route.query.projectId, action: route.query.action }
+            }
+        },
+
+
+        {
+            path: '/admin/manage-documents',
+            name: 'manage-documents',
+            component: () => import('../Pages/Admin/ManageDocument.vue'),
+        },
+        
     ]
 })

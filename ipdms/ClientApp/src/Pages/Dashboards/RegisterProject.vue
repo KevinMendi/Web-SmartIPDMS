@@ -100,14 +100,8 @@
                                             <div class="position-relative form-group">
                                                 <label for="agentName"
                                                        class="">Agent Name</label>
-                                                <!--<input name="agentName"
-                    id="agentName"
-                    placeholder="Agent Name"
-                    v-model="project.agentName"
-                    type="text"
-                    class="form-control"
-                    required>-->
                                                 <select name="agentName"
+                                                        v-if="user.userRoleId == 1"
                                                         id="officeAction"
                                                         v-model="project.agentName"
                                                         class="form-control">
@@ -262,7 +256,7 @@
                     fillingDate: this.project.fillingDate,//add
                     mailingDate: this.project.mailingDate,
                     applicantName: (this.project.applicantName).trim(),
-                    agentName: this.project.agentName,//add
+                    agentName: this.user.userRoleId == 1 ? this.project.agentName : this.user.ipdmsUserId,//add
                     pdfBase64: this.project.pdfBase64,
                     fileName: this.project.fileName,
                     createUserId: this.user.ipdmsUserId,
@@ -340,6 +334,7 @@
             this.getAgents();
             this.getApplicationTypes();
             this.user = JSON.parse(sessionStorage.getItem('userInfo'));
+            console.log("asdasdasdasd");
             console.log(this.user);
             console.log(this.currentDate());
         },

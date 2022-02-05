@@ -17,6 +17,14 @@ class FileDataService {
         return http.get(`/IpdmsFile/project/document/${projectId}`);
     }
 
+    GetProjectById(projectId) {
+        return http.get(`/IpdmsFile/project/${projectId}`);
+    }
+
+    UpdateProject(id, data) {
+        return http.put(`/IpdmsFile/${id}`, data);
+    }
+
     
 }
 
