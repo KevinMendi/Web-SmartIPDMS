@@ -115,12 +115,14 @@
                         Status: <div class="mb-2 mr-2 badge badge-warning">Completion of Final Requirements</div>
                         <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
                     </div>-->
-                        
+
                         <div>
-                            <b >Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
+                            <b>Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
                             <b>Applicant Name:</b>&nbsp;&nbsp; {{ items[0].project.applicantName }}<br />
                             <b> Application Type/No:</b>&nbsp;&nbsp; {{ items[0].project.appType + ' ' + items[0].project.appNumber }}<br />
-                            <b>Title:</b>&nbsp;&nbsp; {{ items[0].project.projectTitle }}
+                            <b>Title:</b>&nbsp;&nbsp; {{ items[0].project.projectTitle }} <br />
+                            <b>Status: </b> <div :class="items[0].project.projectStatusId == 0 ? 'badge badge-warning ml-2' : 'badge badge-success  ml-2'">{{ items[0].project.projectStatusId == 0 && items[0].project.isConverted == true ? "Converted to Utility Model" : items[0].project.projectStatusId == 0 && items[0].project.isConverted == false ? "In Progress" : "Finished" }}</div>
+
                         </div>
                     </div>
 
@@ -260,9 +262,9 @@
                                                                 <div class="position-relative form-group">
                                                                     <label for="applicationType" class="">Application Type</label>
                                                                     <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
-        <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
-        <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
-    </select>-->
+                                                                    <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
+                                                                    <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+                                                                </select>-->
                                                                     <input name="applicationType"
                                                                            v-if="projectIdentifier.applicationTypeName"
                                                                            id="applicationType"
@@ -346,7 +348,7 @@
                                                                            type="datetime"
                                                                            class="form-control" readonly required>
                                                                     <br />
-                                                                    <date-picker v-if="!projectIdentifier.mailDate && !checked" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required ></date-picker>&nbsp;&nbsp;&nbsp;
+                                                                    <date-picker v-if="!projectIdentifier.mailDate && !checked" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
                                                                     <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
                                                                 </div>
                                                                 <!--<div class="position-relative form-group">
@@ -407,84 +409,49 @@
 
                                     </p>
                                 </div>
+
                             </div>
                         </div>
-                        <!--<div class="dot-success vertical-timeline-element">
-            <div>
-                <span class="vertical-timeline-element-icon bounce-in"></span>
-                <div class="vertical-timeline-element-content bounce-in">
-                    <h4 class="timeline-title">Formality Examination Report</h4>
-                    <p>
-                        Received on <span class="text-success">06/01/2021 10:00 AM</span>
-                        Submitted response on <span class="text-success">07/01/2021 7:00 AM</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="dot-success vertical-timeline-element">
-            <div>
-                <span class="vertical-timeline-element-icon bounce-in"></span>
-                <div class="vertical-timeline-element-content bounce-in">
-                    <h4 class="timeline-title">Formality Examination Report</h4>
-                    <p>
-                        Received on <span class="text-success">08/01/2021 10:00 AM</span>
-                        Submitted response on <span class="text-success">09/01/2021 7:00 AM</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="dot-success vertical-timeline-element">
-            <div>
-                <span class="vertical-timeline-element-icon bounce-in"></span>
-                <div class="vertical-timeline-element-content bounce-in">
-                    <h4 class="timeline-title">Formality Examination Report</h4>
-                    <p>
-                        Received on <span class="text-success">10/01/2021 10:00 AM</span>
-                        Submitted response on <span class="text-success">11/01/2021 7:00 AM</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="dot-success vertical-timeline-element">
-            <div>
-                <span class="vertical-timeline-element-icon bounce-in"></span>
-                <div class="vertical-timeline-element-content bounce-in">
-                    <h4 class="timeline-title">Formality Examination Report</h4>
-                    <p>
-                        Received on <span class="text-success">12/23/2021 10:00 AM</span>
-                        Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="dot-warning vertical-timeline-element">
-            <div>
-                <span class="vertical-timeline-element-icon bounce-in"></span>
-                <div class="vertical-timeline-element-content bounce-in">
-                    <h4 class="timeline-title">
-                        Notice of Publication
-                        <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
-                    </h4>
-                    <p>
-                        Received on <span class="text-success">12/23/2021 10:00 AM</span>
-                        Submitted response on <span class="text-success">12/30/2021 7:00 AM</span>
-                    </p>
-                </div>
-            </div>
-        </div>-->
+                        <div class="dot-info vertical-timeline-element" v-if="items[0].project.isConverted == true">
+                            <div>
+                                <span class="vertical-timeline-element-icon bounce-in"></span>
+                                <div class="vertical-timeline-element-content bounce-in">
+                                    <h4 class="timeline-title">CONVERTED TO UTILITY MODEL</h4>
+                                    <p>
+                                        Converted on <span class="text-success">{{ convertedItems[0].project.convertedTime }}</span><br />
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="divider"></div>
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-xl-6 d-flex flex-column">
-                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalFinish()" variant="success" key="success">Finish Project</b-button>
+                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalFinishProject(items[0].project.projectId)" variant="success" key="success" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true" >Finish Project</b-button>
                         </div>
                         <div class="col-sm-12 col-md-6 col-xl-6 d-flex flex-column">
-                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalConvert()" variant="warning" key="warning">Convert to Utility Model</b-button>
+                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalConvert()" variant="warning" key="warning" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true && items[0].project.appType != 'Utility Model'">Convert to Utility Model</b-button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4">
+                            <!--<router-link :to="{ query: { projectId: convertedItems[0].project.projectId } }">TEST</router-link>-->
+                            <a v-if="items[0].project.isConverted == true" :href="$router.resolve({name: 'project-detail' , query: {projectId: convertedItems[0].project.projectId}}).href">Proceed to the Converted Utility Model Project</a>
+                        </div>
+
+                        <div class="col-md-4">
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Modals-->
+
         <b-modal ref="utility-model" hide-header hide-footer title="Warning" size="sm">
             <div class="page-title-icon d-flex justify-content-center">
                 <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
@@ -492,8 +459,69 @@
             <div class="d-block text-center">
                 This project will be converted to Utility Model. Do you want to continue?
             </div>
-            <b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>
+            <!--<b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>-->
+            <!--<b-button v-b-modal.modal-multi-2 class="mt-3" block variant="outline-danger">Yes</b-button>-->
+            <b-button class="mt-3" block @click="toggleModalConvertUM()" variant="outline-danger" key="warning" v-if="items[0].project.projectStatusId == 0">Yes</b-button>
             <b-button class="mt-2" variant="outline-warning" block @click="toggleModalConvert">No</b-button>
+
+
+        </b-modal>
+
+        <b-modal ref="utility-model-convert" hide-header hide-footer title="Warning" size="md">
+            <!--<div class="page-title-icon d-flex justify-content-center">
+        <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
+    </div>-->
+            <!--<div class="d-block text-center">-->
+            <h4 class="d-block text-center text-success">
+                Convert "Invention" to "Utility Model"
+            </h4>
+            <form @submit.prevent="convertToUtilityModel" ref="convertProjectForm">
+                <div class="submit-form">
+                    <div class="content">
+                        <div class="main-card mb-3 card">
+                            <b-overlay :show="busy"
+                                       rounded
+                                       opacity="0.6"
+                                       spinner-small
+                                       spinner-variant="primary"
+                                       class="d-inline-block"
+                                       @hidden="onHidden">
+                                <div class="card-body">
+                                    <!--<h5 class="card-title">Grid Rows</h5>-->
+
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <div class="position-relative form-group">
+                                                <label for="applicationNumber" class="">New Application Number</label>
+                                                <input name="applicationNumber" id="applicationNumber" placeholder="Application Number" type="text" class="form-control" v-model="newApplicationNumber" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
+                                        {{alertMessage}}
+                                    </b-alert><br />
+                                    <!--<b-button type="submit" ref="show" :disabled="show" variant="primary" @click="show = true">
+        Show overlay
+    </b-button>-->
+                                    <!--<b-button ref="show" :disabled="show" variant="primary" @click="show = true">
+        Show overlay
+    </b-button>-->
+                                    <!--<b-button v-b-modal.modal-multi-2 class="mt-3" block variant="outline-success">Save</b-button>-->
+
+                                    <button class="mt-3 btn btn-block btn-outline-success"  variant="outline-success" :disabled="disable">Save</button>
+                                    <b-button class="mt-2" variant="outline-warning" block @click="toggleModalConvertUM(); toggleModalConvert();">Cancel</b-button>
+                                </div>
+
+                            </b-overlay>
+                        </div>
+                    </div>
+                </div>
+            </form>
+                <!--</div>-->
+                <!--<b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>-->
+
+
+
         </b-modal>
 
         <b-modal ref="finish-project" hide-header hide-footer title="Warning" size="sm">
@@ -503,7 +531,8 @@
             <div class="d-block text-center">
                 This project will be marked as finished. Do you want to continue?
             </div>
-            <b-button class="mt-3" variant="outline-danger" block @click="hideModalFinish">Yes</b-button>
+            <b-button class="mt-3" variant="outline-danger" block @click="finishProject(finishProjectId)">Yes</b-button>
+
             <b-button class="mt-2" variant="outline-warning" block @click="toggleModalFinish">No</b-button>
         </b-modal>
 
@@ -522,7 +551,7 @@
             <!--<div class="page-title-icon d-flex justify-content-center">-->
             <!--<i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />-->
             <!--Response Date
-    </div>-->
+        </div>-->
             <div class="d-block text-center">
                 <h5>Response Date</h5>
                 <date-picker v-model="setRDate" valueType="format" format="DD/MM/YYYY" required></date-picker>
@@ -535,8 +564,8 @@
                     </div>
                 </div>
             </div>
-            
-            
+
+
         </b-modal>
     </div>
 </template>
@@ -634,7 +663,20 @@
                 applicationTypes: [],
                 user: null,
                 setRDate: null,
-                checked: false
+                checked: false,
+                finishProjectId: 0,
+                project: {
+                    appTypeId: -1,
+                    appNumber: "",
+                    applicantName: "",
+                    projectTitle: "",
+                    projectStatusId: 0,
+                    agentId: 0,
+                    createUserId: 0,
+                    lastUpdateUserId: 0
+                },
+                newApplicationNumber: null,
+                convertedItems: []
             }
         },
         computed: {
@@ -684,6 +726,11 @@
                 // when the modal has hidden
                 this.$refs['utility-model'].toggle('#toggle-btn')
             },
+            toggleModalConvertUM() {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.$refs['utility-model-convert'].toggle('#toggle-btn')
+            },
 
             hideModalFinish() {
                 this.$refs['finish-project'].hide()
@@ -691,6 +738,12 @@
             toggleModalFinish() {
                 // We pass the ID of the button that we want to return focus to
                 // when the modal has hidden
+                this.$refs['finish-project'].toggle('#toggle-btn')
+            },
+            toggleModalFinishProject(id) {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.finishProjectId = id;
                 this.$refs['finish-project'].toggle('#toggle-btn')
             },
             hideModalDelete() {
@@ -738,8 +791,10 @@
             getDocumentListByProjectId(id) {
                 FileDataService.GetDocumentListByProjectId(id)
                     .then(response => {
-                        console.log(response);
+                        
                         this.items = response.data;
+                        console.log("getDocumentListByProjectId");
+                        console.log(this.items );
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -1019,9 +1074,125 @@
                         this.error = true;
                     });
             },
+            updateProject(id) {
+
+                var data = {
+                    projectId: id,
+                    applicationTypeId: this.project.appTypeId,
+                    projectStatusId: 1,
+                    ipdmsUserId: this.project.agentId,
+                    applicationNo: this.project.appNumber.trim(),
+                    projectTitle: this.project.projectTitle.trim(),
+                    applicantName: this.project.applicantName.trim(),
+                    createUserId: this.project.createUserId,
+                    lastUpdateUserId: this.project.lastUpdateUserId,
+                    isDeleted: false
+                };
+
+                FileDataService.UpdateProject(id, data)
+                    .then(response => {
+                        console.log(response.data);
+                        this.getDocumentListByProjectId(id);
+                        this.$refs['finish-project'].toggle('#toggle-btn')
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.delayedAlert();
+                    });
+            },
+            finishProject(id) {
+                console.log("finishProject");
+                console.log(id);
+                FileDataService.GetProjectById(id)
+                    .then(response => {
+                        var data = response.data;
+                        console.log("data");
+                        console.log(data);
+                        this.project.appTypeId = data.project.appTypeId;
+                        this.project.appNumber = data.project.appNumber;
+                        this.project.applicantName = data.project.applicantName;
+                        this.project.projectTitle = data.project.projectTitle;
+                        this.project.projectStatusId = data.project.projectStatusId;
+                        this.project.agentId = data.project.agentId;
+                        this.project.createUserId = data.project.createUserId;
+                        this.project.lastUpdateUserId = data.project.lastUpdateUserId;
+
+                        this.updateProject(id);
+
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.delayedAlert();
+                    });
+
+            },
+            convertToUtilityModel() {
+                this.busy = true;
+                this.disable = true;
+
+                var data = {
+                    applicationTypeId: 2,// Utility Model
+                    applicationNo: this.newApplicationNumber,
+                    projectTitle: this.items[0].project.projectTitle,
+                   /* officeActionId: this.project.officeAction,*/
+                    //fillingDate: this.project.fillingDate,//add
+                    //mailingDate: this.project.mailingDate,
+                    applicantName: this.items[0].project.applicantName,
+                    agentName: this.user.ipdmsUserId,
+                  /*  pdfBase64: this.project.pdfBase64,*/
+                  /*  fileName: this.project.fileName,*/
+                    createUserId: this.user.ipdmsUserId,
+                    createUserDate: this.currentDate(),
+                    lastUpdateUserId: this.user.ipdmsUserId,
+                    lastUpdateDate: this.currentDate(),
+                    saveType: 3,// Convert to Utility Model
+                    refProjectId: this.items[0].project.projectId
+
+                };
+
+                console.log("convertToUtilityModel");
+                console.log(data);
+
+                this.show = true;
+                FileDataService.SaveProject(JSON.stringify(data))
+                    .then(response => {
+                        this.busy = false;
+                        this.disable = false;
+                        // this.$refs.registerProjectForm.reset();//reset form
+                        this.alertMessage = response.data;
+                        this.error = false;
+                        this.delayedAlert();
+                        this.toggleModalConvertUM(); this.toggleModalConvert();
+                        this.getDocumentListByProjectId(this.projectId);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                        this.busy = false;
+                        this.disable = false;
+                    });
+            },
+            getConvertedProjectDetailsById(id) {
+                FileDataService.GetConvertedProjectDetailsById(id)
+                    .then(response => {
+                        this.busy = false;
+                        this.disable = false;
+
+                        this.convertedItems = response.data;
+                        console.log("getConvertedProjectDetailsById");
+                        console.log(this.convertedItems);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                        this.busy = false;
+                        this.disable = false;
+                    });
+            }
         },
         beforeMount() {
             this.getDocumentListByProjectId(this.projectId);
+            this.getConvertedProjectDetailsById(this.projectId);
             this.getAgents();
             this.getApplicationTypes();
             this.user = JSON.parse(sessionStorage.getItem('userInfo'));

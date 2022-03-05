@@ -53,6 +53,8 @@
                 </a>-->
                                                     <button :disabled="disable" class="mt-1 btn btn-primary">Analyze Image</button>
 
+                                                    <pre>{{ projectIdentifier }}</pre>
+
                                                 </div>
                                             </div>
                                         </center>
@@ -92,10 +94,6 @@
 
                                             <div class="position-relative form-group">
                                                 <label for="applicationType" class="">Application Type</label>
-                                                <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
-            <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
-            <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
-        </select>-->
                                                 <input name="applicationType"
                                                        v-if="projectIdentifier.applicationTypeName"
                                                        id="applicationType"
@@ -104,27 +102,30 @@
                                                        type="text"
                                                        class="form-control" readonly required>
 
-                                                <input name="applicationType"
+                                                <!--<input name="applicationType"
                                                        v-if="!projectIdentifier.applicationTypeName"
                                                        id="applicationType"
                                                        placeholder="Application Type"
                                                        v-model="projectIdentifier.applicationTypeName"
                                                        type="text"
-                                                       class="form-control" required>
+                                                       class="form-control" required>-->
+                                                <select name="applicationType" id="applicationType" v-if="!projectIdentifier.applicationTypeName" class="form-control" v-model="projectIdentifier.applicationTypeId" required>
+                                                    <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+                                                </select>
                                             </div>
                                             <div class="position-relative form-group">
                                                 <label for="applicationNumber"
                                                        class="">Application Number</label>
-                                                <input name="applicationNumber"
+                                                <!--<input name="applicationNumber"
                                                        v-if="projectIdentifier.applicationNo"
                                                        id="applicationNumber"
                                                        placeholder="Application Number"
                                                        v-model="projectIdentifier.applicationNo"
                                                        type="text"
-                                                       class="form-control" readonly required>
+                                                       class="form-control" readonly required>-->
 
                                                 <input name="applicationNumber"
-                                                       v-if="!projectIdentifier.applicationNo"
+                                               
                                                        id="applicationNumber"
                                                        placeholder="Application Number"
                                                        v-model="projectIdentifier.applicationNo"
@@ -135,22 +136,7 @@
 
                                             <div class="position-relative form-group">
                                                 <label for="officeAction" class="">Office Action:</label>
-                                                <!--<select name="officeAction"
-                                                                         id="officeAction"
-                                                                         class="form-control">
-            <option value="1">Acknowledgement</option>
-            <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
-            <option value="3">Notice of Publication</option>
-            <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
-            <option value="5">Completion of Final Requirements</option>
-            <option value="6">Notice of Allowance</option>
-            <option value="7">Certificate</option>
-            <option value="11">Notice of Issuance of Certificate</option>
-            <option value="12">Notice of Withdrawn Application</option>
-            <option value="13">Revival Order</option>
-            <option value="14">Notice of Forfeiture of Application</option>
 
-        </select>-->
                                                 <input name="officeAction"
                                                        v-if="projectIdentifier.officeActionName"
                                                        id="officeAction"
@@ -159,13 +145,16 @@
                                                        type="text"
                                                        class="form-control" readonly required>
 
-                                                <input name="officeAction"
+                                                <!--<input name="officeAction"
                                                        v-if="!projectIdentifier.officeActionName"
                                                        id="officeAction"
                                                        placeholder="Office Action"
                                                        v-model="projectIdentifier.officeActionName"
                                                        type="text"
-                                                       class="form-control" required>
+                                                       class="form-control" required>-->
+                                                <select name="officeAction" id="officeAction" v-if="!projectIdentifier.officeActionName" class="form-control"  v-model="projectIdentifier.officeActionId" required>
+                                                    <option v-for="(officeAction, index) in officeActions" :key="index" :value="officeAction.officeActionId">{{ officeAction.officeActionName1 }}</option>
+                                                </select>
                                             </div>
                                             <div class="position-relative form-group">
                                                 <label for="mailingDate"
@@ -227,6 +216,7 @@
 <script>
     import PageTitle from "../../Layout/Components/PageTitle.vue";
     import FileDataService from "../../Services/FileDataService";
+    import LookUpDataService from "../../Services/LookUpDataService";
     import DatePicker from 'vue2-datepicker';
     import 'vue2-datepicker/index.css';
 
@@ -277,7 +267,9 @@
             isLoading: false,
             link: '#',
             cavas: "",
-            checked: false
+            checked: false,
+            applicationTypes: [],
+            officeActions: [],
         }),
         methods: {
             refreshData() {
@@ -505,7 +497,27 @@
                 const canvas = document.getElementById("photoTaken").toDataURL("image/jpeg")
                     .replace("image/jpeg", "image/octet-stream");
                 download.setAttribute("href", canvas);
+            },
+            getApplicationTypes() {
+                LookUpDataService.GetApplicationTypes()
+                    .then(response => {
+                        this.applicationTypes = response.data;
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                    });
+            },
+            getOfficeActions() {
+                LookUpDataService.GetOfficeActions()
+                    .then(response => {
+                        this.officeActions = response.data;
+                        console.log(this.officeActions);
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                    });
             }
+
         
         },
         beforeMount() {
@@ -513,6 +525,8 @@
             //this.getAgents();
             //this.getApplicationTypes();
             this.user = JSON.parse(sessionStorage.getItem('userInfo'));
+            this.getApplicationTypes();
+            this.getOfficeActions();
 
         }
 

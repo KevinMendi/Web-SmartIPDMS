@@ -253,6 +253,12 @@ export default new Router({
             name: 'manage-documents',
             component: () => import('../Pages/Admin/ManageDocument.vue'),
         },
+
+        {
+            path: '/admin/manage-office-action',
+            name: 'office-action-register',
+            component: () => import('../Pages/Admin/ManageOfficeAction.vue'),
+        },
         
     ]
 })

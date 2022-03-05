@@ -57,6 +57,10 @@
                         //]
                     },
                     {
+                        header: true,
+                        title: 'Project'
+                    },
+                    {
                         icon: 'pe-7s-plus',
                         title: 'Register Project',
                         href: '/register/register-project',
@@ -66,11 +70,11 @@
                         title: 'Upload File',
                         href: '/upload/upload-file',
                     },
-                    {
-                        icon: 'pe-7s-cloud-upload',
-                        title: 'File Upload',
-                        href: '/uploads/upload-file',
-                    },
+                    //{
+                    //    icon: 'pe-7s-cloud-upload',
+                    //    title: 'File Upload',
+                    //    href: '/uploads/upload-file',
+                    //},
 
                     {
                         header: true,
@@ -80,6 +84,15 @@
                         icon: 'pe-7s-folder',
                         title: 'File Manager',
                         href: '/monitoring/file-manager'
+                    },
+                    {
+                        header: true,
+                        title: 'OFFICE ACTIOn'
+                    },
+                    {
+                        icon: 'pe-7s-news-paper',
+                        title: 'Add Office Action',
+                        href: '/admin/manage-office-action'
                     },
 
                     //{

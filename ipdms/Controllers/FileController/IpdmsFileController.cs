@@ -42,7 +42,7 @@ namespace ipdms.Controllers.FileController
                 {
                     mailDate = DateTime.ParseExact(result["mailingDate"].ToString(), "dd/MM/yyyy", null);
                 }
-                else
+                else if(result["saveType"].ToString() == "2")
                 {
                     //var pdefBase64 = new IpdmsFile()
                     //{
@@ -71,6 +71,7 @@ namespace ipdms.Controllers.FileController
                 var folderBaseName = result["applicationTypeId"].ToString() == "1" ? "Invention" : "Utility Model";
                // result["applicationNo"] = "1/2014/000317";
                 var folderName = (result["applicationNo"].ToString()).Replace("/", "_");
+                var appNUm = result["applicationNo"].ToString();
 
                 //For Upload File when saving documents
                 if (string.IsNullOrEmpty(result["projectTitle"].ToString()))
@@ -110,23 +111,29 @@ namespace ipdms.Controllers.FileController
                 //Create Folder for saving PDF in drive
                 var folderPath = $"{folderBaseName}_{folderName}/";
                 var fileSize = 0;
-                byte[] byteArray = Convert.FromBase64String((result["pdfBase64"].ToString()).Remove(0, 28));
+                
                 System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
-                using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
+                if (result["saveType"].ToString() == "1" || result["saveType"].ToString() == "2")
                 {
-                    stream.Write(byteArray, 0, byteArray.Length);
-                    int counter = 0;
-                    decimal number = (decimal)byteArray.Length;
-                    while (Math.Round(number / 1024) >= 1)
+                    byte[] byteArray = Convert.FromBase64String((result["pdfBase64"].ToString()).Remove(0, 28));
+                    using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
                     {
-                        number = number / 1024;
-                        counter++;
+                        stream.Write(byteArray, 0, byteArray.Length);
+                        int counter = 0;
+                        decimal number = (decimal)byteArray.Length;
+                        while (Math.Round(number / 1024) >= 1)
+                        {
+                            number = number / 1024;
+                            counter++;
+                        }
+                        fileSize = (int)Math.Ceiling(number);
                     }
-                    fileSize = (int)Math.Ceiling(number);
                 }
 
                 //Check if Project alreaady exist
                 var ifProjectExist = _context.Project.Any(x => x.application_no == result["applicationNo"].ToString().Trim());
+
+
 
                 if (!ifProjectExist)
                 {
@@ -142,30 +149,46 @@ namespace ipdms.Controllers.FileController
                         CREATE_USER_ID = (int)result["createUserId"],
                         CREATE_USER_DATE = DateTime.Now,
                         LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
-                        LAST_UPDATE_USER_DATE = DateTime.Now
+                        LAST_UPDATE_USER_DATE = DateTime.Now,
+                        ref_project_id = result["saveType"].ToString() == "3" ? int.Parse(result["refProjectId"].ToString()) : null
                     };
 
                     _context.Project.Add(project);
                     await _context.SaveChangesAsync();
-                    int projectId = project.project_id;
-
-                    var document = new Document()
+                    if (result["saveType"].ToString() == "1")
                     {
-                        office_action_id = (int)result["officeActionId"],
-                        project_id = projectId,
-                        mail_date = mailDate,
-                        filling_date = string.IsNullOrEmpty(result["fillingDate"].ToString()) == true ? DateTime.Now : DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
-                        pdf_name = result["fileName"].ToString(),
-                        //pdf_content = result["pdfBase64"].ToString(),
-                        pdf_file_size = fileSize,
-                        CREATE_USER_ID = (int)result["createUserId"],
-                        CREATE_USER_DATE = DateTime.Now,
-                        LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
-                        LAST_UPDATE_USER_DATE = DateTime.Now
-                    };
+                        int projectId = project.project_id;
 
-                    _context.Document.Add(document);
-                    await _context.SaveChangesAsync();
+                        var document = new Document()
+                        {
+                            office_action_id = (int)result["officeActionId"],
+                            project_id = projectId,
+                            mail_date = mailDate,
+                            filling_date = string.IsNullOrEmpty(result["fillingDate"].ToString()) == true ? DateTime.Now : DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
+                            pdf_name = result["fileName"].ToString(),
+                            //pdf_content = result["pdfBase64"].ToString(),
+                            pdf_file_size = fileSize,
+                            CREATE_USER_ID = (int)result["createUserId"],
+                            CREATE_USER_DATE = DateTime.Now,
+                            LAST_UPDATE_USER_ID = (int)result["lastUpdateUserId"],
+                            LAST_UPDATE_USER_DATE = DateTime.Now
+                        };
+
+                        _context.Document.Add(document);
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (result["saveType"].ToString() == "3")
+                    {
+                        //update is converted
+                        var p = await _context.Project.Where(x => x.project_id == int.Parse(result["refProjectId"].ToString())).FirstOrDefaultAsync();
+                        p.is_converted = true;
+                        p.LAST_UPDATE_USER_DATE = DateTime.Now;
+                       // _context.Project.Update(p);
+                        await _context.SaveChangesAsync();
+
+                    }
+
+
                 }
                 else
                 {
@@ -219,12 +242,17 @@ namespace ipdms.Controllers.FileController
             string pngBase64 = Convert.ToBase64String(bytes);
 
             byte[] pngBytes = Convert.FromBase64String((pngBase64));
-            //convert to image
-            byte[] pngByte = Freeware.Pdf2Png.Convert(bytes, 1);
+
+            if (file.type != 3)
+            {
+               pngBytes = Freeware.Pdf2Png.Convert(bytes, 1);
+            }
+                //convert to image
+                //byte[] pngByte = Freeware.Pdf2Png.Convert(bytes, 1);
 
             var imageAnalysisResult = new ProjectIdentifier();
             Image image;
-            using (MemoryStream ms = new MemoryStream(pngByte))
+            using (MemoryStream ms = new MemoryStream(pngBytes))
             {
                 image = Image.FromStream(ms);
             }
@@ -311,35 +339,40 @@ namespace ipdms.Controllers.FileController
         public ApplicationNoDto GetApplicationNo(List<string> extractedText)
         {
             var applicationNoDto = new ApplicationNoDto();
+            applicationNoDto.ApplicationNo = null;
             var applicationTypeList = _context.ApplicationType.ToList();
 
             var applicationTypeNo = applicationTypeList.Where(p => extractedText.Any(p2 => p2.Contains(p.application_type_name))).FirstOrDefault();
-            var appNumberTemp = extractedText.FirstOrDefault(x => x.Contains(applicationTypeNo.application_type_name));
-
-            var appNumber = (Regex.Replace(appNumberTemp, @"[A-Za-z]+", "")).Trim();
-
-            var toTrim = 0;
-            foreach (char c in appNumber)
+            if (applicationTypeNo != null)
             {
-                if (!Char.IsLetterOrDigit(c))//if character
+                var appNumberTemp = extractedText.FirstOrDefault(x => x.Contains(applicationTypeNo.application_type_name));
+
+                var appNumber = (Regex.Replace(appNumberTemp, @"[A-Za-z]+", "")).Trim();
+
+                var toTrim = 0;
+                foreach (char c in appNumber)
                 {
-                    ++toTrim;
+                    if (!Char.IsLetterOrDigit(c))//if character
+                    {
+                        ++toTrim;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (toTrim > 0)
+                {
+                    applicationNoDto.ApplicationNo = appNumber.Remove(0, toTrim);
+                    toTrim = 0;
                 }
                 else
                 {
-                    break;
+                    applicationNoDto.ApplicationNo = appNumber;
                 }
             }
-
-            if (toTrim > 0)
-            {
-                applicationNoDto.ApplicationNo = appNumber.Remove(0, toTrim);
-                toTrim = 0;
-            }
-            else
-            {
-                applicationNoDto.ApplicationNo = appNumber;
-            }
+          
 
             return applicationNoDto;
 
@@ -706,6 +739,7 @@ namespace ipdms.Controllers.FileController
                              Project = new { pname = p.project_title, createDate = p.CREATE_USER_DATE },
                              Agent = new { first = i.first_name, last = i.last_name },
                              NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count(),
+                             Status = new { projectStatusId = p.project_status_id == 0 && p.is_converted == true ? 1 : p.project_status_id == 0 && p.is_converted == false ? 2 : 3, projectStatus = p.project_status_id == 0 && p.is_converted == true ? "Converted to UM" : p.project_status_id == 0 && p.is_converted == false ? "In Progress" : "Finished" },
                              Actions = new { projectId = p.project_id}
                          }).OrderByDescending(o => o.Project.createDate).ToListAsync();
 
@@ -723,6 +757,7 @@ namespace ipdms.Controllers.FileController
                                     Project = new { pname = p.project_title, createDate = p.CREATE_USER_DATE },
                                     Agent = new { first = i.first_name, last = i.last_name },
                                     NumberOfFiles = _context.Document.Where(d => d.project_id == p.project_id).Count(),
+                                    Status = new { projectStatusId = p.project_status_id == 0 && p.is_converted == true ? 1 : p.project_status_id == 0 && p.is_converted == false ? 2 : 3, projectStatus = p.project_status_id == 0 && p.is_converted == true ? "Converted to UM" : p.project_status_id == 0 && p.is_converted == false ? "In Progress" : "Finished" },
                                     Actions = new { projectId = p.project_id }
                                 }).OrderByDescending(o => o.Project.createDate).ToListAsync();
             }
@@ -747,10 +782,48 @@ namespace ipdms.Controllers.FileController
                                        mail_date = d.mail_date == null ? null : d.mail_date.Value.ToShortDateString(),
                                        due = d.mail_date != null ? d.mail_date.Value.AddDays(oa.office_action_due.Value).ToShortDateString() : null,
                                        Actions = new { documentId = d.document_id, folder = p.project_path, fname = d.pdf_name }, 
-                                       project = new { appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title, applicantName = p.applicant_name}
+                                       project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title, applicantName = p.applicant_name, projectStatusId = p.project_status_id, isConverted = p.is_converted },
+                                       
         }).ToListAsync();
 
             return documents;
+        }
+
+        [HttpGet("project-converted/document/{projectId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetConvertedProjectDocumentListByProjectId(int projectId)
+        {
+            var documents = await (from p in _context.Project
+                                   join d in _context.Document on p.project_id equals d.project_id
+                                   join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                   where p.ref_project_id == projectId && d.is_deleted == false 
+                                   select new
+                                   {
+                                       IsActive = false,
+                                       OfficeAction = new { icon = "pe-7s-file", type = oa.office_action_name1, id = oa.office_action_id },
+                                       File = new { fname = d.pdf_name },
+                                       fileSize = d.pdf_file_size,
+                                       created_on = d.CREATE_USER_DATE == null ? null : d.CREATE_USER_DATE.Value.ToShortDateString(),
+                                       response_date = d.response_date == null ? null : d.response_date.Value.ToShortDateString(),
+                                       mail_date = d.mail_date == null ? null : d.mail_date.Value.ToShortDateString(),
+                                       due = d.mail_date != null ? d.mail_date.Value.AddDays(oa.office_action_due.Value).ToShortDateString() : null,
+                                       Actions = new { documentId = d.document_id, folder = p.project_path, fname = d.pdf_name },
+                                       project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title, applicantName = p.applicant_name, projectStatusId = p.project_status_id, isConverted = p.is_converted, dateConverted = p.LAST_UPDATE_USER_DATE },
+
+                                   }).ToListAsync();
+
+            return documents;
+        }
+
+        [HttpGet("project-converted/{projectId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetConvertedProjectDetailsById(int projectId)
+        {
+            var project = await (from p in _context.Project
+                                   where p.ref_project_id == projectId && p.is_deleted == false
+                                   select new { 
+                                    project = new { projectId = p.project_id, convertedTime = p.CREATE_USER_DATE == null ? null : p.CREATE_USER_DATE.Value.ToShortDateString(), refProjectId = p.ref_project_id }
+                                   }).ToListAsync();
+
+            return project;
         }
 
 
@@ -786,11 +859,11 @@ namespace ipdms.Controllers.FileController
             var result = 0;
             if (roleId == 1)
             {
-                _context.Project.Count(n =>  n.application_type_id == 2 && n.project_status_id == 0);
+                result = _context.Project.Count(n =>  n.application_type_id == 2 && n.project_status_id == 0);
             }
             else
             {
-                _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0);
+                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0);
             }
 
             return result;

@@ -13,6 +13,14 @@ class LookUpDataService {
         return http.put(`/Documents/${id}`, data);
     }
 
+    GetOfficeActions() {
+        return http.get("/OfficeActions");
+    }
+
+    SaveOfficeAction(data) {
+        return http.post("/OfficeActions", data);
+    }
+
 }
 
 export default new LookUpDataService();

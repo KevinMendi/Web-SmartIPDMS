@@ -25,6 +25,15 @@ class FileDataService {
         return http.put(`/IpdmsFile/${id}`, data);
     }
 
+    GetConvertedProjectDocumentListByProjectId(projectId) {
+        return http.get(`/IpdmsFile/project-converted/document/${projectId}`);
+    }
+
+    GetConvertedProjectDetailsById(projectId) {
+        return http.get(`/IpdmsFile/project-converted/${projectId}`);
+    }
+    
+
     
 }
 

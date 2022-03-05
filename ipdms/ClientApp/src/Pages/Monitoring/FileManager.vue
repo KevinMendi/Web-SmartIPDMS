@@ -32,6 +32,7 @@
                                         <b-form-checkbox value="project">Project Name</b-form-checkbox>
                                         <b-form-checkbox value="agent_name">Agent Name</b-form-checkbox>
                                         <b-form-checkbox value="no_of_files">No. of files</b-form-checkbox>
+                                        <b-form-checkbox value="status">Status</b-form-checkbox>
                                     </b-form-checkbox-group>
                                 </b-form-group>
 
@@ -70,16 +71,19 @@
                                     <template #cell(numberOfFiles)="row">
                                         {{ row.value }}
                                     </template>
+                                    <template #cell(status)="row">
+                                        <div :class="row.value.projectStatusId == 1 ? 'badge badge-info ml-2' : row.value.projectStatusId == 2 ? 'badge badge-warning  ml-2' : 'badge badge-success  ml-2'">{{ row.value.projectStatus }}</div>
+                                    </template>
                                     <template #cell(agent)="row">
                                         {{ row.value.first}} {{ row.value.last }}
                                     </template>
 
                                     <!--<template #cell(actions)="row">-->
-                                        <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
-                                        <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
-                                            View Details
-                                        </b-button>
-                                    </template>-->
+                                    <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
+                                    <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
+            View Details
+        </b-button>
+    </template>-->
 
                                     <template #row-details="row">
                                         <b-card>
@@ -147,6 +151,7 @@
                     { key: 'application', label: 'Application Type/No', sortable: true, sortDirection: 'desc' },
                     { key: 'project', label: 'Project Name', sortable: true, class: 'text-center' },
                     { key: 'numberOfFiles', label: 'No. of files', sortable: true, class: 'text-center' },
+                    { key: 'status', label: 'Status', sortable: true, class: 'text-center' },
                     { key: 'agent', label: 'Agent', sortable: true, sortDirection: 'desc'},
                     //{
                     //    key: 'isActive',

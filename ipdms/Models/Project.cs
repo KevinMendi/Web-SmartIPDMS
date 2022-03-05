@@ -48,5 +48,11 @@ namespace ipdms.Models
 
         [JsonPropertyName("lastUpdateUserDate")]
         public DateTime? LAST_UPDATE_USER_DATE { get; set; }
+
+        [JsonPropertyName("isConverted")]
+        public bool is_converted { get; set; }
+
+        [JsonPropertyName("refProjectId")]
+        public int? ref_project_id { get; set; }
     }
 }

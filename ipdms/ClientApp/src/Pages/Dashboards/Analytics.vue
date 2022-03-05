@@ -406,6 +406,8 @@
                 DashboardDataService.GetUtilityModelCount(this.userInfoSession.ipdmsUserId, this.userInfoSession.userRoleId)
                     .then(response => {
                         this.utilityModelInProgressCount = response.data;
+                        console.log("utilityModelInProgressCount");
+                        console.log(this.utilityModelInProgressCount);
                     })
                     .catch(e => {
                         this.alertMessage = e;
