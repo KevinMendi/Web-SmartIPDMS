@@ -109,13 +109,13 @@
                                             <label for="mailingDate"
                                                    class="">Document Mailing Date</label><input name="mailingDate"
                                                                                                 id="mailingDate"
-                                                                                                v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 8"
+                                                                                                v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 10"
                                                                                                 placeholder="Mailing Date"
                                                                                                 v-model="projectIdentifier.mailDate"
                                                                                                 type="datetime"
                                                                                                 class="form-control" readonly required>
                                             <br />
-                                            <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 8 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
+                                            <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 10 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
                                             <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
                                         </div>
 
@@ -238,13 +238,13 @@
                                                 <label for="mailingDate"
                                                        class="">Document Mailing Date</label><input name="mailingDate"
                                                                                                     id="mailingDate"
-                                                                                                    v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 8"
+                                                                                                    v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 10"
                                                                                                     placeholder="Mailing Date"
                                                                                                     v-model="projectIdentifier.mailDate"
                                                                                                     type="datetime"
                                                                                                     class="form-control" readonly required>
                                                 <br />
-                                                <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 8 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
+                                                <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 10 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
                                                 <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
                                             </div>
                                             <!--<div class="position-relative form-group">
