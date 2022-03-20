@@ -49,18 +49,96 @@
 
                                                 <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
                                                     <!--<a id="downloadPhoto" download="my-photo.jpg" class="button" role="button" @click="downloadImage">
-                    Download
-                </a>-->
+                            Download
+                        </a>-->
                                                     <button :disabled="disable" class="mt-1 btn btn-primary">Analyze Image</button>
 
-                                                    <pre>{{ projectIdentifier }}</pre>
+                                                    <!--<pre>{{ projectIdentifier }}</pre>-->
+
 
                                                 </div>
                                             </div>
                                         </center>
                                     </b-overlay>
                                 </form>
-                                    
+                                <div>
+                                    <form @submit.prevent="saveProject" ref="UploadForm">
+                                        <div class="position-relative form-group">
+                                            <label for="applicationType" class="">Application Type</label>
+                                            <input name="applicationType"
+                                                   v-if="projectIdentifier.applicationTypeName"
+                                                   id="applicationType"
+                                                   placeholder="Application Type"
+                                                   v-model="projectIdentifier.applicationTypeName"
+                                                   type="text"
+                                                   class="form-control" readonly required>
+
+                                            <select name="applicationType" id="applicationType" v-if="!projectIdentifier.applicationTypeName" class="form-control" v-model="projectIdentifier.applicationTypeId" required>
+                                                <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="position-relative form-group">
+                                            <label for="applicationNumber"
+                                                   class="">Application Number</label>
+
+                                            <input name="applicationNumber"
+                                                   id="applicationNumber"
+                                                   placeholder="Application Number"
+                                                   v-model="projectIdentifier.applicationNo"
+                                                   type="text"
+                                                   class="form-control" required>
+                                        </div>
+
+
+                                        <div class="position-relative form-group">
+                                            <label for="officeAction" class="">Office Action:</label>
+
+                                            <input name="officeAction"
+                                                   v-if="projectIdentifier.officeActionName"
+                                                   id="officeAction"
+                                                   placeholder="Office Action"
+                                                   v-model="projectIdentifier.officeActionName"
+                                                   type="text"
+                                                   class="form-control" readonly required>
+
+                                            <select name="officeAction" id="officeAction" v-if="!projectIdentifier.officeActionName" class="form-control" v-model="projectIdentifier.officeActionId" required>
+                                                <option v-for="(officeAction, index) in officeActions" :key="index" :value="officeAction.officeActionId">{{ officeAction.officeActionName1 }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="position-relative form-group">
+                                            <label for="mailingDate"
+                                                   class="">Document Mailing Date</label><input name="mailingDate"
+                                                                                                id="mailingDate"
+                                                                                                v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 8"
+                                                                                                placeholder="Mailing Date"
+                                                                                                v-model="projectIdentifier.mailDate"
+                                                                                                type="datetime"
+                                                                                                class="form-control" readonly required>
+                                            <br />
+                                            <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 8 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
+                                            <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
+                                        </div>
+
+                                        <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
+                                            {{alertMessage}}
+                                        </b-alert><br />
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <b-button :disabled="disable" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
+                                                          size="lg">
+                                                    Save
+                                                </b-button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <b-button :disabled="disable" type="button" variant="danger" @click="refreshData()" class="btn-wide btn-pill btn-shadow btn-hover-shine float-right"
+                                                          size="lg">
+                                                    Clear
+                                                </b-button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </b-tab>
                             <b-tab title="Upload Document" active>
                                 <form @submit.prevent="saveProject" ref="UploadForm">
@@ -160,13 +238,13 @@
                                                 <label for="mailingDate"
                                                        class="">Document Mailing Date</label><input name="mailingDate"
                                                                                                     id="mailingDate"
-                                                                                                    v-if="projectIdentifier.mailDate"
+                                                                                                    v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 8"
                                                                                                     placeholder="Mailing Date"
                                                                                                     v-model="projectIdentifier.mailDate"
                                                                                                     type="datetime"
                                                                                                     class="form-control" readonly required>
                                                 <br />
-                                                <date-picker v-if="!projectIdentifier.mailDate && !checked" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
+                                                <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 8 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
                                                 <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
                                             </div>
                                             <!--<div class="position-relative form-group">

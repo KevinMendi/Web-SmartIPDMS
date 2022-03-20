@@ -30,90 +30,91 @@
                                                class="mt-1">
                             <b-form-checkbox value="application">Application Type/No</b-form-checkbox>
                             <b-form-checkbox value="project">Project Name</b-form-checkbox>
-                            <b-form-checkbox value="agent_name">Agent Name</b-form-checkbox>
+                            <b-form-checkbox value="agent">Agent Name</b-form-checkbox>
                             <b-form-checkbox value="no_of_files">No. of files</b-form-checkbox>
                         </b-form-checkbox-group>
                     </b-form-group>
 
 
                 </div>
-                <b-tabs pills card>
-                    <b-tab title="2022" active>
-                        <template>
-                            <b-container fluid>
-                                <!--Main table element-->
-                                <b-table :items="items"
-                                         :fields="fields"
-                                         :current-page="currentPage"
-                                         :per-page="perPage"
-                                         :filter="filter"
-                                         :filter-included-fields="filterOn"
-                                         :sort-by.sync="sortBy"
-                                         :sort-desc.sync="sortDesc"
-                                         :sort-direction="sortDirection"
-                                         stacked="md"
-                                         show-empty
-                                         small
-                                         @filtered="onFiltered">
+                <!--<b-tabs pills card>
+        <b-tab title="2022" active>
 
-                                    <!--<template #cell(project_name)>
+        </b-tab>
 
-                                </template>-->
-                                    <template #cell(application)="row">
-                                        <i class="pe-7s-folder px-2"></i>
-                                        <span>{{ row.value.type }} {{ row.value.number }}</span>
-                                        <!-- You can also use the font-awesome-icon component here -->
-                                    </template>
-                                    <template #cell(project)="row">
-                                        {{ row.value.pname }}
-                                    </template>
-                                    <template #cell(numberOfFiles)="row">
-                                        {{ row.value }}
-                                    </template>
-                                    <template #cell(agent)="row">
-                                        {{ row.value.first}} {{ row.value.last }}
-                                    </template>
+        <b-tab title="2021">
+            same as 2021 tab
+        </b-tab>
+        <b-tab title="2020">
+            same as 2021 tab
+        </b-tab>
+        <b-tab title="2019">
+            same as 2021 tab
+        </b-tab>
+    </b-tabs>-->
+                <template>
+                    <b-container fluid>
+                        <!--Main table element-->
+                        <b-table :items="items"
+                                 :fields="fields"
+                                 :current-page="currentPage"
+                                 :per-page="perPage"
+                                 :filter="filter"
+                                 :filter-included-fields="filterOn"
+                                 :sort-by.sync="sortBy"
+                                 :sort-desc.sync="sortDesc"
+                                 :sort-direction="sortDirection"
+                                 stacked="md"
+                                 show-empty
+                                 small
+                                 @filtered="onFiltered">
+
+                            <!--<template #cell(project_name)>
+
+                </template>-->
+                            <template #cell(application)="row">
+                                <i class="pe-7s-folder px-2"></i>
+                                <span>{{ row.value.type }} {{ row.value.number }}</span>
+                                <!-- You can also use the font-awesome-icon component here -->
+                            </template>
+                            <template #cell(project)="row">
+                                {{ row.value.pname }}
+                            </template>
+                            <template #cell(numberOfFiles)="row">
+                                {{ row.value }}
+                            </template>
+                            <template #cell(agent)="row">
+                                {{ row.value.first}} {{ row.value.last }}
+                            </template>
 
 
-                                    <template #cell(actions)="row">
-                                        <router-link :to="{ name: 'project-info', query: { projectId: row.value.projectId, action: 'r' } }">
-                                            <b-button pill variant="success" v-b-tooltip title="View"><i class="pe-7s-look"></i></b-button>
-                                        </router-link>&nbsp;
-                                        <router-link :to="{ name: 'project-info', query: { projectId: row.value.projectId, action: 'e' } }">
-                                            <b-button pill variant="warning" v-b-tooltip title="Edit"><i class="pe-7s-pen"></i></b-button>
-                                        </router-link>&nbsp;
+                            <template #cell(actions)="row">
+                                <router-link :to="{ name: 'project-info', query: { projectId: row.value.projectId, action: 'r' } }">
+                                    <b-button pill variant="success" v-b-tooltip title="View"><i class="pe-7s-look"></i></b-button>
+                                </router-link>&nbsp;
+                                <router-link :to="{ name: 'project-info', query: { projectId: row.value.projectId, action: 'e' } }">
+                                    <b-button pill variant="warning" v-b-tooltip title="Edit"><i class="pe-7s-pen"></i></b-button>
+                                </router-link>&nbsp;
 
-                                        <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteProjectById(row.value.projectId)"><i class="pe-7s-trash"></i></b-button>
-                                    </template>
+                                <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteProjectById(row.value.projectId)"><i class="pe-7s-trash"></i></b-button>
+                            </template>
 
-                                    <template #row-details="row">
-                                        <b-card>
-                                            <ul>
-                                                <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                            </ul>
-                                        </b-card>
-                                    </template>
-                                </b-table>
-                                <!--Info modal-->
-                                <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-                                    <pre>{{ infoModal.content }}</pre>
-                                </b-modal>
-                            </b-container>
-                        </template>
-                        <b-pagination align="center" :total-rows="100" v-model="currentPage" :per-page="10">
-                        </b-pagination>
-                    </b-tab>
-
-                    <b-tab title="2021">
-                        same as 2021 tab
-                    </b-tab>
-                    <b-tab title="2020">
-                        same as 2021 tab
-                    </b-tab>
-                    <b-tab title="2019">
-                        same as 2021 tab
-                    </b-tab>
-                </b-tabs>
+                            <template #row-details="row">
+                                <b-card>
+                                    <ul>
+                                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+                                    </ul>
+                                </b-card>
+                            </template>
+                        </b-table>
+                        <!--Info modal-->
+                        <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
+                            <pre>{{ infoModal.content }}</pre>
+                        </b-modal>
+                    </b-container>
+                </template>
+                <b-pagination align="center" :total-rows="100" v-model="currentPage" :per-page="10">
+                </b-pagination>
             </b-card>
         </div>
         <b-modal ref="delete-project" hide-header hide-footer title="Warning" size="md">

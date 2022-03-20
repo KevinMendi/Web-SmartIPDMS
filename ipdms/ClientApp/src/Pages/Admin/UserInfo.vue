@@ -1,5 +1,7 @@
 <template>
     <div>
+        <page-title v-if="action == 'r'" :heading=heading :subheading=subheading1 :icon=icon></page-title>
+        <page-title v-if="action == 'e'" :heading=heading :subheading=subheading2 :icon=icon></page-title>
         <form @submit.prevent="updateUser">
             <div class="submit-form">
                 <!--<div class="h-100" style="background-color: #38d39f;">-->
@@ -62,7 +64,7 @@
                                     </b-form-input>
 
                                     <b-form-input id="lastname"
-                                                  v-if="action == 'e'" 
+                                                  v-if="action == 'e'"
                                                   name="lastname"
                                                   type="text"
                                                   v-model="user.lastname"
@@ -83,7 +85,7 @@
                                     </b-form-input>
 
                                     <b-form-input id="middlename"
-                                                  v-if="action == 'e'" 
+                                                  v-if="action == 'e'"
                                                   name="middlename"
                                                   type="text"
                                                   v-model="user.middlename"
@@ -104,7 +106,7 @@
                                           placeholder="Enter email *">
                             </b-form-input>
                             <b-form-input id="email"
-                                          v-if="action == 'e'" 
+                                          v-if="action == 'e'"
                                           name="email"
                                           type="email"
                                           v-model="user.email"
@@ -125,7 +127,7 @@
                                                   placeholder="Enter password *">
                                     </b-form-input>
                                     <b-form-input id="password"
-                                                  v-if="action == 'e'" 
+                                                  v-if="action == 'e'"
                                                   name="password"
                                                   type="password"
                                                   v-model="user.password"
@@ -139,7 +141,7 @@
                                 <b-form-group id="exampleInputGroup2"
                                               label-for="exampleInput2">
                                     <b-form-input id="password2"
-                                                  v-if="action == 'e'" 
+                                                  v-if="action == 'e'"
                                                   name="password2"
                                                   type="password"
                                                   v-model="user.password2"
@@ -150,13 +152,13 @@
                             </div>
                         </div>
                         <!--<b-form-checkbox name="check" id="exampleCheck">
-        Accept our <a href="javascript:void(0);">Terms and Conditions</a>.
-    </b-form-checkbox>-->
+                        Accept our <a href="javascript:void(0);">Terms and Conditions</a>.
+                    </b-form-checkbox>-->
                         <div class="divider" />
                         <!--<h6 class="mb-0">
-        Already have an account?
-        <router-link :to="{ name: 'login-boxed' }" class="text-primary">Sign in</router-link>
-    </h6>-->
+                        Already have an account?
+                        <router-link :to="{ name: 'login-boxed' }" class="text-primary">Sign in</router-link>
+                    </h6>-->
                     </div>
                     <div class="modal-footer d-block text-center">
                         <router-link :to="{ name: 'manage-users' }">
@@ -183,6 +185,7 @@
 
 <script>
     import UserDataService from "../../Services/UserDataService";
+    import PageTitle from "../../Layout/Components/PageTitle.vue";
     export default {
         name: "UserInfo",
         props: {
@@ -198,8 +201,17 @@
             }
             
         },
+        components: {
+            PageTitle,
+
+        },
         data() {
             return {
+                heading: 'Manage Users',
+                subheading1: 'View User',
+                subheading2: 'Update User',
+                icon: 'pe-7s-users icon-gradient bg-happy-itmeo',
+
                 user: {
                     firstname: null,
                     lastname: "",

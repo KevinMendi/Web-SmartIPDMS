@@ -1,5 +1,7 @@
 <template>
     <div>
+        <page-title v-if="action == 'r'" :heading=heading :subheading=subheading1 :icon=icon></page-title>
+        <page-title v-if="action == 'e'" :heading=heading :subheading=subheading2 :icon=icon></page-title>
         <form @submit.prevent="updateProject">
             <div class="submit-form">
                 <!--<div class="h-100" style="background-color: #38d39f;">-->
@@ -33,7 +35,7 @@
                                 <div class="position-relative form-group">
                                     <label for="applicationNumber" class="">Application Number</label>
                                     <input name="applicationNumber" id="applicationNumber" placeholder="Application Number" type="text" class="form-control" v-model="project.appNumber" v-if="action == 'r'" readonly required>
-                                    <input name="applicationNumber" id="applicationNumber" placeholder="Application Number" type="text" class="form-control" v-model="project.appNumber" v-if="action == 'e'"  required>
+                                    <input name="applicationNumber" id="applicationNumber" placeholder="Application Number" type="text" class="form-control" v-model="project.appNumber" v-if="action == 'e'" required>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +51,7 @@
                                           placeholder="Project title *">
                             </b-form-input>
                             <b-form-input id="projectTitle"
-                                          v-if="action == 'e'" 
+                                          v-if="action == 'e'"
                                           name="projectTitle"
                                           type="text"
                                           v-model="project.projectTitle"
@@ -73,7 +75,7 @@
                                     </b-form-input>
 
                                     <b-form-input id="applicantName"
-                                                  v-if="action == 'e'" 
+                                                  v-if="action == 'e'"
                                                   name="applicantName"
                                                   type="text"
                                                   v-model="project.applicantName"
@@ -83,17 +85,17 @@
                                 </b-form-group>
                             </div>
                             <div class="col-md-6">
-                                
+
                             </div>
                         </div>
                         <!--<b-form-checkbox name="check" id="exampleCheck">
-        Accept our <a href="javascript:void(0);">Terms and Conditions</a>.
-    </b-form-checkbox>-->
+                        Accept our <a href="javascript:void(0);">Terms and Conditions</a>.
+                    </b-form-checkbox>-->
                         <div class="divider" />
                         <!--<h6 class="mb-0">
-        Already have an account?
-        <router-link :to="{ name: 'login-boxed' }" class="text-primary">Sign in</router-link>
-    </h6>-->
+                        Already have an account?
+                        <router-link :to="{ name: 'login-boxed' }" class="text-primary">Sign in</router-link>
+                    </h6>-->
                     </div>
                     <div class="modal-footer d-block text-center">
                         <router-link :to="{ name: 'manage-projects' }">
@@ -120,6 +122,7 @@
 
 <script>
     import FileDataService from "../../Services/FileDataService";
+    import PageTitle from "../../Layout/Components/PageTitle.vue";
     export default {
         name: "ProjectIno",
         props: {
@@ -135,8 +138,17 @@
             }
 
         },
+        components: {
+            PageTitle,
+
+        },
         data() {
             return {
+                heading: 'Manage Projects',
+                subheading1: 'View Project',
+                subheading2: 'Update Project',
+                icon: 'pe-7s-folder icon-gradient bg-happy-itmeo',
+
                 project: {
                     appTypeId: -1,
                     appNumber: "",

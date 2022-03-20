@@ -87,7 +87,7 @@
                     },
                     {
                         header: true,
-                        title: 'OFFICE ACTIOn'
+                        title: 'OFFICE ACTION'
                     },
                     {
                         icon: 'pe-7s-news-paper',
@@ -356,6 +356,15 @@
                         icon: 'pe-7s-folder',
                         title: 'Manage Projects',
                         href: '/admin/manage-projects'
+                    },
+                    {
+                        header: true,
+                        title: 'OFFICE ACTION'
+                    },
+                    {
+                        icon: 'pe-7s-news-paper',
+                        title: 'Add Office Action',
+                        href: '/admin/manage-office-action'
                     },
                     //{
                     //    header: true,

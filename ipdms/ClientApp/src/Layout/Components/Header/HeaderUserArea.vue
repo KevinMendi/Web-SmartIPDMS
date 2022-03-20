@@ -7,10 +7,10 @@
                         <b-dropdown toggle-class="p-0 mr-2" menu-class="dropdown-menu-lg" variant="link" right>
                             <span slot="button-content">
                                 <div class="icon-wrapper icon-wrapper-alt rounded-circle">
-                                    <img width="42" class="rounded-circle" src="@/assets/images/avatars/avatar.png" alt="">
+                                    <img width="42" class="rounded-circle" src="@/assets/images/avatars/user-icon-green.png" alt="">
                                 </div>
                             </span>
-                            <button type="button" tabindex="0" class="dropdown-item">Notifications</button>
+                            <!--<button type="button" tabindex="0" class="dropdown-item">Notifications</button>-->
                             
                             <router-link :to="{ name: 'user-info', query: { userId: user.ipdmsUserId, action: 'e' } }">
                                 <button type="button" tabindex="0" class="dropdown-item">Edit My Profile</button>
@@ -24,11 +24,11 @@
                         <div v-if="user.userRoleId == 2" class="widget-subheading">System Admin</div>
                         <div v-if="user.userRoleId == 3" class="widget-subheading">Agent</div>
                     </div>
-                    <div class="widget-content-right header-user-info ml-3">
+                    <!--<div class="widget-content-right header-user-info ml-3">
                         <b-btn v-b-tooltip.hover title="Tooltip Example" class="btn-shadow p-1" size="sm" variant="info">
                             <font-awesome-icon icon="calendar-alt" class="mr-1 ml-1"/>
                         </b-btn>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
         faFileArchive,
         faEllipsisH,
     } from '@fortawesome/free-solid-svg-icons'
-    import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+   // import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
     library.add(
         faAngleDown,
@@ -68,7 +68,7 @@
 
     export default {
         components: {
-            'font-awesome-icon': FontAwesomeIcon,
+           // 'font-awesome-icon': FontAwesomeIcon,
         },
         data() {
             return {

@@ -47,9 +47,9 @@
                                                               placeholder="Enter password">
                                                 </b-form-input>
                                             </b-form-group>
-                                            <b-form-checkbox name="check" id="exampleCheck">
+                                            <!--<b-form-checkbox name="check" id="exampleCheck">
                                                 Keep me logged in
-                                            </b-form-checkbox>
+                                            </b-form-checkbox>-->
                                             <div class="divider" />
                                             <h6 class="mb-0">
                                                 No account?

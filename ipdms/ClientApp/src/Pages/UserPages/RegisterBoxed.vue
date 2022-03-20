@@ -18,12 +18,12 @@
                                                 <span>It only takes a <span class="text-success">few seconds</span> to create your account</span>
                                             </h4>
                                             <div class="divider" />
-                                            <select class="mb-2 form-control" name="userRoleId" id="userRoleId" v-model="user.userRoleId">
-                                                <option value="-1" disabled>Please select *</option>
+                                            <!--<select class="mb-2 form-control" name="userRoleId" id="userRoleId" v-model="user.userRoleId">
+                                                <option value="-1" disabled>Please select *</option>-->
                                                 <!--<option value="1">Super Admin</option>-->
                                                 <!--<option value="2">Admin</option>-->
-                                                <option value="3">Agent</option>
-                                            </select>
+                                                <!--<option value="3">Agent</option>
+                                            </select>-->
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <b-form-group id="exampleInputGroup2"
@@ -56,6 +56,7 @@
                                                                       name="middlename"
                                                                       type="text"
                                                                       v-model="user.middlename"
+                                                                      max="1"
                                                                       placeholder="MI.">
                                                         </b-form-input>
                                                     </b-form-group>
@@ -98,7 +99,7 @@
                                                     </b-form-group>
                                                 </div>
                                             </div>
-                                            <b-form-checkbox name="check" id="exampleCheck">
+                                            <b-form-checkbox name="check" id="exampleCheck" required>
                                                 Accept our <a href="javascript:void(0);">Terms and Conditions</a>.
                                             </b-form-checkbox>
                                             <div class="divider" />
@@ -152,7 +153,7 @@
                     firstname: this.user.firstname,
                     middlename: this.user.middlename,
                     lastname: this.user.lastname,
-                    userRoleId: parseInt(this.user.userRoleId),
+                    userRoleId: 3, //parseInt(this.user.userRoleId),
                     email: (this.user.email).trim(),
                     password: (this.user.password).trim(),
                     password2: (this.user.password2).trim()

@@ -302,7 +302,7 @@
                                             </div>
                                             <div class="widget-content-left mr-3">
                                                 <div class="widget-content-left">
-                                                    <img width="42" class="rounded" src="@/assets/images/avatars/1.jpg"
+                                                    <img width="42" class="rounded" src="@/assets/images/avatars/user-icon-green.png"
                                                          alt="">
                                                 </div>
                                             </div>
@@ -321,7 +321,7 @@
                         <!--</VuePerfectScrollbar>-->
                     </div>
                     <div class="d-block text-right card-footer">
-                        <button class="btn btn-primary">Add New Agent</button>
+                        <a v-if="this.userInfoSession.userRoleId == 1" class="btn btn-primary" href="../admin/manage-users/user-register">Add Agent</a>
                     </div>
                 </div>
             </div>
