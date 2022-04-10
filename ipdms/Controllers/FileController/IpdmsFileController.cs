@@ -413,31 +413,44 @@ namespace ipdms.Controllers.FileController
                     }
                 }
 
-                //Determine Mail date Format
                 var result = Regex.Replace(mailDateDto.MailDate, @"[^A-Za-z0-9]+", "");
-
-                var mailDateFormat = result.Substring(0, 3);
-                var format1 = false;
-                foreach (var ch in mailDateFormat)
+                //if printed
+                if (result.StartsWith("MAILED"))
                 {
-                    //Check if it is digit
-                    if (!Char.IsDigit(ch))
-                    {
-                        format1 = true;
-                    }
-                    else
-                    {
-                        format1 = false;
-                    }
-                }
+                    var date = result.Replace("MAILED", "");
 
-                if (format1)
-                {
-                    mailDateDto.MailDate = MailDateFormat1(result);
+                    var month = Regex.Replace(date, @"[\d-]", string.Empty);
+
+                    var dayAndYear = date.Replace(month, "");
+
+                    mailDateDto.MailDate = MailDateFormat1($"{month.Substring(0, 3)}{dayAndYear}");
+          
                 }
                 else
                 {
+                    //Determine Mail date Format
+                    
 
+
+                    var mailDateFormat = result.Substring(0, 3);
+                    var format1 = false;
+                    foreach (var ch in mailDateFormat)
+                    {
+                        //Check if it is digit
+                        if (!Char.IsDigit(ch))
+                        {
+                            format1 = true;
+                        }
+                        else
+                        {
+                            format1 = false;
+                        }
+                    }
+
+                    if (format1)
+                    {
+                        mailDateDto.MailDate = MailDateFormat1(result);
+                    }
                 }
             }
             catch

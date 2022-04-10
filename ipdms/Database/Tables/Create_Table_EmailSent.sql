@@ -1,0 +1,19 @@
+USE [IpdmsDb]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[EmailSent](
+	[email_sent_id] [int] IDENTITY(1,1) NOT NULL,
+	[document_id] [int] NOT NULL,
+	[project_id] [int] NOT NULL,
+	[day_five] Bit NOT NULL DEFAULT(0),
+	[day_three] Bit NOT NULL DEFAULT(0),
+	[day_one] Bit NOT NULL DEFAULT(0),
+	[CREATE_USER_DATE] [datetime] NULL
+ CONSTRAINT [PK_EmailSent] PRIMARY KEY CLUSTERED 
+(
+	[email_sent_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
