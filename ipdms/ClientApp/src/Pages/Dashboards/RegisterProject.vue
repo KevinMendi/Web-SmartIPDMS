@@ -98,7 +98,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="position-relative form-group">
-                                                <label for="agentName"
+                                                <label v-if="user.userRoleId == 1" for="agentName"
                                                        class="">Agent Name</label>
                                                 <select name="agentName"
                                                         v-if="user.userRoleId == 1"

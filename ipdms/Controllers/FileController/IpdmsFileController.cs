@@ -131,7 +131,7 @@ namespace ipdms.Controllers.FileController
                 }
 
                 //Check if Project alreaady exist
-                var ifProjectExist = _context.Project.Any(x => x.application_no == result["applicationNo"].ToString().Trim());
+                var ifProjectExist = _context.Project.Any(x => x.application_no == result["applicationNo"].ToString().Trim() && x.is_deleted != true);
 
 
 
@@ -386,8 +386,10 @@ namespace ipdms.Controllers.FileController
             {
                 mailDateDto.MailDate = null;
                 var monthsList = new List<string>(){
-                "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-            };
+                "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+
+                var monthsListFull = new List<string>(){
+                "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
 
                 var mailDates = new List<string>();
                 var mailDate = "";
@@ -410,6 +412,31 @@ namespace ipdms.Controllers.FileController
                     if (mailDateDto.MailDate != null)
                     {
                         break;
+                    }
+                }
+
+                if(mailDateDto.MailDate == null)
+                {
+                    foreach (var m in monthsListFull)
+                    {
+                        mailDates = extractedText.Where(s => s.Contains(m)).ToList();
+                        foreach (var mdate in mailDates)
+                        {
+                            if (mdate.Contains("SUMMARY") || mdate.Contains("USEP"))
+                            {
+
+                            }
+                            else
+                            {
+                                mailDateDto.MailDate = mdate;
+                                break;
+                            }
+                        }
+
+                        if (mailDateDto.MailDate != null)
+                        {
+                            break;
+                        }
                     }
                 }
 
