@@ -21,6 +21,10 @@ class LookUpDataService {
         return http.post("/OfficeActions", data);
     }
 
+    GetProjectById(id) {
+        return http.get(`/Documents/project/${id}`);
+    }
+
 }
 
 export default new LookUpDataService();

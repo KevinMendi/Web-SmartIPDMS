@@ -394,16 +394,16 @@
                                 <div class="vertical-timeline-element-content bounce-in">
                                     <h4 class="timeline-title">
                                         {{ item.officeAction.type }}
-                                        <div v-if="item.officeAction.id != 1 && item.response_date == null " class="badge badge-danger ml-2">DUE {{ item.due }}</div>
+                                        <div v-if="item.response_date == null && item.officeAction.id != 1 && item.mail_date != null" class="badge badge-danger ml-2">DUE {{ item.due }}</div>
                                     </h4>
 
                                     <p>
                                         File uploaded <span class="text-success">{{ item.created_on }}</span><br />
-                                        Mail Date <span class="text-success">{{ item.mail_date }}</span><br />
+                                        Mail Date <span class="text-success">{{ item.mail_date == null ? "N/A" : item.mail_date}}</span><br />
                                         Submitted response on
                                         <span class="text-success">
-                                            {{ item.response_date == null && item.officeAction.id == 1  ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
-                                            <b-button v-if="item.response_date == null && item.officeAction.id != 1 " variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
+                                            {{ item.response_date == null && (item.officeAction.id == 1 || item.mail_date == null) ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
+                                            <b-button v-if="item.response_date == null && item.officeAction.id != 1 && item.mail_date != null" variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
                                         </span>
                                         <!--<span v-if="item.response_date == null && item.officeAction.id != 1">(set response date)</span>-->
 
@@ -427,7 +427,7 @@
                     <div class="divider"></div>
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-xl-6 d-flex flex-column">
-                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalFinishProject(items[0].project.projectId)" variant="success" key="success" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true" >Finish Project</b-button>
+                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalFinishProject(items[0].project.projectId)" variant="success" key="success" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true">Finish Project</b-button>
                         </div>
                         <div class="col-sm-12 col-md-6 col-xl-6 d-flex flex-column">
                             <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalConvert()" variant="warning" key="warning" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true && items[0].project.appType != 'Utility Model'">Convert to Utility Model</b-button>
@@ -452,6 +452,7 @@
 
         <!-- Modals-->
 
+
         <b-modal ref="utility-model" hide-header hide-footer title="Warning" size="sm">
             <div class="page-title-icon d-flex justify-content-center">
                 <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
@@ -469,8 +470,8 @@
 
         <b-modal ref="utility-model-convert" hide-header hide-footer title="Warning" size="md">
             <!--<div class="page-title-icon d-flex justify-content-center">
-        <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
-    </div>-->
+            <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
+        </div>-->
             <!--<div class="d-block text-center">-->
             <h4 class="d-block text-center text-success">
                 Convert "Invention" to "Utility Model"
@@ -501,14 +502,14 @@
                                         {{alertMessage}}
                                     </b-alert><br />
                                     <!--<b-button type="submit" ref="show" :disabled="show" variant="primary" @click="show = true">
-        Show overlay
-    </b-button>-->
+                                    Show overlay
+                                </b-button>-->
                                     <!--<b-button ref="show" :disabled="show" variant="primary" @click="show = true">
-        Show overlay
-    </b-button>-->
+                                    Show overlay
+                                </b-button>-->
                                     <!--<b-button v-b-modal.modal-multi-2 class="mt-3" block variant="outline-success">Save</b-button>-->
 
-                                    <button class="mt-3 btn btn-block btn-outline-success"  variant="outline-success" :disabled="disable">Save</button>
+                                    <button class="mt-3 btn btn-block btn-outline-success" variant="outline-success" :disabled="disable">Save</button>
                                     <b-button class="mt-2" variant="outline-warning" block @click="toggleModalConvertUM(); toggleModalConvert();">Cancel</b-button>
                                 </div>
 
@@ -517,8 +518,8 @@
                     </div>
                 </div>
             </form>
-                <!--</div>-->
-                <!--<b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>-->
+            <!--</div>-->
+            <!--<b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>-->
 
 
 
@@ -587,7 +588,7 @@
         },
         props: {
             projectId: {
-                type: Number,
+                type: String,
                 required: true
             }
         },
@@ -676,7 +677,8 @@
                     lastUpdateUserId: 0
                 },
                 newApplicationNumber: null,
-                convertedItems: []
+                convertedItems: [],
+                newlyConvertedUM: null
             }
         },
         computed: {
@@ -1188,14 +1190,35 @@
                         this.busy = false;
                         this.disable = false;
                     });
+            },
+            getProjectById(id) {
+                LookUpDataService.GetProjectById(id)
+                    .then(response => {
+                        console.log("getProjectById");
+                        this.newlyConvertedUM = response.data;
+
+                        console.log("newlyConvertedUM");
+                        console.log(this.newlyConvertedUM );
+                        
+
+                        
+                    })
+                    .catch(e => {
+                        this.alertMessage = e;
+                        this.error = true;
+                        this.busy = false;
+                        this.disable = false;
+                    });
             }
         },
         beforeMount() {
             this.getDocumentListByProjectId(this.projectId);
             this.getConvertedProjectDetailsById(this.projectId);
+            this.getProjectById(this.projectId);
             this.getAgents();
             this.getApplicationTypes();
             this.user = JSON.parse(sessionStorage.getItem('userInfo'));
+
 
         }
     }

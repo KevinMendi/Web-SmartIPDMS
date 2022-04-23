@@ -262,7 +262,7 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <b-button :disabled="disable" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
+                                                    <b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
                                                               size="lg">
                                                         Upload
                                                     </b-button>
@@ -409,6 +409,10 @@
                             this.busy = false;
                             this.disable = false;
                         });
+                    
+                    //if (this.projectIdentifier.mailDate == "" && !this.checked) {
+                    //    this.disable = true;
+                    //}
                 };
                 reader.readAsDataURL(file);
 
@@ -470,7 +474,7 @@
                     projectId: null,
                     officeActionId: this.projectIdentifier.officeActionId,
                     fillingDate: null,//add
-                    mailingDate: this.projectIdentifier.mailDate,
+                    mailingDate: this.checked ? null : this.projectIdentifier.mailDate,
                     applicantName: "",
                     agentName: "",//add
                     pdfBase64: this.image,

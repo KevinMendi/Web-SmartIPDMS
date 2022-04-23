@@ -104,5 +104,18 @@ namespace ipdms.Controllers.LookUpController
         {
             return _context.Document.Any(e => e.document_id == id);
         }
+
+        [HttpGet("project/{id}")]
+        public async Task<ActionResult<Project>> GetProjectById(int id)
+        {
+            var project = await _context.Project.FindAsync(id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return project;
+        }
     }
 }
