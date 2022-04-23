@@ -81,13 +81,13 @@ namespace ipdms.Controllers.FileController
                     if (string.IsNullOrEmpty(result["projectId"].ToString()))
                     {
                         documentDetails = (from p in _context.Project
-                                           where p.application_no == result["applicationNo"].ToString().Trim()
+                                           where p.application_no == result["applicationNo"].ToString().Trim() && p.is_deleted == false
                                            select p).FirstOrDefault();
                     }
                     else
                     {
                         documentDetails = (from p in _context.Project
-                                           where p.project_id == (int)result["projectId"]
+                                           where p.project_id == (int)result["projectId"] && p.is_deleted == false
                                            select p).FirstOrDefault();
                     }
 
@@ -286,7 +286,7 @@ namespace ipdms.Controllers.FileController
 
                 //Get Mail Date
                 var mailDate = GetMailDate(fileContentList);
-                imageAnalysisResult.MailDate = mailDate.MailDate;
+                imageAnalysisResult.MailDate = mailDate.MailDate.Length < 10 ? "" : mailDate.MailDate;
             }
     
             return imageAnalysisResult;
