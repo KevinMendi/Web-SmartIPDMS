@@ -1,129 +1,16 @@
 <template>
     <div>
         <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
-        <div v-for="(item, i) in items" :key="i">
-            <b-alert show dismissible fade variant="danger" v-if="item.response_date == null && (item.officeAction.id != 1 && item.officeAction.id != 9)"> {{ item.officeAction.type }} response submission deadline is on {{ item. due }}! </b-alert>
-        </div>
-
-        <div class="content">
-            <b-card class="mb-3" no-body>
-                <div class="card-body">
-                    <b-input-group size="sm"
-                                   cols-sm="2">
-                        <b-form-input id="filter-input"
-                                      v-model="filter"
-                                      type="search"
-                                      placeholder="Type to Search">
-                        </b-form-input>
-                        <b-input-group-append>
-                            <b-button :disabled="!filter" @click="filter = ''" variant="primary">Clear</b-button>
-                        </b-input-group-append>
-                    </b-input-group>
-
-                    <b-form-group v-model="sortDirection"
-                                  label="Filter By:"
-                                  description="Leave all unchecked to filter on all data"
-                                  label-cols-sm="1"
-                                  label-align-sm="right"
-                                  label-size="sm"
-                                  class="mb-0"
-                                  v-slot="{ ariaDescribedby }">
-                        <b-form-checkbox-group v-model="filterOn"
-                                               :aria-describedby="ariaDescribedby"
-                                               class="mt-1">
-                            <b-form-checkbox value="office_action">Office Action</b-form-checkbox>
-                            <b-form-checkbox value="file">File Name</b-form-checkbox>
-                            <!--<b-form-checkbox value="application_type">Agent Name</b-form-checkbox>
-                        <b-form-checkbox value="isActive">Application Type</b-form-checkbox>-->
-                        </b-form-checkbox-group>
-                    </b-form-group>
-
-
-                </div>
-                <template>
-                    <b-container fluid>
-                        <!--Main table element-->
-                        <b-table :items="items"
-                                 :fields="fields"
-                                 :current-page="currentPage"
-                                 :per-page="perPage"
-                                 :filter="filter"
-                                 :filter-included-fields="filterOn"
-                                 :sort-by.sync="sortBy"
-                                 :sort-desc.sync="sortDesc"
-                                 :sort-direction="sortDirection"
-                                 stacked="md"
-                                 show-empty
-                                 small
-                                 @filtered="onFiltered">
-
-                            <!--<template #cell(project_name)>
-
-                        </template>-->
-                            <template #cell(officeAction)="row">
-                                <i class="pe-7s-file px-2"></i>
-                                <span>{{ row.value.type }}</span>
-
-                                <!-- You can also use the font-awesome-icon component here -->
-                            </template>
-                            <template #cell(file)="row">
-                                {{ row.value.fname }}
-                            </template>
-                            <template #cell(fileSize)="row">
-                                {{ row.value }} KB
-                            </template>
-
-                            <template #cell(actions)="row">
-                                <!--ommitted script: @click="info(row.item, row.index, $event.target)"-->
-                                <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
-                                View Details
-                            </b-button>-->
-                                <b-button pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-look"></i></b-button>&nbsp;
-                                <b-button pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-download"></i></b-button>&nbsp;
-                                <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteDocumentById(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>
-                                <!--<b-button pill variant="danger" v-b-tooltip title="test"><a href="C:/kmendi/smart-ipdms\ipdms\PDF\Invention_1_2014_000318/2018_FER_PA12018050147.pdf" type="application/pdf" target="_blank">zxcvxcv</a></b-button>-->
-                                <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
-                            </template>
-
-                            <template #row-details="row">
-                                <b-card>
-                                    <ul>
-                                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                                    </ul>
-                                </b-card>
-                            </template>
-                        </b-table>
-                        <!--Info modal-->
-                        <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-                            <pre>{{ infoModal.content }}</pre>
-                        </b-modal>
-                    </b-container>
-                </template>
-
-                <b-pagination align="center" :total-rows="100" v-model="currentPage" :per-page="10">
-                </b-pagination>
-
-            </b-card>
-        </div>
-
-        <!---->
+        <b-alert show dismissible fade variant="info"> There is no uploaded Office Action yet for this Project! </b-alert>
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-xl-6">
-                        <!--<div>
-                        Status: <div class="mb-2 mr-2 badge badge-warning">Completion of Final Requirements</div>
-                        <div class="badge badge-danger ml-2">DUE ON 6/23/2021</div>
-                    </div>-->
 
-                        <div>
-                            <b>Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
-                            <b>Applicant Name:</b>&nbsp;&nbsp; {{ items[0].project.applicantName }}<br />
-                            <b> Application Type/No:</b>&nbsp;&nbsp; {{ items[0].project.appType + ' ' + items[0].project.appNumber }}<br />
-                            <b>Title:</b>&nbsp;&nbsp; {{ items[0].project.projectTitle }} <br />
-                            <b>Status: </b> <div :class="items[0].project.projectStatusId == 0 ? 'badge badge-warning ml-2' : 'badge badge-success  ml-2'">{{ items[0].project.projectStatusId == 0 && items[0].project.isConverted == true ? "Converted to Utility Model" : items[0].project.projectStatusId == 0 && items[0].project.isConverted == false ? "In Progress" : "Finished" }}</div>
-
-                        </div>
+                        <b>Agent:</b>&nbsp;&nbsp; {{ user.firstname + ' ' + user.lastname  }}<br />
+                        <b>Applicant Name:</b>&nbsp;&nbsp; {{ newlyConvertedUM.applicantName }}<br />
+                        <b> Application Type/No:</b>&nbsp;&nbsp; {{ newlyConvertedUM.applicationTypeId == 1 ? "Invention" : "Utility Model" + ' ' + newlyConvertedUM.applicationNo}}<br />
+                        <b>Title:</b>&nbsp;&nbsp; {{ newlyConvertedUM.projectTitle }} <br />
                     </div>
 
                     <div class="col-sm-12 col-md-6 col-xl-6 d-inline-flex p-2 d-flex justify-content-end">
@@ -136,99 +23,7 @@
                                     <b-col md="12">
                                         <b-card class="mb-3 nav-justified" no-body>
                                             <b-tabs pills card>
-                                                <!--<b-tab title="Scan Document" active>
-                                                    <form class="">
-                                                        <div class="">
-                                                            <b-button block class="mr-2 mb-2" variant="warning" :size="sm" :key="sm">
-                                                                Open Camera to Scan the Document
-                                                            </b-button>
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="applicationType" class="">Application Type</label><select name="applicationType"
-                                                                                                                                  id="applicationType"
-                                                                                                                                  class="form-control">
-                                                                <option value="1">Invention</option>
-                                                                <option value="2">Utility Model</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="applicationNumber"
-                                                                   class="">Application Number</label><input name="applicationNumber"
-                                                                                                             id="applicationNumber"
-                                                                                                             placeholder="Application Number"
-                                                                                                             type="text"
-                                                                                                             class="form-control">
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="projectName"
-                                                                   class="">Project Name</label><input name="projectName"
-                                                                                                       id="projectName"
-                                                                                                       placeholder="Project Name"
-                                                                                                       type="text"
-                                                                                                       class="form-control">
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="officeAction"
-                                                                   class="">Office Action Type</label><input name="officeAction"
-                                                                                                             id="officeAction"
-                                                                                                             placeholder="Office Action"
-                                                                                                             type="text"
-                                                                                                             class="form-control">
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="officeAction" class="">Office Action:</label><select name="officeAction"
-                                                                                                                             id="officeAction"
-                                                                                                                             class="form-control">
-                                                                <option value="1">Acknowledgement</option>
-                                                                <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
-                                                                <option value="3">Notice of Publication</option>
-                                                                <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
-                                                                <option value="5">Completion of Final Requirements</option>
-                                                                <option value="6">Notice of Allowance</option>
-                                                                <option value="7">Certificate</option>
-                                                                <option value="11">Notice of Issuance of Certificate</option>
-                                                                <option value="12">Notice of Withdrawn Application</option>
-                                                                <option value="13">Revival Order</option>
-                                                                <option value="14">Notice of Forfeiture of Application</option>
-
-                                                            </select>
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="filingDate"
-                                                                   class="">Document Filing Date</label><input name="filingDate"
-                                                                                                               id="filingDate"
-                                                                                                               placeholder="Filing Date"
-                                                                                                               type="datetime"
-                                                                                                               class="form-control">
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="mailingDate"
-                                                                   class="">Document Mailing Date</label><input name="mailingDate"
-                                                                                                                id="mailingDate"
-                                                                                                                placeholder="Mailing Date"
-                                                                                                                type="datetime"
-                                                                                                                class="form-control">
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <label for="agentName"
-                                                                   class="">Agent Name</label><input name="agentName"
-                                                                                                     id="agentName"
-                                                                                                     placeholder="Agent Name"
-                                                                                                     type="text"
-                                                                                                     class="form-control">
-                                                        </div>
-                                                        <div class="position-relative form-group">
-                                                            <div class="custom-checkbox custom-control">
-                                                                <input type="checkbox"
-                                                                       id="exampleCustomCheckbox"
-                                                                       class="custom-control-input"><label class="custom-control-label" for="exampleCustomCheckbox">
-                                                                    Please check the box if the details are all correct and click Submit.
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <button class="mt-1 btn btn-primary">Submit</button>
-                                                    </form>
-                                                </b-tab>-->
+                                         
                                                 <b-tab title="Upload Document" active>
                                                     <form @submit.prevent="saveProject" ref="ProjectDetailForm">
                                                         <b-overlay :show="busy"
@@ -252,19 +47,19 @@
                                                                     <!--{{imageResult}}-->
                                                                 </div>
                                                                 <!--<div class="">
-        <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
-            Check Details
-        </b-button>
-    </div>-->
+                                                    <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
+                                                        Check Details
+                                                    </b-button>
+                                                </div>-->
                                                                 <!-- elements to collapse -->
                                                                 <!--<b-collapse id="collapseDetails" class="mt-2">-->
 
                                                                 <div class="position-relative form-group">
                                                                     <label for="applicationType" class="">Application Type</label>
                                                                     <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
-            <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
-            <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
-        </select>-->
+                                                        <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
+                                                        <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
+                                                    </select>-->
                                                                     <input name="applicationType"
                                                                            v-if="projectIdentifier.applicationTypeName"
                                                                            id="applicationType"
@@ -305,21 +100,21 @@
                                                                 <div class="position-relative form-group">
                                                                     <label for="officeAction" class="">Office Action:</label>
                                                                     <!--<select name="officeAction"
-                                                                         id="officeAction"
-                                                                         class="form-control">
-            <option value="1">Acknowledgement</option>
-            <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
-            <option value="3">Notice of Publication</option>
-            <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
-            <option value="5">Completion of Final Requirements</option>
-            <option value="6">Notice of Allowance</option>
-            <option value="7">Certificate</option>
-            <option value="11">Notice of Issuance of Certificate</option>
-            <option value="12">Notice of Withdrawn Application</option>
-            <option value="13">Revival Order</option>
-            <option value="14">Notice of Forfeiture of Application</option>
+                                                                                                                     id="officeAction"
+                                                                                                                     class="form-control">
+                                                        <option value="1">Acknowledgement</option>
+                                                        <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
+                                                        <option value="3">Notice of Publication</option>
+                                                        <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
+                                                        <option value="5">Completion of Final Requirements</option>
+                                                        <option value="6">Notice of Allowance</option>
+                                                        <option value="7">Certificate</option>
+                                                        <option value="11">Notice of Issuance of Certificate</option>
+                                                        <option value="12">Notice of Withdrawn Application</option>
+                                                        <option value="13">Revival Order</option>
+                                                        <option value="14">Notice of Forfeiture of Application</option>
 
-        </select>-->
+                                                    </select>-->
                                                                     <input name="officeAction"
                                                                            v-if="projectIdentifier.officeActionName"
                                                                            id="officeAction"
@@ -348,26 +143,25 @@
                                                                            type="datetime"
                                                                            class="form-control" readonly required>
                                                                     <br />
-                                                                    <!--<date-picker v-if="!projectIdentifier.mailDate && !checked" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;-->
-                                                                    <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 10 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
+                                                                     <date-picker v-if="(!projectIdentifier.mailDate && !checked) || (projectIdentifier.mailDate.length < 10 && !checked)" v-model="projectIdentifier.mailDate" valueType="format" format="DD/MM/YYYY" required></date-picker>&nbsp;&nbsp;&nbsp;
                                                                     <span><input type="checkbox" id="checkbox" v-model="checked"> Please check if mailing date is not applicable.</span>
                                                                 </div>
                                                                 <!--<div class="position-relative form-group">
-        <label for="agentName"
-               class="">Agent Name</label><input name="agentName"
-                                                 id="agentName"
-                                                 placeholder="Agent Name"
-                                                 type="text"
-                                                 class="form-control">
+                                                    <label for="agentName"
+                                                           class="">Agent Name</label><input name="agentName"
+                                                                                             id="agentName"
+                                                                                             placeholder="Agent Name"
+                                                                                             type="text"
+                                                                                             class="form-control">
 
-    </div>-->
+                                                </div>-->
                                                                 <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
                                                                     {{alertMessage}}
                                                                 </b-alert><br />
-                                                                <b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
-                                                                          size="lg">
-                                                                    Save
-                                                                </b-button>
+                                                                          <b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
+                                                                                    size="lg">
+                                                                              Save
+                                                                          </b-button>
                                                                 <!--</b-overlay>-->
                                                                 <!--</b-collapse>-->
                                                             </div>
@@ -381,198 +175,10 @@
                             </div>
                         </b-modal>
                     </div>
-                </div>
 
-                <!-- Use dot-info : for office action that is no need for response
-            dot-success : for Office Action that was successfully responded (has sumbit response date)
-            dot-warning : when Office action response is not yet done, 2-3 weeks prior
-            dot-danger : when 3 days or 0 days left before deadline of submission
-            dot-dark : if it exceeds submission date-->
-                <div>
-                    <div class="divider"></div>
-                    <h4 style="color: #56CC9D;">Timeline</h4>
-                    <div class="vertical-time-simple vertical-without-time vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
-                        <div v-for="(item, i) in items" :key="i" :class=" item.officeAction.id == 1 ? 'dot-info vertical-timeline-element' : item.response_date == null ? 'dot-warning vertical-timeline-element' : 'dot-success vertical-timeline-element' ">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">
-                                        {{ item.officeAction.type }}
-                                        <div v-if="item.response_date == null && item.officeAction.id != 1 && item.mail_date != null" class="badge badge-danger ml-2">DUE {{ item.due }}</div>
-                                    </h4>
-
-                                    <p>
-                                        File uploaded <span class="text-success">{{ item.created_on }}</span><br />
-                                        Mail Date <span class="text-success">{{ item.mail_date == null ? "N/A" : item.mail_date}}</span><br />
-                                        Submitted response on
-                                        <span class="text-success">
-                                            {{ item.response_date == null && (item.officeAction.id == 1 || item.mail_date == null) ? "N/A" : item.response_date == null ? "Pending" : item.response_date }}
-                                            <b-button v-if="item.response_date == null && item.officeAction.id != 1 && item.mail_date != null" variant="link" v-b-tooltip title="View" @click="toggleSetResponseDate(item.actions.documentId)">(set response date)</b-button>
-                                        </span>
-                                        <!--<span v-if="item.response_date == null && item.officeAction.id != 1">(set response date)</span>-->
-
-                                    </p>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="dot-info vertical-timeline-element" v-if="items[0].project.isConverted == true">
-                            <div>
-                                <span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">CONVERTED TO UTILITY MODEL</h4>
-                                    <p>
-                                        Converted on <span class="text-success">{{ convertedItems[0].project.convertedTime }}</span><br />
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 col-xl-6 d-flex flex-column">
-                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalFinishProject(items[0].project.projectId)" variant="success" key="success" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true">Finish Project</b-button>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-xl-6 d-flex flex-column">
-                            <b-button class="mr-2 mb-2 btn-hover-shine btn-transition" @click="toggleModalConvert()" variant="warning" key="warning" v-if="items[0].project.projectStatusId == 0 && items[0].project.isConverted != true && items[0].project.appType != 'Utility Model'">Convert to Utility Model</b-button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-
-                        </div>
-                        <div class="col-md-4">
-                            <!--<router-link :to="{ query: { projectId: convertedItems[0].project.projectId } }">TEST</router-link>-->
-                            <a v-if="items[0].project.isConverted == true && convertedItems[0].project.convertedItemsCount > 0" :href="$router.resolve({name: 'project-detail' , query: {projectId: convertedItems[0].project.projectId}}).href">Proceed to the Converted Utility Model Project</a>
-                            <a v-if="items[0].project.isConverted == true && convertedItems[0].project.convertedItemsCount == 0" :href="$router.resolve({name: 'converted-project-detail' , query: {projectId: convertedItems[0].project.projectId}}).href">Proceed to the Converted Utility Model Project</a>
-                        </div>
-
-                        <div class="col-md-4">
-
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Modals-->
-
-
-        <b-modal ref="utility-model" hide-header hide-footer title="Warning" size="sm">
-            <div class="page-title-icon d-flex justify-content-center">
-                <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
-            </div>
-            <div class="d-block text-center">
-                This project will be converted to Utility Model. Do you want to continue?
-            </div>
-            <!--<b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>-->
-            <!--<b-button v-b-modal.modal-multi-2 class="mt-3" block variant="outline-danger">Yes</b-button>-->
-            <b-button class="mt-3" block @click="toggleModalConvertUM()" variant="outline-danger" key="warning" v-if="items[0].project.projectStatusId == 0">Yes</b-button>
-            <b-button class="mt-2" variant="outline-warning" block @click="toggleModalConvert">No</b-button>
-
-
-        </b-modal>
-
-        <b-modal ref="utility-model-convert" hide-header hide-footer title="Warning" size="md">
-            <!--<div class="page-title-icon d-flex justify-content-center">
-            <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
-        </div>-->
-            <!--<div class="d-block text-center">-->
-            <h4 class="d-block text-center text-success">
-                Convert "Invention" to "Utility Model"
-            </h4>
-            <form @submit.prevent="convertToUtilityModel" ref="convertProjectForm">
-                <div class="submit-form">
-                    <div class="content">
-                        <div class="main-card mb-3 card">
-                            <b-overlay :show="busy"
-                                       rounded
-                                       opacity="0.6"
-                                       spinner-small
-                                       spinner-variant="primary"
-                                       class="d-inline-block"
-                                       @hidden="onHidden">
-                                <div class="card-body">
-                                    <!--<h5 class="card-title">Grid Rows</h5>-->
-
-                                    <div class="form-row">
-                                        <div class="col-md-12">
-                                            <div class="position-relative form-group">
-                                                <label for="applicationNumber" class="">New Application Number</label>
-                                                <input name="applicationNumber" id="applicationNumber" placeholder="Application Number" type="text" class="form-control" v-model="newApplicationNumber" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <b-alert :class="error ? 'danger' : 'success'" show dismissible fade v-model="showAlert">
-                                        {{alertMessage}}
-                                    </b-alert><br />
-                                    <!--<b-button type="submit" ref="show" :disabled="show" variant="primary" @click="show = true">
-                                    Show overlay
-                                </b-button>-->
-                                    <!--<b-button ref="show" :disabled="show" variant="primary" @click="show = true">
-                                    Show overlay
-                                </b-button>-->
-                                    <!--<b-button v-b-modal.modal-multi-2 class="mt-3" block variant="outline-success">Save</b-button>-->
-
-                                    <button class="mt-3 btn btn-block btn-outline-success" variant="outline-success" :disabled="disable">Save</button>
-                                    <b-button class="mt-2" variant="outline-warning" block @click="toggleModalConvertUM(); toggleModalConvert();">Cancel</b-button>
-                                </div>
-
-                            </b-overlay>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <!--</div>-->
-            <!--<b-button class="mt-3" variant="outline-danger" block @click="hideModalConvert">Yes</b-button>-->
-
-
-
-        </b-modal>
-
-        <b-modal ref="finish-project" hide-header hide-footer title="Warning" size="sm">
-            <div class="page-title-icon d-flex justify-content-center">
-                <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
-            </div>
-            <div class="d-block text-center">
-                This project will be marked as finished. Do you want to continue?
-            </div>
-            <b-button class="mt-3" variant="outline-danger" block @click="finishProject(finishProjectId)">Yes</b-button>
-
-            <b-button class="mt-2" variant="outline-warning" block @click="toggleModalFinish">No</b-button>
-        </b-modal>
-
-        <b-modal ref="delete-document" hide-header hide-footer title="Warning" size="sm">
-            <div class="page-title-icon d-flex justify-content-center">
-                <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
-            </div>
-            <div class="d-block text-center">
-                Are you sure you want to delete this document ?
-            </div>
-            <b-button class="mt-3" variant="outline-danger" block @click="deletePdfFile(deleteDocId)">Yes</b-button>
-            <b-button class="mt-2" variant="outline-warning" block @click="toggleModalDelete">No</b-button>
-        </b-modal>
-
-        <b-modal ref="set-response-date" hide-header hide-footer title="Warning" size="sm">
-            <!--<div class="page-title-icon d-flex justify-content-center">-->
-            <!--<i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />-->
-            <!--Response Date
-        </div>-->
-            <div class="d-block text-center">
-                <h5>Response Date</h5>
-                <date-picker v-model="setRDate" valueType="format" format="DD/MM/YYYY" required></date-picker>
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <b-button variant="outline-danger" block @click="setResponseDate(setDocId)">Set</b-button>
-                    </div>
-                    <div class="col-md-6">
-                        <b-button variant="outline-warning" block @click="toggleModalSetResponseDate">Cancel</b-button>
-                    </div>
-                </div>
-            </div>
-
-
-        </b-modal>
     </div>
 </template>
 
@@ -581,14 +187,14 @@
     import FileDataService from "../../Services/FileDataService";
     import LookUpDataService from "../../Services/LookUpDataService";
     import UserDataService from "../../Services/UserDataService";
-    import DatePicker from 'vue2-datepicker';
+    //import DatePicker from 'vue2-datepicker';
     import 'vue2-datepicker/index.css';
 
     export default {
-        name: 'project-detail',
+        name: 'converted-project-detail',
         components: {
-            PageTitle,
-            DatePicker,
+           PageTitle,
+            //DatePicker,
 
         },
         props: {
@@ -661,7 +267,7 @@
                     applicantName: "",
                     agentName: "",
                     fileName:"",
-                    
+
                 },
                 showAlert: false,
                 alertMessage: "",
@@ -686,20 +292,7 @@
                 newlyConvertedUM: null
             }
         },
-        computed: {
-            sortOptions() {
-                // Create an options list from our fields
-                return this.fields
-                    .filter(f => f.sortable)
-                    .map(f => {
-                        return { text: f.label, value: f.key }
-                    })
-            }
-        },
-        mounted() {
-            // Set the initial number of items
-            this.totalRows = this.items.length
-        },
+
         methods: {
             refreshData() {
                 this.projectIdentifier =  {
@@ -714,7 +307,7 @@
                     applicantName: "",
                     agentName: "",
                     fileName:"",
-                    
+
                 }
             },
             onShown() {
@@ -798,13 +391,11 @@
             getDocumentListByProjectId(id) {
                 FileDataService.GetDocumentListByProjectId(id)
                     .then(response => {
-                        
+
                         this.items = response.data;
                         console.log("getDocumentListByProjectId");
                         console.log(this.items);
-                        if (this.items.length == 0) {
-                            console.log("way sulod");
-                        }
+                        this.redirect();
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -855,7 +446,7 @@
                 window.open(`${folder}/${fname}`, '_blank');
             },
             deletePdfFile(id) {
-                
+
                 LookUpDataService.GetDocumentById(id)
                     .then(response => {
                         response.data.isDeleted = true;
@@ -868,10 +459,10 @@
                         this.error = true;
                     });
 
-                
+
             },
             flagDocumentDeleted(id, data) {
-                
+
                 LookUpDataService.DeleteDocumentById(id, data)
                     .then(result => {
                         console.log(result.data);
@@ -883,7 +474,7 @@
                         this.error = true;
                     });
             },
-            //Upload Document 
+            //Upload Document
             onFileChange(e) {
                 var files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
@@ -981,7 +572,7 @@
                 this.busy = true;
                 this.disable = true;
 
-                
+
 
                 var data = {
                     applicationTypeId: this.projectIdentifier.applicationTypeId,
@@ -1003,7 +594,7 @@
                 };
 
                 //var data2 = {
-                //    pdf: this.pdfData 
+                //    pdf: this.pdfData
                 //};
 
                 console.log(data);
@@ -1014,11 +605,17 @@
                         this.disable = false;
                         // this.$refs.registerProjectForm.reset();//reset form
                         this.alertMessage = response.data;
+
+                        //this.$router.push({ name: 'dashboard' });
+                        //console.log("this.$router.resolve({ name: 'project-detail', query: { projectId: 5044 } })");
+
                         this.error = false;
                         this.delayedAlert();
+
                         //this.imageResult = response.data;
                         //console.log(response.data);
-                        this.getDocumentListByProjectId(this.projectId);
+                        //this.getDocumentListByProjectId(this.projectId);
+                        
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -1191,7 +788,6 @@
                         this.convertedItems = response.data;
                         console.log("getConvertedProjectDetailsById");
                         console.log(this.convertedItems);
-
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -1208,9 +804,9 @@
 
                         console.log("newlyConvertedUM");
                         console.log(this.newlyConvertedUM );
-                        
 
-                        
+
+
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -1218,6 +814,12 @@
                         this.busy = false;
                         this.disable = false;
                     });
+            },
+            redirect() {
+                if (this.items.length > 0) {
+                    this.$router.push({ name: 'project-detail', query: { projectId: 5044 } })
+                   
+                }
             }
         },
         beforeMount() {
@@ -1227,8 +829,6 @@
             this.getAgents();
             this.getApplicationTypes();
             this.user = JSON.parse(sessionStorage.getItem('userInfo'));
-
-
         }
     }
 </script>

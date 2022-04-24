@@ -47,6 +47,14 @@ export default new Router({
                 return { projectId: route.query.projectId }
             }
         },
+        {
+            path: '/monitoring/file-manager/converted-project-detail',
+            name: 'converted-project-detail',
+            component: () => import('../Pages/Monitoring/ConvertedProjectDetail.vue'),
+            props(route) {
+                return { projectId: route.query.projectId }
+            }
+        },
 
 
         // Pages

@@ -125,7 +125,7 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <b-button :disabled="disable" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
+                                                <b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
                                                           size="lg">
                                                     Save
                                                 </b-button>
@@ -238,7 +238,7 @@
                                                 <label for="mailingDate"
                                                        class="">Document Mailing Date</label><input name="mailingDate"
                                                                                                     id="mailingDate"
-                                                                                                    v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 10"
+                                                                                                    v-if="projectIdentifier.mailDate && projectIdentifier.mailDate.length == 10 && !checked"
                                                                                                     placeholder="Mailing Date"
                                                                                                     v-model="projectIdentifier.mailDate"
                                                                                                     type="datetime"

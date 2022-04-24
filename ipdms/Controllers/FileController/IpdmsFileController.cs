@@ -771,6 +771,7 @@ namespace ipdms.Controllers.FileController
                          join a in _context.ApplicationType on p.application_type_id equals a.application_type_id
                          join i in _context.IpdmsUser on p.ipdms_user_id equals i.ipdms_user_id
                          where p.ipdms_user_id == userId && p.is_deleted == false 
+                         && (_context.Document.Where(d => d.project_id == p.project_id).Count() > 0)
                          select new
                          {
                              IsActive = false,
@@ -860,7 +861,7 @@ namespace ipdms.Controllers.FileController
             var project = await (from p in _context.Project
                                    where p.ref_project_id == projectId && p.is_deleted == false
                                    select new { 
-                                    project = new { projectId = p.project_id, convertedTime = p.CREATE_USER_DATE == null ? null : p.CREATE_USER_DATE.Value.ToShortDateString(), refProjectId = p.ref_project_id }
+                                    project = new { projectId = p.project_id, convertedTime = p.CREATE_USER_DATE == null ? null : p.CREATE_USER_DATE.Value.ToShortDateString(), refProjectId = p.ref_project_id, convertedItemsCount =  _context.Document.Where(x => x.project_id == p.project_id).ToList().Count }
                                    }).ToListAsync();
 
             return project;
