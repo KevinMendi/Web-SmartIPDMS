@@ -320,6 +320,8 @@ namespace ipdms.Controllers.FileController
             var applicationTypeDto = new ApplicationTypeDto(); 
             var applicationTypeList = _context.ApplicationType.ToList();
 
+           extractedText.RemoveAll(x => x.Contains("Inventions (PUBREG)") || x.Contains("Inventions (PUBREG)") || x.StartsWith("Inventions"));
+
             var applicationType = applicationTypeList.Where(p => extractedText.Any(p2 => p2.Contains(p.application_type_name))).FirstOrDefault();
 
             if (applicationType != null)
