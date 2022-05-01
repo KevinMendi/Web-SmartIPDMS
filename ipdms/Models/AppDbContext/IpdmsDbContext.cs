@@ -18,8 +18,8 @@ namespace ipdms.Models.AppDbContext
 
         public DbSet<ipdms.Models.ApplicationType> ApplicationType { get; set; }
 
-        public DbSet<ipdms.Models.OfficeAction> OfficeAction { get; set; }
-
+        public DbSet<ipdms.Models.OfficeAction> OfficeAction { get; set; }    
+        public DbSet<ipdms.Models.DocumentPage> DocumentPage { get; set; }
         public IpdmsDbContext(DbContextOptions<IpdmsDbContext> options) : base(options){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,6 +30,7 @@ namespace ipdms.Models.AppDbContext
             modelBuilder.Entity<Document>().ToTable("Document");
             modelBuilder.Entity<ApplicationType>().ToTable("lk_ApplicationType");
             modelBuilder.Entity<OfficeAction>().ToTable("lk_OfficeAction");
+            modelBuilder.Entity<DocumentPage>().ToTable("DocumentPage");
         }
 
         

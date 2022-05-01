@@ -7,7 +7,11 @@ class FileDataService {
 
     SaveProject(data) {
         return http.post("/IpdmsFile", data);
-    } 
+    }
+
+    SavePages(data) {
+        return http.post("/IpdmsFile/save-pages", data);
+    }
 
     GetProjectList(userId, roleId, year) {
         return http.get(`/IpdmsFile/projects/user/${userId}/role/${roleId}/year/${year}`);

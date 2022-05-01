@@ -28,6 +28,14 @@ export default new Router({
             name: 'upload-file',
             component: () => import('../Pages/Uploads/UploadFile.vue'),
         },
+        {
+            path: '/upload/upload-file/scan-pages',
+            name: 'scan-pages',
+            component: () => import('../Pages/Uploads/ScanPages.vue'),
+            props(route) {
+                return { documentId: route.query.documentId, pages: route.query.pages }
+            }
+        },
         // Monitoring
         {
             path: '/monitoring/file-manager',

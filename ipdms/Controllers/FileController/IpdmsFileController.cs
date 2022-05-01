@@ -27,6 +27,65 @@ namespace ipdms.Controllers.FileController
             _context = context;
         }
 
+        [HttpPost("save-pages")]
+        public async Task<ActionResult<string>> SavePages([FromBody] object data)
+        {
+            var message = "";
+            try
+            {
+                var result = JsonConvert.DeserializeObject<JToken>(data.ToString());
+
+                var documentDetails = await (from p in _context.Project
+                                       join d in _context.Document on p.project_id equals d.project_id
+                                        where d.document_id == (int)result["documentId"] && p.is_deleted == false
+                                        select new
+                                        {
+                                            applicationTypeId = p.application_type_id,
+                                            applicationNo = p.application_no,
+                                            documentFolder = d.pdf_name
+                                        }).FirstOrDefaultAsync();
+
+                var folderBaseName = documentDetails.applicationTypeId == 1 ? "Invention" : "Utility Model";
+                var folderName = documentDetails.applicationNo.Replace("/", "_");
+
+                var folderPath = $"{folderBaseName}_{folderName}/";
+
+                var img64 = (result["image64"].ToString()).Remove(0, 23);
+
+                byte[] byteArray = Convert.FromBase64String(img64);
+                var filename = $"{"Page"}_{result["currentPage"]}{".png"}";
+
+                using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{documentDetails.documentFolder}/{filename}"))
+                {
+                    stream.Write(byteArray, 0, byteArray.Length);
+                    int counter = 0;
+                    decimal number = (decimal)byteArray.Length;
+                    while (Math.Round(number / 1024) >= 1)
+                    {
+                        number = number / 1024;
+                        counter++;
+                    }
+                    //fileSize = (int)Math.Ceiling(number);
+                }
+
+                var documentPage = new DocumentPage()
+                {
+                    document_id = (int)result["documentId"],
+                    path = $"{Constants.Constants.projectBase}{folderPath}{documentDetails.documentFolder}/{filename}"
+                };
+
+                _context.DocumentPage.Add(documentPage);
+                await _context.SaveChangesAsync();
+
+                message = "Successfully Saved!";
+            }
+            catch(Exception ex)
+            {
+                message = ex.ToString();
+            }
+            return message;
+        }
+
         //POST: api/IpdmsFile/register/project
         [HttpPost]
         public async Task<ActionResult<string>> SaveProject([FromBody] object data)
@@ -42,17 +101,8 @@ namespace ipdms.Controllers.FileController
                 {
                     mailDate = DateTime.ParseExact(result["mailingDate"].ToString(), "dd/MM/yyyy", null);
                 }
-                else if(result["saveType"].ToString() == "2")
+                else if(result["saveType"].ToString() == "2" || result["saveType"].ToString() == "3")
                 {
-                    //var pdefBase64 = new IpdmsFile()
-                    //{
-                    //    image64 = result["pdfBase64"].ToString()
-                    //};
-
-                    //var projectIdentifier = new ProjectIdentifier();
-                    //projectIdentifier = AnalyzeImage(pdefBase64);
-
-
                     try
                     {
                         mailDate = DateTime.ParseExact(result["mailingDate"].ToString(), "dd/MM/yyyy", null);
@@ -111,29 +161,66 @@ namespace ipdms.Controllers.FileController
                 //Create Folder for saving PDF in drive
                 var folderPath = $"{folderBaseName}_{folderName}/";
                 var fileSize = 0;
-                
-                System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
-                if (result["saveType"].ToString() == "1" || result["saveType"].ToString() == "2")
+                var fileNameGlobal = "";
+               
+                if (result["saveType"].ToString() == "1" || result["saveType"].ToString() == "2" || result["saveType"].ToString() == "3")
                 {
-                    byte[] byteArray = Convert.FromBase64String((result["pdfBase64"].ToString()).Remove(0, 28));
-                    using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{result["fileName"]}"))
+                    var pdf64 = "";
+                    var fileName = "";
+                    var scannedDocumentFolder = "";
+                    if (result["saveType"].ToString() == "3")
                     {
-                        stream.Write(byteArray, 0, byteArray.Length);
-                        int counter = 0;
-                        decimal number = (decimal)byteArray.Length;
-                        while (Math.Round(number / 1024) >= 1)
+                        scannedDocumentFolder = result["fileName"].ToString().Replace(" ", "_");
+                        
+                        pdf64 = (result["pdfBase64"].ToString()).Remove(0, 23);
+                        fileName = $"{scannedDocumentFolder}_{DateTime.Now.ToString("hmmss").Trim()}{".png"}";
+                        fileNameGlobal = fileName.Replace(".png", "");
+
+                        System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}{fileNameGlobal}/");
+
+                        byte[] byteArray = Convert.FromBase64String(pdf64);
+                        using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{fileNameGlobal}/{fileName}"))
                         {
-                            number = number / 1024;
-                            counter++;
+                            stream.Write(byteArray, 0, byteArray.Length);
+                            int counter = 0;
+                            decimal number = (decimal)byteArray.Length;
+                            while (Math.Round(number / 1024) >= 1)
+                            {
+                                number = number / 1024;
+                                counter++;
+                            }
+                            fileSize = (int)Math.Ceiling(number);
                         }
-                        fileSize = (int)Math.Ceiling(number);
                     }
+                    else
+                    {
+                        System.IO.Directory.CreateDirectory($"{Constants.Constants.projectBase}{folderPath}");
+                        pdf64 = (result["pdfBase64"].ToString()).Remove(0, 28);
+                        var tempName = (result["fileName"].ToString()).Replace(".pdf", "");
+                        fileName = $"{tempName}{DateTime.Now.ToString("hmmss").Trim()}{".pdf"}";
+                        fileNameGlobal = fileName;
+
+                        byte[] byteArray = Convert.FromBase64String(pdf64);
+                        using (FileStream stream = System.IO.File.Create($"{Constants.Constants.projectBase}{folderPath}{fileName}"))
+                        {
+                            stream.Write(byteArray, 0, byteArray.Length);
+                            int counter = 0;
+                            decimal number = (decimal)byteArray.Length;
+                            while (Math.Round(number / 1024) >= 1)
+                            {
+                                number = number / 1024;
+                                counter++;
+                            }
+                            fileSize = (int)Math.Ceiling(number);
+                        }
+                    }
+                   
                 }
 
                 //Check if Project alreaady exist
                 var ifProjectExist = _context.Project.Any(x => x.application_no == result["applicationNo"].ToString().Trim() && x.is_deleted != true);
 
-
+                var documentId = 0;
 
                 if (!ifProjectExist)
                 {
@@ -165,7 +252,7 @@ namespace ipdms.Controllers.FileController
                             project_id = projectId,
                             mail_date = mailDate,
                             filling_date = string.IsNullOrEmpty(result["fillingDate"].ToString()) == true ? DateTime.Now : DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
-                            pdf_name = result["fileName"].ToString(),
+                            pdf_name = fileNameGlobal,
                             //pdf_content = result["pdfBase64"].ToString(),
                             pdf_file_size = fileSize,
                             CREATE_USER_ID = (int)result["createUserId"],
@@ -199,7 +286,7 @@ namespace ipdms.Controllers.FileController
                         project_id = (int)result["projectId"],
                         mail_date = mailDate,
                         filling_date = string.IsNullOrEmpty(result["fillingDate"].ToString()) == true ? DateTime.Now : DateTime.ParseExact(result["fillingDate"].ToString(), "dd/MM/yyyy", null),
-                        pdf_name = result["fileName"].ToString(),
+                        pdf_name = fileNameGlobal,
                         //pdf_content = result["pdfBase64"].ToString(),
                         pdf_file_size = fileSize,
                         CREATE_USER_ID = (int)result["createUserId"],
@@ -210,6 +297,13 @@ namespace ipdms.Controllers.FileController
 
                     _context.Document.Add(document);
                     await _context.SaveChangesAsync();
+
+                    documentId = document.document_id;
+                    if (result["saveType"].ToString() == "3")
+                    {
+                        return documentId.ToString();
+                    }
+                        
                 }
             }
             catch (Exception ex)
@@ -286,7 +380,22 @@ namespace ipdms.Controllers.FileController
 
                 //Get Mail Date
                 var mailDate = GetMailDate(fileContentList);
-                imageAnalysisResult.MailDate = mailDate.MailDate.Length < 10 ? "" : mailDate.MailDate;
+                //imageAnalysisResult.MailDate = mailDate != null ? mailDate.MailDate.Length < 10 ? "" : mailDate.MailDate : "";
+                if (mailDate.MailDate != null)
+                {
+                    if (mailDate.MailDate.Length < 10)
+                    {
+                        imageAnalysisResult.MailDate = "";
+                    }
+                    else
+                    {
+                        imageAnalysisResult.MailDate = mailDate.MailDate;
+                    }
+                }
+                else
+                {
+                    imageAnalysisResult.MailDate = "";
+                }
             }
     
             return imageAnalysisResult;
@@ -490,168 +599,6 @@ namespace ipdms.Controllers.FileController
 
             return mailDateDto;
         }
-
-        //public ProjectIdentifier ExtractProjectIdentifier(List<string> extractedText)
-        //{
-
-
-        //    //var officeActionList = new List<string>(){
-        //    //    //"SUBSTANTIVE EXAMINATION REPORT",
-        //    //    //"FORMALITY EXAMINATION REPORT",
-        //    //    //"NOTICE OF WITHDRAWN APPLICATION",
-        //    //    //"NOTICE OF PUBLICATION",
-        //    //    //"NOTICE OF ISSUANCE OF CERTIFICATE",
-        //    //    //"Revival Order",
-        //    //    //"Certificate of Registration",
-        //    //    //"Acknowledgement",
-
-        //    //    "Acknowledgement",
-        //    //    "FORMALITY EXAMINATION REPORT",
-        //    //    "Subsequent Formality Examination Report",//same with Formality Examination Report
-        //    //    "Notice of Publication",
-        //    //    "SUBSTANTIVE EXAMINATION REPORT",
-        //    //    "SUBSEQUENT SUBSTANTIVE EXAMINATION REPORT",//same with Substantive Examination Report
-        //    //    "Completion of Final Requirements",
-        //    //    "Notice of Allowance",
-        //    //    "Certificate",
-        //    //    "NOTICE OF ISSUANCE OF CERTIFICATE",
-        //    //    "NOTICE OF WITHDRAWN APPLICATION",
-        //    //    "Revival Order",
-        //    //    "Notice of Forfeiture of Application",
-
-        //    //};
-        //    //var officeActionList = new List<string>();
-
-        //    var officeActionList = _context.OfficeAction.ToList();
-
-
-
-        //    //var applicationTypeList = new List<string>(){
-        //    //    "Industrial Design",
-        //    //    "Invention",
-        //    //    "Utility Model"
-        //    //};
-
-        //    var applicationTypeList = _context.ApplicationType.ToList();
-
-        //    var projectIdentifier = new ProjectIdentifier();
-
-        //    var monthsList = new List<string>(){
-        //        "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-        //    };
-
-        //    var officeAction = (from o in officeActionList
-        //                        where extractedText.Contains(o.office_action_name1)
-        //                        select o).FirstOrDefault();
-
-        //    if (officeAction != null)
-        //    {
-        //        projectIdentifier.OfficeActionId = officeAction.office_action_id;
-        //        projectIdentifier.OfficeActionName = officeAction.office_action_name1;
-        //    }
-
-        //    //string applicationTypeNo = "";
-        //    //foreach (var a in applicationTypeList)
-        //    //{
-        //    //applicationTypeNo = extractedText.FirstOrDefault(s => s.Contains(a.application_type_name));
-
-        //    //var applicationTypeNo = (from a in applicationTypeList
-        //    //                         where a.application_type_name.IndexOf(extractedText) > 0
-        //    //                         select a).FirstOrDefault();
-
-        //    //Get Application Type and Number
-        //    var applicationTypeNo = applicationTypeList.Where(p => extractedText.Any(p2 => p2.Contains(p.application_type_name))).FirstOrDefault();
-
-        //    if (applicationTypeNo != null)
-        //    {
-        //        projectIdentifier.ApplicationTypeId = applicationTypeNo.application_type_id;
-        //        projectIdentifier.ApplicationTypeName = applicationTypeNo.application_type_name;
-
-        //        var appNumberTemp = extractedText.FirstOrDefault(x => x.Contains(applicationTypeNo.application_type_name));
-
-        //        var appNumber = (Regex.Replace(appNumberTemp, @"[A-Za-z]+", "")).Trim();
-
-        //        var toTrim = 0;
-        //        foreach (char c in appNumber)
-        //        {
-        //            if (!Char.IsLetterOrDigit(c))//if character
-        //            {
-        //                ++toTrim;
-        //            }
-        //            else
-        //            {
-        //                break;
-        //            }
-        //        }
-
-        //        if (toTrim > 0)
-        //        {
-        //            projectIdentifier.ApplicationNo = appNumber.Remove(0, toTrim);
-        //            toTrim = 0;
-        //        }
-        //        else
-        //        {
-        //            projectIdentifier.ApplicationNo = appNumber;
-        //        }
-
-
-        //    }
-        //    //}
-
-        //    var mailDates = new List<string>();
-        //    var mailDate = "";
-        //    foreach (var m in monthsList)
-        //    {
-        //        mailDates = extractedText.Where(s => s.Contains(m)).ToList();
-        //        foreach (var mdate in mailDates)
-        //        {
-        //            if (mdate.Contains("SUMMARY") || mdate.Contains("USEP"))
-        //            {
-
-        //            }
-        //            else
-        //            {
-        //                projectIdentifier.MailDate = mdate;
-        //                break;
-        //            }
-        //        }
-
-        //        if (projectIdentifier.MailDate != null)
-        //        {
-        //            break;
-        //        }
-        //    }
-
-        //    //Determine Mail date Format
-        //    var result = Regex.Replace(projectIdentifier.MailDate, @"[^A-Za-z0-9]+", "");
-
-        //    var mailDateFormat = result.Substring(0, 3);
-        //    var format1 = false;
-        //    foreach (var ch in mailDateFormat)
-        //    {
-        //        //Check if it is digit
-        //        if (!Char.IsDigit(ch))
-        //        {
-        //            format1 = true;
-        //        }
-        //        else
-        //        {
-        //            format1 = false;
-        //        }
-        //    }
-
-        //    if (format1)
-        //    {
-        //        projectIdentifier.MailDate = MailDateFormat1(result);
-        //    }
-        //    else
-        //    {
-
-        //    }
-
-        //    return projectIdentifier;
-        //}
-
         public string MailDateFormat1(string dateToCheck)
         {
             var mailDateStr = "";

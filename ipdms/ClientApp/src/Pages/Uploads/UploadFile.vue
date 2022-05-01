@@ -39,7 +39,19 @@
                                                     <video v-show="!isPhotoTaken" ref="camera" :width="450" :height="337.5" autoplay></video>
 
                                                     <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :width="450" :height="337.5"></canvas>
-                                                </div>
+                                                </div><br />
+
+                                                <!--<div v-if="isCameraOpen && !isLoading" class="position-relative form-group">
+                                                    <label for="applicationNumber"
+                                                           class="">Number of Pages</label>
+
+                                                    <input name="numberOfPages"
+                                                           id="numberOfPages"
+                                                           placeholder="Number of Pages"
+                                                           v-model="pdfPages"
+                                                           type="number"
+                                                           class="form-control" required>
+                                                </div>-->
 
                                                 <div v-if="isCameraOpen && !isLoading" class="camera-shoot">
                                                     <button type="button" class="button" @click="takePhoto">
@@ -48,14 +60,8 @@
                                                 </div>
 
                                                 <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
-                                                    <!--<a id="downloadPhoto" download="my-photo.jpg" class="button" role="button" @click="downloadImage">
-                            Download
-                        </a>-->
                                                     <button :disabled="disable" class="mt-1 btn btn-primary">Analyze Image</button>
-
                                                     <!--<pre>{{ projectIdentifier }}</pre>-->
-
-
                                                 </div>
                                             </div>
                                         </center>
@@ -125,18 +131,52 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
-                                                          size="lg">
-                                                    Save
-                                                </b-button>
+                                                <!--<b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" type="submit" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine"
+                      size="lg">
+                Save
+            </b-button>-->
                                             </div>
                                             <div class="col-md-6">
-                                                <b-button :disabled="disable" type="button" variant="danger" @click="refreshData()" class="btn-wide btn-pill btn-shadow btn-hover-shine float-right"
+                                                <!--<b-button :disabled="disable" type="button" variant="danger" @click="refreshData()" class="btn-wide btn-pill btn-shadow btn-hover-shine float-right"
+                      size="lg">
+                Clear
+            </b-button>-->
+                                                <b-button :disabled="!projectIdentifier.mailDate && !checked ? true : false" @click="toggleModalScan" variant="primary" class="btn-wide btn-pill btn-shadow btn-hover-shine float-right"
                                                           size="lg">
-                                                    Clear
+                                                    Next
                                                 </b-button>
                                             </div>
                                         </div>
+
+                                        <b-modal ref="scan-document" hide-header hide-footer title="Warning" size="md">
+                                            <div class="page-title-icon d-flex justify-content-center">
+                                                <i class="pe-7s-attention icon-gradient bg-warm-flame fa-5x" />
+                                            </div>
+                                            <div class="d-block text-center">
+                                                <b>Please provide the number of pages:</b>
+                                                <input name="numberOfPages"
+                                                       id="numberOfPages"
+                                                       placeholder="Number of Pages"
+                                                       v-model="pdfPages"
+                                                       type="number"
+                                                       min="1"
+                                                       class="form-control" required>
+                                                <br /><br />
+                                                <div class="d-block text-left">
+                                                    <b style="color: red;">NOTE: </b><br />
+                                                    <ul>
+                                                        <li>Make sure to input the exact number of pages.</li>
+                                                        <li>Do not reload the page and make sure to finish all the pages. Otherwise, you have to delete the document/office action and scan the document again.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <b-button class="mt-3" :disabled="pdfPages <= 0" block @click="saveProject();" variant="outline-success" key="warning">Got It!</b-button>
+                                            <b-button class="mt-2" variant="outline-danger" block @click="toggleModalScan">Cancel</b-button>
+
+
+                                        </b-modal>
+
                                     </form>
                                 </div>
                             </b-tab>
@@ -348,6 +388,9 @@
             checked: false,
             applicationTypes: [],
             officeActions: [],
+            pdfPages: 0,
+            isAnalyzed: false,
+            saveType: 2
         }),
         methods: {
             refreshData() {
@@ -364,6 +407,22 @@
                 agentName: "",
                 fileName: "",
                 }
+            },
+            hideModalScan() {
+                this.$refs['scan-document'].hide()
+            },
+            toggleModalScan() {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.$refs['scan-document'].toggle('#toggle-btn')
+            },
+            hideModalScanPages() {
+                this.$refs['scan-document-pages'].hide()
+            },
+            toggleModalScanPages() {
+                // We pass the ID of the button that we want to return focus to
+                // when the modal has hidden
+                this.$refs['scan-document-pages'].toggle('#toggle-btn')
             },
             onFileChange(e) {
                 var files = e.target.files || e.dataTransfer.files;
@@ -423,7 +482,7 @@
                    // projectId: null,
                     type: 3,//Scan Document
                 }
-
+                this.saveType = 3;
                 //data.image64 = file;
                 console.log("AnalyzeScanDocument");
                 console.log(data);
@@ -477,13 +536,13 @@
                     mailingDate: this.checked ? null : this.projectIdentifier.mailDate,
                     applicantName: "",
                     agentName: "",//add
-                    pdfBase64: this.image,
-                    fileName: this.projectIdentifier.fileName,
+                    pdfBase64: this.saveType == 2 ? this.image : this.canvas,
+                    fileName: this.saveType == 2 ? this.projectIdentifier.fileName : this.projectIdentifier.officeActionName,
                     createUserId: this.user.ipdmsUserId,
                     createUserDate: this.currentDate(),
                     lastUpdateUserId: this.user.ipdmsUserId,
                     lastUpdateDate: this.currentDate(),
-                    saveType: 2
+                    saveType: this.saveType
                 };
 
                 //var data2 = {
@@ -497,12 +556,15 @@
                         this.busy = false;
                         this.disable = false;
                         // this.$refs.registerProjectForm.reset();//reset form
-                        this.alertMessage = response.data;
+                       
                         this.error = false;
-                        this.delayedAlert();
-                        //this.imageResult = response.data;
-                        //console.log(response.data);
-                       // this.getDocumentListByProjectId(this.projectId);
+                        if (this.saveType == 3) {
+                            this.$router.push({ name: 'scan-pages', query: { documentId: response.data, pages: this.pdfPages } })
+                        } else {
+                            this.alertMessage = response.data;
+                            this.delayedAlert();
+                        }
+                        
                     })
                     .catch(e => {
                         this.alertMessage = e;
@@ -606,6 +668,7 @@
             //this.getDocumentListByProjectId(this.projectId);
             //this.getAgents();
             //this.getApplicationTypes();
+            this.toggleCamera();
             this.user = JSON.parse(sessionStorage.getItem('userInfo'));
             this.getApplicationTypes();
             this.getOfficeActions();

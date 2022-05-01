@@ -251,20 +251,9 @@
                                                                     </small>
                                                                     <!--{{imageResult}}-->
                                                                 </div>
-                                                                <!--<div class="">
-        <b-button v-b-toggle.collapseDetails block class="mr-2 mb-2" variant="info" :size="sm" :key="sm">
-            Check Details
-        </b-button>
-    </div>-->
-                                                                <!-- elements to collapse -->
-                                                                <!--<b-collapse id="collapseDetails" class="mt-2">-->
 
                                                                 <div class="position-relative form-group">
                                                                     <label for="applicationType" class="">Application Type</label>
-                                                                    <!--<select name="applicationType" id="applicationType" class="form-control" v-model="projectIdentifier.applicationType" required>
-            <option :value="projectIdentifier.applicationType"> projectIdentifier.applicationType</option>
-            <option v-for="(applicationType, index) in applicationTypes" :key="index" :value="applicationType.applicationTypeId">{{ applicationType.applicationTypeName }}</option>
-        </select>-->
                                                                     <input name="applicationType"
                                                                            v-if="projectIdentifier.applicationTypeName"
                                                                            id="applicationType"
@@ -304,22 +293,6 @@
 
                                                                 <div class="position-relative form-group">
                                                                     <label for="officeAction" class="">Office Action:</label>
-                                                                    <!--<select name="officeAction"
-                                                                         id="officeAction"
-                                                                         class="form-control">
-            <option value="1">Acknowledgement</option>
-            <option value="2">Formality Examination Report/Subsequent Formality Examination Report</option>
-            <option value="3">Notice of Publication</option>
-            <option value="4">Substantive Examination Report/Subsequent Substantive Report</option>
-            <option value="5">Completion of Final Requirements</option>
-            <option value="6">Notice of Allowance</option>
-            <option value="7">Certificate</option>
-            <option value="11">Notice of Issuance of Certificate</option>
-            <option value="12">Notice of Withdrawn Application</option>
-            <option value="13">Revival Order</option>
-            <option value="14">Notice of Forfeiture of Application</option>
-
-        </select>-->
                                                                     <input name="officeAction"
                                                                            v-if="projectIdentifier.officeActionName"
                                                                            id="officeAction"
