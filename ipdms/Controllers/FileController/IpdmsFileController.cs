@@ -832,11 +832,11 @@ namespace ipdms.Controllers.FileController
             var result = 0;
             if (roleId == 1)
             {
-                result = _context.Project.Count(n => n.application_type_id == 1 && n.project_status_id == 0);
+                result = _context.Project.Count(n => n.application_type_id == 1 && n.project_status_id == 0 && n.is_converted == false && n.is_deleted == false);
             }
             else
             {
-                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 0);
+                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 0 && n.is_converted == false  && n.is_deleted == false);
             }
             
                                 
@@ -849,45 +849,139 @@ namespace ipdms.Controllers.FileController
             var result = 0;
             if (roleId == 1)
             {
-                result = _context.Project.Count(n =>  n.application_type_id == 2 && n.project_status_id == 0);
+                result = _context.Project.Count(n =>  n.application_type_id == 2 && n.project_status_id == 0 && n.is_deleted == false);
             }
             else
             {
-                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0);
+                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0 && n.is_deleted == false);
             }
 
             return result;
         }
 
-        [HttpGet("count/invention/finished/user/{userId}/role/{roleId}")]
-        public int GetInventionFinishedCount(int userId, int roleId)
-        {
-            var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
+        //[HttpGet("count/invention/finished/user/{userId}/role/{roleId}")]
+        //public int GetInventionFinishedCount(int userId, int roleId)
+        //{
+        //    var result = 0;
+        //    var appType = new int[] { 1, 2 };
+        //    if (roleId == 1)
+        //    {
+        //        result = _context.Project.Count(n => appType.Contains(n.application_type_id) && n.project_status_id == 1 && n.is_deleted == false);
+        //    }
+        //    else
+        //    {
+        //        result = _context.Project.Count(n => n.ipdms_user_id == userId && appType.Contains(n.application_type_id) && n.project_status_id == 1 && n.is_deleted == false);
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        [HttpGet("count/utility-model/finished/user/{userId}/role/{roleId}")]
-        public int GetUtilityModelFinishedCount(int userId, int roleId)
-        {
-            var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
+        //[HttpGet("count/utility-model/finished/user/{userId}/role/{roleId}")]
+        //public int GetUtilityModelFinishedCount(int userId, int roleId)
+        //{
+        //    var result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 1);
 
-            return result;
-        }
+        //    return result;
+        //}
 
         [HttpGet("count/projects/finished/user/{userId}/role/{roleId}")]
         public int GetFinishedProjectsCount(int userId, int roleId)
         {
             var result = 0;
+            var appType = new int[] { 1, 2 };
             if (roleId == 1)
             {
-                result = _context.Project.Count(n => n.project_status_id == 1);
+                result = _context.Project.Count(n => appType.Contains(n.application_type_id) && n.project_status_id == 1 && n.is_deleted == false);
             }
             else
             {
-               result = _context.Project.Count(n => n.ipdms_user_id == userId && n.project_status_id == 1);
+                result = _context.Project.Count(n => n.ipdms_user_id == userId && appType.Contains(n.application_type_id) && n.project_status_id == 1 && n.is_deleted == false);
             }
-               
+
+            return result;
+        }
+
+        [HttpGet("count/projects/converted/user/{userId}/role/{roleId}")]
+        public int GetConvertedProjectsCount(int userId, int roleId)
+        {
+            var result = 0;
+
+            if (roleId == 1)
+            {
+                result = _context.Project.Count(n => n.application_type_id == 1 && n.is_converted == true && n.is_deleted == false);
+            }
+            else
+            {
+                result = _context.Project.Count(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.is_converted == true && n.is_deleted == false);
+            }
+
+            return result;
+        }
+
+        //
+        [HttpGet("invention/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetInventionInProgress(int userId, int roleId)
+        {
+            var result = new List<Project>();
+            if (roleId == 1)
+            {
+                result =  await _context.Project.Where(n => n.application_type_id == 1 && n.project_status_id == 0 && n.is_converted == false && n.is_deleted == false).ToListAsync();
+            }
+            else
+            {
+                result =  await _context.Project.Where(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.project_status_id == 0 && n.is_converted == false && n.is_deleted == false).ToListAsync();
+            }
+
+
+            return result;
+        }
+
+        [HttpGet("utility-model/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetUtilityModelInProgress(int userId, int roleId)
+        {
+            var result = new List<Project>();
+            if (roleId == 1)
+            {
+                result = await _context.Project.Where(n => n.application_type_id == 2 && n.project_status_id == 0 && n.is_deleted == false).ToListAsync();
+            }
+            else
+            {
+                result = await _context.Project.Where(n => n.ipdms_user_id == userId && n.application_type_id == 2 && n.project_status_id == 0 && n.is_deleted == false).ToListAsync();
+            }
+
+            return result;
+        }
+
+        [HttpGet("projects/finished/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetFinishedProjects(int userId, int roleId)
+        {
+            var result = new List<Project>();
+            var appType = new int[] { 1, 2 };
+            if (roleId == 1)
+            {
+                result = await _context.Project.Where(n => appType.Contains(n.application_type_id) && n.project_status_id == 1 && n.is_deleted == false).ToListAsync();
+            }
+            else
+            {
+                result = await _context.Project.Where(n => n.ipdms_user_id == userId && appType.Contains(n.application_type_id) && n.project_status_id == 1 && n.is_deleted == false).ToListAsync();
+            }
+
+            return result;
+        }
+
+        [HttpGet("projects/converted/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetConvertedProjects(int userId, int roleId)
+        {
+            var result = new List<Project>();
+
+            if (roleId == 1)
+            {
+                result = await _context.Project.Where(n => n.application_type_id == 1 && n.is_converted == true && n.is_deleted == false).ToListAsync();
+            }
+            else
+            {
+                result = await _context.Project.Where(n => n.ipdms_user_id == userId && n.application_type_id == 1 && n.is_converted == true && n.is_deleted == false).ToListAsync();
+            }
 
             return result;
         }
@@ -954,7 +1048,7 @@ namespace ipdms.Controllers.FileController
         [HttpGet("project/due/user/{userId}/role/{roleId}")]
         public async Task<OfficeActionDueDto> GetProjectWithDueCount(int userId, int roleId)
         {
-            var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
+            //var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
             var todaysDate = DateTime.Today;
             var officeActionDue = new OfficeActionDueDto()
             {
@@ -966,7 +1060,12 @@ namespace ipdms.Controllers.FileController
             var result = await (from p in _context.Project
                                 join d in _context.Document on p.project_id equals d.project_id
                                 join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
-                                where p.ipdms_user_id == userId && d.is_deleted == false && !officeActionsWithNoDue.Contains(d.office_action_id) && d.response_date == null
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && p.ipdms_user_id == userId
+                                && d.mail_date != null
+                                && d.response_date == null
                                 select new
                                 {
                                     Project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
@@ -978,7 +1077,11 @@ namespace ipdms.Controllers.FileController
                 result = await (from p in _context.Project
                                 join d in _context.Document on p.project_id equals d.project_id
                                 join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
-                                where d.is_deleted == false && !officeActionsWithNoDue.Contains(d.office_action_id) && d.response_date == null
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && d.mail_date != null
+                                && d.response_date == null
                                 select new
                                 {
                                     Project = new { projectId = p.project_id, appType = p.application_type_id == 1 ? "Invention" : "Utility Model", appNumber = p.application_no, projectTitle = p.project_title },
@@ -1011,6 +1114,171 @@ namespace ipdms.Controllers.FileController
                 }
             }
             return officeActionDue;
+        }
+
+        [HttpGet("project/due/month/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectWithDueMonth(int userId, int roleId)
+        {
+            //var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
+            var officeActionDueThisMonth = new List<Project>();
+            var todaysDate = DateTime.Today;
+
+
+            var result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && p.ipdms_user_id == userId
+                                && d.mail_date != null
+                                && d.response_date == null
+                                select new
+                                {
+                                    Project = p,
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && d.mail_date != null
+                                && d.response_date == null
+                                select new
+                                {
+                                    Project = p,
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+            }
+
+            foreach (var o in result)
+            {
+
+
+                if (o.Document.due.Year == DateTime.Now.Year && o.Document.due.Month == DateTime.Now.Month)
+                {
+                    officeActionDueThisMonth.Add(o.Project);
+
+                }
+            }
+            return officeActionDueThisMonth;
+        }
+
+        [HttpGet("project/due/week/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectWithDueWeek(int userId, int roleId)
+        {
+            //var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
+            var officeActionDueThisWeek = new List<Project>();
+            var todaysDate = DateTime.Today;
+
+
+            var result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && p.ipdms_user_id == userId
+                                && d.mail_date != null
+                                && d.response_date == null
+                                select new
+                                {
+                                    Project = p,
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && d.mail_date != null
+                                && d.response_date == null
+                                select new
+                                {
+                                    Project = p,
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+            }
+
+            foreach (var o in result)
+            {
+
+
+                if (o.Document.due.Year == DateTime.Now.Year && o.Document.due.Month == DateTime.Now.Month)
+                {
+                    var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+                    var d1 = DateTime.Now.Date.AddDays(-1 * (int)cal.GetDayOfWeek(DateTime.Now));
+                    var d2 = o.Document.due.Date.AddDays(-1 * (int)cal.GetDayOfWeek(o.Document.due));
+
+                    if (d1 == d2)
+                    {
+                        officeActionDueThisWeek.Add(o.Project);
+                    }
+
+                }
+            }
+            return officeActionDueThisWeek;
+        }
+
+        [HttpGet("project/due/today/user/{userId}/role/{roleId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetProjectWithDueToday(int userId, int roleId)
+        {
+            //var officeActionsWithNoDue = new int[] { 1, 6, 7, 10, 11 };
+            var officeActionDueThisToday = new List<Project>();
+            var todaysDate = DateTime.Today;
+
+
+            var result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && p.ipdms_user_id == userId
+                                && d.mail_date != null
+                                && d.response_date == null
+                                select new
+                                {
+                                    Project = p,
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+
+            if (roleId == 1)
+            {
+                result = await (from p in _context.Project
+                                join d in _context.Document on p.project_id equals d.project_id
+                                join oa in _context.OfficeAction on d.office_action_id equals oa.office_action_id
+                                where p.is_deleted == false
+                                && d.is_deleted == false
+                                && d.office_action_id != 1
+                                && d.mail_date != null
+                                && d.response_date == null
+                                select new
+                                {
+                                    Project = p,
+                                    Document = new { documentId = d.document_id, officeAction = oa.office_action_name1, createDate = d.CREATE_USER_DATE, due = d.mail_date.Value.AddDays(oa.office_action_due.GetValueOrDefault()) }
+                                }).ToListAsync();
+            }
+
+            foreach (var o in result)
+            {
+
+
+                if (o.Document.due.Year == DateTime.Now.Year && o.Document.due.Month == DateTime.Now.Month && o.Document.due.Day == DateTime.Now.Day)
+                {
+                    officeActionDueThisToday.Add(o.Project);
+                }
+            }
+            return officeActionDueThisToday;
         }
 
         [HttpGet("project/user/{userId}/role/{roleId}/year/{year}")]

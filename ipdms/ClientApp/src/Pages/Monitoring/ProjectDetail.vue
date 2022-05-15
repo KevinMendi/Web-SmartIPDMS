@@ -2,7 +2,7 @@
     <div>
         <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
         <div v-for="(item, i) in items" :key="i">
-            <b-alert show dismissible fade variant="danger" v-if="item.response_date == null && (item.officeAction.id != 1 && item.officeAction.id != 9)"> {{ item.officeAction.type }} response submission deadline is on {{ item. due }}! </b-alert>
+            <b-alert show dismissible fade variant="danger" v-if="item.response_date == null && item.officeAction.id != 1 && item.mail_date != null"> {{ item.officeAction.type }} response submission deadline is on {{ item. due }}! </b-alert>
         </div>
 
         <div class="content">
