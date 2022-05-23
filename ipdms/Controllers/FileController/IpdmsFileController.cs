@@ -71,7 +71,7 @@ namespace ipdms.Controllers.FileController
                 var documentPage = new DocumentPage()
                 {
                     document_id = (int)result["documentId"],
-                    path = $"{Constants.Constants.projectBase}{folderPath}{documentDetails.documentFolder}/{filename}"
+                    path = $"{Constants.Constants.projectPath}{folderPath}{documentDetails.documentFolder}/{filename}"
                 };
 
                 _context.DocumentPage.Add(documentPage);
@@ -816,6 +816,16 @@ namespace ipdms.Controllers.FileController
             return project;
         }
 
+
+        [HttpGet("document-page/document/{documentId}")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetDocumentPageById(int documentId)
+        {
+            var documents = await (from d in _context.DocumentPage
+                                 where d.document_id == documentId
+                                 select d).ToListAsync();
+
+            return documents;
+        }
 
         ////////////////////////DASHBOARD
         [HttpGet("count/projects/user/{userId}")]

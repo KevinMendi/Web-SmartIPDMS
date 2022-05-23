@@ -221,6 +221,8 @@
                     type: 3,//Scan Document
                     currentPage: this.pages - this.numberOfPagesLeft
                 }
+
+               
                 
                 FileDataService.SavePages(data)
                     .then(response => {

@@ -36,8 +36,11 @@ class FileDataService {
     GetConvertedProjectDetailsById(projectId) {
         return http.get(`/IpdmsFile/project-converted/${projectId}`);
     }
-    
 
+    GetDocumentPageById(documentId) {
+        return http.get(`/IpdmsFile/document-page/document/${documentId}`);
+    }
+    
     
 }
 

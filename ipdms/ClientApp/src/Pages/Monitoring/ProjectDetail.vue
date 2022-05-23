@@ -78,8 +78,8 @@
                                 <!--<b-button size="sm" href="file-manager/project-detail" class="mr-1" variant="info">
                                 View Details
                             </b-button>-->
-                                <b-button pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-look"></i></b-button>&nbsp;
-                                <b-button pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-download"></i></b-button>&nbsp;
+                                <b-button v-if='row.value.fname.substr(row.value.fname.length - 4) === ".pdf"' pill variant="success" v-b-tooltip title="View" v-on:click="previewPdfFile(row.value.folder, row.value.fname)"><i class="pe-7s-look"></i></b-button>&nbsp;
+                                <b-button  pill variant="warning" v-b-tooltip title="Download" v-on:click="downloadPdfFile(row.value.folder, row.value.fname, row.value.documentId)"><i class="pe-7s-download"></i></b-button>&nbsp;
                                 <b-button pill variant="danger" v-b-tooltip title="Delete" @click="toggleModalDeleteDocumentById(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>
                                 <!--<b-button pill variant="danger" v-b-tooltip title="test"><a href="C:/kmendi/smart-ipdms\ipdms\PDF\Invention_1_2014_000318/2018_FER_PA12018050147.pdf" type="application/pdf" target="_blank">zxcvxcv</a></b-button>-->
                                 <!--<b-button pill variant="danger" v-b-tooltip title="Delete" v-on:click="deletePdfFile(row.value.documentId)"><i class="pe-7s-trash"></i></b-button>-->
@@ -775,16 +775,13 @@
                         this.items = response.data;
                         console.log("getDocumentListByProjectId");
                         console.log(this.items);
-                        if (this.items.length == 0) {
-                            console.log("way sulod");
-                        }
                     })
                     .catch(e => {
                         this.alertMessage = e;
                         this.error = true;
                     });
             },
-            downloadPdfFile(folder, fname) {
+            downloadPdfFile(folder, fname, documentId) {
                 //LookUpDataService.GetDocumentById(id)
                 //    .then(response => {
                 //        this.pdfBase64 = response.data.pdfContent;
@@ -800,11 +797,34 @@
                 //        this.alertMessage = e;
                 //        this.error = true;
                 //    });
+                if (fname.substr(fname.length - 4) === ".pdf") {
+                    var link = document.createElement('a');
+                    link.href = `${folder}/${fname}`;
+                    link.download = fname;
+                    link.dispatchEvent(new MouseEvent('click'));
+                } else {
+                    
+                    FileDataService.GetDocumentPageById(documentId)
+                        .then(response => {
+                            console.log("downloadPdfFile");
+                            console.log(response);
+                            var pages = response.data.length;
+                            while (pages >= 1) {
+                                var link2 = document.createElement('a');
+                                link2.href = response.data[response.data.length -1].path;
+                                link2.download = `Page_${pages}.png`;
+                                link2.dispatchEvent(new MouseEvent('click'));
+                                pages -= 1;
+                            }
+                        })
+                        .catch(e => {
+                            this.alertMessage = e;
+                            this.error = true;
+                        });
 
-                var link = document.createElement('a');
-                link.href = `${folder}/${fname}`;
-                link.download = fname;
-                link.dispatchEvent(new MouseEvent('click'));
+                    
+                }
+                
             },
             previewPdfFile(folder, fname) {
                 //LookUpDataService.GetDocumentById(id)
